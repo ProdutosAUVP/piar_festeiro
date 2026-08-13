@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
-  <meta name="description" content="O teste de suitability mais importante da sua vida: descubra se você é um festeiro conservador, moderado ou arrojado e receba sua carteira de rolês recomendada.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
+  <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥂</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,94 +14,190 @@
 
   <main class="app">
 
-    <!-- ===== TELA INICIAL ===== -->
+    <!-- ===================== TELA INICIAL ===================== -->
     <section class="screen screen--active" id="screen-intro">
-      <div class="card card--intro">
-        <div class="intro-badge">🎉 Análise de Perfil Festivo (APF)</div>
-        <h1 class="intro-title">Qual é o seu<br><span class="gradient-text">Perfil de Festeiro?</span></h1>
-        <p class="intro-subtitle">
-          Todo banco te pergunta seu perfil de investidor antes de deixar você
-          perder dinheiro. Nós perguntamos seu perfil de festeiro antes de deixar
-          você perder a hora, a dignidade ou o sapato.
+      <div class="wrap wrap--narrow">
+        <p class="kicker">Análise de Perfil Festivo</p>
+        <h1 class="display">
+          Qual é o seu<br>perfil de <span class="accent-text">festeiro</span>?
+        </h1>
+        <p class="lede">
+          Bancos aplicam um questionário para descobrir quanto risco cabe na sua
+          carteira. Nós adaptamos o mesmo método para a variável que realmente
+          define o seu fim de semana: o quanto de rolê o seu corpo aguenta.
         </p>
-        <ul class="intro-features">
-          <li><span>📋</span><p>10 perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</p></li>
-          <li><span>📊</span><p>Classificação oficial: <strong>Conservador</strong>, <strong>Moderado</strong> ou <strong>Arrojado</strong></p></li>
-          <li><span>💼</span><p>Uma carteira de rolês diversificada e recomendada pro seu perfil</p></li>
+
+        <ul class="specs">
+          <li>
+            <span class="specs__num">10</span>
+            <span class="specs__text">perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</span>
+          </li>
+          <li>
+            <span class="specs__num">03</span>
+            <span class="specs__text">resultados possíveis: <strong>Fica em Casa</strong>, <strong>Sai às Vezes</strong> ou <strong>Vamos Viver Essa Experiência</strong></span>
+          </li>
+          <li>
+            <span class="specs__num">01</span>
+            <span class="specs__text">carteira de rolês diversificada, com alocação recomendada para o seu perfil</span>
+          </li>
         </ul>
-        <button class="btn btn--primary" id="btn-start">Começar minha análise 🚀</button>
+
+        <button class="btn btn--primary" id="btn-start">Começar análise</button>
+
         <p class="disclaimer">
-          * Este teste não constitui recomendação de rolê. Festa passada não é garantia de ressaca futura.
+          Este teste não constitui recomendação de rolê. Festa passada não é
+          garantia de ressaca futura. Rentabilidade emocional sujeita à
+          disponibilidade dos seus amigos.
         </p>
       </div>
     </section>
 
-    <!-- ===== TELA DO QUIZ ===== -->
+    <!-- ===================== QUIZ ===================== -->
     <section class="screen" id="screen-quiz">
-      <div class="card card--quiz">
-        <div class="quiz-header">
-          <button class="btn-back" id="btn-back" aria-label="Voltar pergunta">←</button>
-          <div class="progress">
-            <div class="progress__track">
-              <div class="progress__fill" id="progress-fill"></div>
-            </div>
-            <span class="progress__label" id="progress-label">1 / 10</span>
+      <div class="wrap wrap--narrow">
+        <div class="quiz-top">
+          <button class="icon-btn" id="btn-back" aria-label="Voltar para a pergunta anterior">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="meter meter--progress">
+            <div class="meter__fill" id="progress-fill"></div>
+          </div>
+          <span class="counter"><b id="progress-current">1</b> / 10</span>
+        </div>
+
+        <div class="quiz-body" id="quiz-body">
+          <p class="kicker" id="question-kicker"></p>
+          <h2 class="question" id="question-title"></h2>
+          <div class="options" id="options" role="group" aria-labelledby="question-title"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROCESSANDO ===================== -->
+    <section class="screen" id="screen-loading">
+      <div class="wrap wrap--narrow center">
+        <div class="spinner" aria-hidden="true"></div>
+        <h2 class="loading-title">Processando sua análise</h2>
+        <p class="loading-step" id="loading-step">Consultando o comitê de churrasco</p>
+        <div class="meter meter--slim">
+          <div class="meter__fill" id="loading-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RESULTADO (landing page) ===================== -->
+    <section class="screen" id="screen-result">
+
+      <!-- Barra fixa -->
+      <div class="topbar" id="topbar">
+        <span class="topbar__label">Perfil</span>
+        <span class="topbar__name" id="topbar-name"></span>
+        <button class="btn btn--mini" id="btn-restart-top">Refazer</button>
+      </div>
+
+      <!-- 01 — Hero -->
+      <header class="lp-hero">
+        <div class="wrap">
+          <p class="kicker">Relatório de perfil festivo</p>
+          <h2 class="display display--result" id="result-title"></h2>
+          <p class="lede lede--result" id="result-tagline"></p>
+          <div class="hero-figure">
+            <span class="hero-figure__value" id="result-score"></span>
+            <span class="hero-figure__unit">/ 40</span>
+            <span class="hero-figure__label">pontos de festividade</span>
           </div>
         </div>
-        <div class="quiz-body" id="quiz-body">
-          <p class="question-kicker" id="question-kicker"></p>
-          <h2 class="question-title" id="question-title"></h2>
-          <div class="options" id="options"></div>
+      </header>
+
+      <!-- 02 — Diagnóstico -->
+      <section class="lp-section">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">01</span>
+            <h3 class="section-head__title">Diagnóstico</h3>
+          </div>
+          <p class="prose" id="result-description"></p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ===== TELA DE ANÁLISE (loading fake) ===== -->
-    <section class="screen" id="screen-loading">
-      <div class="card card--loading">
-        <div class="loading-emoji" id="loading-emoji">🥁</div>
-        <h2 class="loading-title">Processando sua análise...</h2>
-        <p class="loading-step" id="loading-step">Consultando o comitê de churrasco...</p>
-        <div class="progress__track progress__track--loading">
-          <div class="progress__fill" id="loading-fill"></div>
+      <!-- 03 — Indicadores -->
+      <section class="lp-section">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">02</span>
+            <h3 class="section-head__title">Indicadores do perfil</h3>
+          </div>
+          <p class="section-sub">Métricas apuradas com base nas suas respostas e em nenhuma metodologia aceita pelo mercado.</p>
+          <div class="tiles" id="indicators"></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ===== TELA DE RESULTADO ===== -->
-    <section class="screen" id="screen-result">
-      <div class="card card--result">
-        <p class="result-kicker">📑 Relatório oficial de suitability festivo</p>
-        <div class="result-emoji" id="result-emoji"></div>
-        <p class="result-label">Seu perfil de festeiro é</p>
-        <h2 class="result-title" id="result-title"></h2>
-        <p class="result-tagline" id="result-tagline"></p>
-        <p class="result-description" id="result-description"></p>
+      <!-- 04 — Carteira -->
+      <section class="lp-section">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">03</span>
+            <h3 class="section-head__title">Carteira de rolês recomendada</h3>
+          </div>
+          <p class="section-sub" id="portfolio-subtitle"></p>
 
-        <div class="indicators" id="indicators"></div>
+          <div class="chart-panel">
+            <figure class="chart" id="chart-figure">
+              <div class="donut-wrap">
+                <svg class="donut" id="donut" viewBox="0 0 200 200" role="img" aria-labelledby="donut-title">
+                  <title id="donut-title">Distribuição percentual da carteira de rolês</title>
+                  <g id="donut-segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value" id="donut-center-value">100%</span>
+                  <span class="donut-center__label" id="donut-center-label">alocado</span>
+                </div>
+                <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+              </div>
+              <figcaption class="legend" id="legend"></figcaption>
+            </figure>
+          </div>
 
-        <div class="portfolio">
-          <h3 class="portfolio-title">💼 Sua carteira de rolês recomendada</h3>
-          <p class="portfolio-subtitle" id="portfolio-subtitle"></p>
-          <div class="portfolio-items" id="portfolio-items"></div>
+          <div class="alloc" id="portfolio-items"></div>
         </div>
+      </section>
 
-        <div class="result-quote" id="result-quote"></div>
-
-        <div class="result-actions">
-          <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp 💬</a>
-          <button class="btn btn--ghost" id="btn-restart">Refazer análise 🔄</button>
+      <!-- 05 — Recomendação -->
+      <section class="lp-section">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">04</span>
+            <h3 class="section-head__title">Recomendação do analista</h3>
+          </div>
+          <blockquote class="quote" id="result-quote"></blockquote>
         </div>
-        <p class="disclaimer">
-          * Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da família marcar almoço no mesmo dia do rolê.
-        </p>
-      </div>
+      </section>
+
+      <!-- 06 — CTA -->
+      <section class="lp-cta">
+        <div class="wrap center">
+          <h3 class="cta-title">Descobriu o seu. E o resto do grupo?</h3>
+          <p class="section-sub">Mande o teste para quem sempre some às 23h — ou para quem nunca vai embora.</p>
+          <div class="cta-actions">
+            <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+            <button class="btn btn--ghost" id="btn-restart">Refazer análise</button>
+          </div>
+          <p class="disclaimer">
+            Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da
+            família marcar almoço no mesmo dia do rolê. Resultados podem variar
+            conforme a qualidade da caixa de som.
+          </p>
+        </div>
+      </section>
+
     </section>
 
   </main>
 
   <footer class="footer">
-    Feito com 🍻 e zero responsabilidade fiduciária — PIAR Festeiro
+    <span>PIAR Festeiro</span>
+    <span class="footer__sep">·</span>
+    <span>zero responsabilidade fiduciária</span>
   </footer>
 
   <script src="app.js"></script>
