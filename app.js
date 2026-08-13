@@ -7,6 +7,60 @@
 const $ = (id) => document.getElementById(id);
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* As cores do gráfico vivem no CSS (--series-N), então trocar de tema
+   repinta tudo sozinho, sem redesenhar nada. */
+const SERIES = [1, 2, 3, 4, 5].map((n) => `var(--series-${n})`);
+
+/* ==========================================================================
+   Tema — o do sistema é o padrão; o clique fixa uma escolha
+   ========================================================================== */
+const Theme = (() => {
+  const KEY = "piar-festeiro:tema";
+  const media = window.matchMedia("(prefers-color-scheme: light)");
+  const listeners = [];
+  let choice = "system";
+
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved === "light" || saved === "dark") choice = saved;
+  } catch (err) {
+    /* sem storage: seguimos com o tema do sistema */
+  }
+
+  const resolved = () => (choice === "system" ? (media.matches ? "light" : "dark") : choice);
+
+  function apply() {
+    const theme = resolved();
+    document.documentElement.dataset.theme = theme;
+    const color = document.querySelector('meta[name="theme-color"]');
+    if (color) color.setAttribute("content", theme === "light" ? "#f6f6f4" : "#08080a");
+    const scheme = document.querySelector('meta[name="color-scheme"]');
+    if (scheme) scheme.setAttribute("content", theme);
+    listeners.forEach((fn) => fn(theme));
+  }
+
+  media.addEventListener("change", () => {
+    if (choice === "system") apply();
+  });
+
+  return {
+    resolved,
+    onChange(fn) {
+      listeners.push(fn);
+    },
+    init: apply,
+    toggle() {
+      choice = resolved() === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem(KEY, choice);
+      } catch (err) {
+        /* a escolha vale só para esta sessão */
+      }
+      apply();
+    },
+  };
+})();
+
 /* ==========================================================================
    Fundo de luz
    - "trail": manchas coloridas nascem no cursor e no rastro dele (landing)
@@ -20,15 +74,17 @@ const Ambient = (() => {
   let height = 0;
   let mode = "trail";
   let frame = null;
-  let colorIndex = 0;
 
   let blobs = [];
   let lights = [];
   let bits = [];
+  let palette = AMBIENT.dark;
+  let sinceAmbient = 0;
+  let colorIndex = 0;
 
   const pointer = { x: 0.5, y: 0.5 };
   const eased = { x: 0.5, y: 0.5 };
-  let last = { x: null, y: null, at: 0 };
+  const last = { x: null, y: null };
 
   const rand = (min, max) => min + Math.random() * (max - min);
   const rgba = (hex, alpha) => {
@@ -48,11 +104,11 @@ const Ambient = (() => {
 
   function buildDrift() {
     const small = width < 720;
-    lights = Array.from({ length: small ? 5 : 7 }, (_, i) => ({
+    lights = Array.from({ length: small ? 6 : 9 }, (_, i) => ({
       x: rand(0, width),
       y: rand(0, height),
-      r: rand(width * 0.18, width * 0.34),
-      color: LIGHTS[i % LIGHTS.length],
+      r: rand(width * 0.2, width * 0.38),
+      colorIndex: i % palette.lights.length,
       vx: rand(-0.09, 0.09),
       vy: rand(-0.07, 0.07),
       phase: rand(0, Math.PI * 2),
@@ -65,7 +121,7 @@ const Ambient = (() => {
       y: rand(0, height),
       w: rand(3, 6),
       h: rand(6, 12),
-      color: LIGHTS[Math.floor(rand(0, LIGHTS.length))],
+      colorIndex: Math.floor(rand(0, palette.lights.length)),
       vy: rand(0.15, 0.5),
       vx: rand(-0.18, 0.18),
       rot: rand(0, Math.PI * 2),
@@ -75,39 +131,55 @@ const Ambient = (() => {
     }));
   }
 
-  /* Uma mancha de luz nasce onde o ponteiro passou. */
-  function spawn(x, y, scale = 1) {
+  /* Rastro do cursor: sempre verde. */
+  function spawnTrail(x, y) {
     blobs.push({
       x,
       y,
-      r: rand(90, 190) * scale,
-      color: LIGHTS[colorIndex++ % LIGHTS.length],
+      r: rand(110, 210),
+      trail: true,
       life: 0,
-      max: rand(1500, 2600),
+      max: rand(1600, 2800),
     });
-    if (blobs.length > 90) blobs.shift();
+    if (blobs.length > 80) blobs.shift();
+  }
+
+  /* Manchas que surgem sozinhas no fundo: maiores e mais frequentes. */
+  function spawnAmbient() {
+    blobs.push({
+      x: rand(-0.05, 1.05) * width,
+      y: rand(-0.05, 1.05) * height,
+      r: rand(220, 440),
+      index: colorIndex++ % palette.lights.length,
+      life: 0,
+      max: rand(4200, 6400),
+    });
+    if (blobs.length > 80) blobs.shift();
   }
 
   function drawTrail(dt) {
-    // sem ponteiro por um tempo? a pista acende sozinha, discretamente
-    if (performance.now() - last.at > 1400 && Math.random() < 0.03) {
-      spawn(rand(width * 0.1, width * 0.9), rand(height * 0.1, height * 0.9), 1.2);
-      last.at = performance.now() - 700;
+    sinceAmbient += dt;
+    if (sinceAmbient > 480) {
+      sinceAmbient = 0;
+      spawnAmbient();
     }
 
-    ctx.globalCompositeOperation = "lighter";
+    ctx.globalCompositeOperation = palette === AMBIENT.light ? "source-over" : "lighter";
     blobs = blobs.filter((b) => {
       b.life += dt;
       const t = b.life / b.max;
       if (t >= 1) return false;
 
-      // sobe e apaga: acende rápido, some devagar
-      const fade = t < 0.18 ? t / 0.18 : 1 - (t - 0.18) / 0.82;
-      const radius = b.r * (0.75 + t * 0.5);
+      // acende rápido, some devagar
+      const fade = t < 0.16 ? t / 0.16 : 1 - (t - 0.16) / 0.84;
+      const peak = b.trail ? palette.trailAlpha : palette.lightAlpha;
+      const color = b.trail ? palette.trail : palette.lights[b.index];
+      const radius = b.r * (0.78 + t * 0.42);
+
       const gradient = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, radius);
-      gradient.addColorStop(0, rgba(b.color, 0.3 * fade));
-      gradient.addColorStop(0.45, rgba(b.color, 0.1 * fade));
-      gradient.addColorStop(1, rgba(b.color, 0));
+      gradient.addColorStop(0, rgba(color, peak * fade));
+      gradient.addColorStop(0.45, rgba(color, peak * 0.36 * fade));
+      gradient.addColorStop(1, rgba(color, 0));
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(b.x, b.y, radius, 0, Math.PI * 2);
@@ -123,7 +195,7 @@ const Ambient = (() => {
     const px = (eased.x - 0.5) * 60;
     const py = (eased.y - 0.5) * 60;
 
-    ctx.globalCompositeOperation = "lighter";
+    ctx.globalCompositeOperation = palette === AMBIENT.light ? "source-over" : "lighter";
     lights.forEach((l) => {
       l.x += l.vx;
       l.y += l.vy;
@@ -135,9 +207,10 @@ const Ambient = (() => {
       const pulse = 0.5 + 0.5 * Math.sin(time * l.pulse + l.phase);
       const x = l.x + px * l.depth;
       const y = l.y + py * l.depth;
+      const color = palette.lights[l.colorIndex];
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, l.r);
-      gradient.addColorStop(0, rgba(l.color, 0.14 + pulse * 0.1));
-      gradient.addColorStop(1, rgba(l.color, 0));
+      gradient.addColorStop(0, rgba(color, palette.lightAlpha * (0.7 + pulse * 0.5)));
+      gradient.addColorStop(1, rgba(color, 0));
       ctx.fillStyle = gradient;
       ctx.beginPath();
       ctx.arc(x, y, l.r, 0, Math.PI * 2);
@@ -160,7 +233,7 @@ const Ambient = (() => {
       ctx.translate(b.x + px * b.depth * 0.6, b.y + py * b.depth * 0.6);
       ctx.rotate(b.rot);
       ctx.globalAlpha = b.alpha;
-      ctx.fillStyle = b.color;
+      ctx.fillStyle = palette.lights[b.colorIndex];
       ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * (0.4 + 0.6 * Math.abs(Math.cos(b.rot))));
       ctx.restore();
     });
@@ -183,13 +256,11 @@ const Ambient = (() => {
     pointer.x = x / width;
     pointer.y = y / height;
     if (mode !== "trail") return;
-    const moved =
-      last.x === null ? Infinity : Math.hypot(x - last.x, y - last.y);
-    if (moved > 26) {
-      spawn(x, y);
+    const moved = last.x === null ? Infinity : Math.hypot(x - last.x, y - last.y);
+    if (moved > 24) {
+      spawnTrail(x, y);
       last.x = x;
       last.y = y;
-      last.at = performance.now();
     }
   }
 
@@ -216,13 +287,20 @@ const Ambient = (() => {
 
   return {
     start() {
+      palette = AMBIENT[Theme.resolved()] || AMBIENT.dark;
       resize();
-      if (reduceMotion) {
-        // estático: acende algumas luzes e para
-        for (let i = 0; i < 5; i++) {
-          spawn(rand(0, width), rand(0, height), 1.4);
+      Theme.onChange((theme) => {
+        palette = AMBIENT[theme] || AMBIENT.dark;
+        if (reduceMotion) {
+          ctx.clearRect(0, 0, width, height);
+          loop(0);
         }
-        blobs.forEach((b) => (b.life = b.max * 0.2));
+      });
+
+      if (reduceMotion) {
+        // estático: acende algumas manchas e para
+        for (let i = 0; i < 6; i++) spawnAmbient();
+        blobs.forEach((b) => (b.life = b.max * 0.25));
         loop(0);
         return;
       }
@@ -289,10 +367,6 @@ const Storage = (() => {
       const data = read();
       return data && data.attempts.length ? data.attempts[data.attempts.length - 1] : null;
     },
-    history() {
-      const data = read();
-      return data ? data.attempts.slice().reverse() : [];
-    },
     save(attempt) {
       const data = read() || { attempts: [] };
       data.attempts.push(attempt);
@@ -338,9 +412,22 @@ function computeScore() {
   );
 }
 
+/* Categoria e título andam sempre juntos, em texto e em marcação. */
+function profileText(profile) {
+  return `${profile.category} · ${profile.name}`;
+}
+
+function profileMarkup(profile) {
+  return (
+    `<span class="pname__cat">${profile.category}</span>` +
+    `<span class="pname__sep">·</span>` +
+    `<span class="pname__desc">${profile.name}</span>`
+  );
+}
+
 function shareLink(profile) {
   const text =
-    `Fiz a Análise de Perfil Festivo e o resultado saiu: "${profile.name}".\n` +
+    `Fiz a Análise de Perfil Festivo e o resultado saiu: "${profileText(profile)}".\n` +
     `${profile.tagline}\n\nDescubra o seu perfil: ${location.origin}${location.pathname}`;
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
@@ -525,7 +612,7 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
     seg.setAttribute("cx", "100");
     seg.setAttribute("cy", "100");
     seg.setAttribute("r", String(DONUT.radius));
-    seg.setAttribute("stroke", color);
+    seg.style.stroke = color; // via style: atributo de apresentação não resolve var()
     seg.setAttribute("stroke-dasharray", `0 ${circumference}`);
     seg.setAttribute("stroke-dashoffset", String(-offset));
     seg.setAttribute("tabindex", "0");
@@ -680,6 +767,30 @@ function renderAlloc(host, profile) {
   });
 }
 
+function renderStrategy(host, profile) {
+  const rows = [
+    { key: "picking", pct: profile.strategy.picking, color: "var(--series-5)" },
+    { key: "passive", pct: profile.strategy.passive, color: "var(--series-1)" },
+  ];
+
+  host.innerHTML = rows
+    .map(
+      (row) => `
+      <div class="strategy__row">
+        <span class="strategy__label">${STRATEGY_LABELS[row.key]}</span>
+        <div class="strategy__track">
+          <div class="strategy__fill" data-width="${row.pct}" style="background:${row.color}">${row.pct}%</div>
+        </div>
+      </div>`
+    )
+    .join("");
+
+  const note = document.createElement("p");
+  note.className = "strategy__note";
+  note.textContent = profile.strategy.note;
+  host.appendChild(note);
+}
+
 function renderPoint(item, warn) {
   const el = document.createElement("article");
   el.className = `point${warn ? " point--warn" : ""}`;
@@ -706,8 +817,8 @@ function animateMetrics(root) {
 function renderResult(profile) {
   state.profile = profile;
 
-  $("result-title").textContent = profile.name;
-  $("topbar-name").textContent = profile.name;
+  $("result-title").innerHTML = profileMarkup(profile);
+  $("topbar-name").textContent = profileText(profile);
   $("result-tagline").textContent = profile.tagline;
   $("result-description").textContent = profile.description;
   $("result-portfolio-subtitle").textContent = profile.portfolioSubtitle;
@@ -715,6 +826,7 @@ function renderResult(profile) {
   $("btn-share").href = shareLink(profile);
 
   renderIndicators($("result-indicators"), profile);
+  renderStrategy($("result-strategy"), profile);
   renderAlloc($("result-alloc"), profile);
 
   const wrap = $("result-donut-wrap");
@@ -765,7 +877,7 @@ function renderDashboard(attempt) {
   const profile = getProfile(attempt.score);
   state.profile = profile;
 
-  $("dash-profile").textContent = profile.name;
+  $("dash-profile").innerHTML = profileMarkup(profile);
   $("dash-tagline").textContent = profile.tagline;
   $("dash-date").textContent = formatDate(attempt.savedAt);
   $("dash-description").textContent = profile.description;
@@ -778,8 +890,9 @@ function renderDashboard(attempt) {
   $("scale-marker").style.left = `${[16, 50, 84][position]}%`;
   $("scale-note").textContent = profile.scaleNote;
 
-  // Indicadores
+  // Indicadores e estratégia
   renderIndicators($("dash-indicators"), profile);
+  renderStrategy($("dash-strategy"), profile);
 
   // Destaques
   $("dash-top-strength").replaceChildren(renderPoint(profile.strengths[0], false));
@@ -808,23 +921,6 @@ function renderDashboard(attempt) {
     $("dash-alloc")
   );
 
-  // Histórico
-  const history = Storage.history();
-  const historyHost = $("dash-history");
-  historyHost.innerHTML = "";
-  history.forEach((entry, i) => {
-    const p = getProfile(entry.score);
-    const row = document.createElement("div");
-    row.className = `history__row${i === 0 ? " history__row--current" : ""}`;
-    row.innerHTML = `
-      <span class="history__date">${formatDate(entry.savedAt)}</span>
-      <span class="history__profile">${p.name}</span>
-      ${i === 0 ? '<span class="history__tag">Atual</span>' : ""}
-    `;
-    historyHost.appendChild(row);
-  });
-  $("history-card").classList.toggle("is-hidden", history.length < 2);
-
   setTimeout(() => {
     animateMetrics($("screen-dashboard"));
     animateMini();
@@ -841,7 +937,11 @@ function setView(view) {
     link.classList.toggle("nav__link--active", link.dataset.view === active);
   });
   $("dash-kicker").textContent =
-    active === "carteira" ? "Carteira recomendada" : active === "perfil" ? "Análise de perfil" : "Seu perfil festivo";
+    active === "carteira"
+      ? "Estratégia e alocação"
+      : active === "perfil"
+        ? "Análise de perfil"
+        : "Seu perfil festivo";
 }
 
 function openDashboard(view) {
@@ -881,11 +981,12 @@ function burst() {
   if (reduceMotion) return;
   const host = $("burst");
   host.innerHTML = "";
+  const palette = (AMBIENT[Theme.resolved()] || AMBIENT.dark).lights;
   for (let i = 0; i < 60; i++) {
     const piece = document.createElement("span");
     piece.className = "burst__piece";
     piece.style.left = `${Math.random() * 100}%`;
-    piece.style.background = LIGHTS[i % LIGHTS.length];
+    piece.style.background = palette[i % palette.length];
     piece.style.setProperty("--spin", `${Math.random() * 900 - 450}deg`);
     piece.style.animationDelay = `${Math.random() * 0.9}s`;
     piece.style.animationDuration = `${1.9 + Math.random() * 1.6}s`;
@@ -928,6 +1029,10 @@ function refreshIntro() {
   $("btn-dashboard").classList.toggle("is-hidden", !Storage.latest());
 }
 
+document.querySelectorAll(".theme-toggle").forEach((btn) => {
+  btn.addEventListener("click", () => Theme.toggle());
+});
+
 $("btn-start").addEventListener("click", startQuiz);
 $("btn-dashboard").addEventListener("click", () => openDashboard(VIEWS[0]));
 $("btn-to-dashboard").addEventListener("click", () => openDashboard(VIEWS[0]));
@@ -950,6 +1055,7 @@ document.querySelectorAll(".nav__link, .card__link").forEach((link) => {
 /* ==========================================================================
    Início
    ========================================================================== */
+Theme.init();
 Ambient.start();
 renderQuestion();
 refreshIntro();

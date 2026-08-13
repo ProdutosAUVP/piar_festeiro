@@ -9,10 +9,27 @@
   <meta name="theme-color" content="#08080a">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪩</text></svg>">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // aplicado antes da primeira pintura para não piscar o tema errado
+    (function () {
+      try {
+        var saved = localStorage.getItem("piar-festeiro:tema");
+        var system = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = saved === "light" || saved === "dark" ? saved : system;
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    })();
+  </script>
 </head>
 <body data-screen="intro">
   <canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
   <div class="burst" id="burst" aria-hidden="true"></div>
+
+  <button class="theme-toggle theme-toggle--float" id="theme-float" type="button" aria-label="Alternar entre tema claro e escuro">
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.8 5.8 4.3 4.3M19.7 19.7l-1.5-1.5M18.2 5.8l1.5-1.5M4.3 19.7l1.5-1.5"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4z"/></svg>
+  </button>
 
   <main class="app">
 
@@ -36,7 +53,7 @@
           </li>
           <li class="spec-card">
             <span class="spec-card__num">03</span>
-            <span class="spec-card__text">resultados possíveis: <strong>Fica em Casa</strong>, <strong>Sai às Vezes</strong> ou <strong>Vamos Viver Essa Experiência</strong></span>
+            <span class="spec-card__text">resultados possíveis: <strong>Ermitão</strong> (fica em casa), <strong>Assombração</strong> (sai às vezes) ou <strong>Inimigo do Fim</strong> (vamos viver essa experiência)</span>
           </li>
           <li class="spec-card">
             <span class="spec-card__num">01</span>
@@ -79,18 +96,29 @@
     <!-- ===================== PROCESSANDO ===================== -->
     <section class="screen" id="screen-loading">
       <div class="wrap wrap--narrow center">
-        <!-- Bola de espelhos -->
-        <div class="disco" aria-hidden="true">
-          <span class="disco__cord"></span>
-          <span class="disco__cap"></span>
-          <div class="disco__ball">
-            <div class="disco__facets"></div>
-            <span class="disco__shine"></span>
-          </div>
-          <span class="disco__beam disco__beam--1"></span>
-          <span class="disco__beam disco__beam--2"></span>
-          <span class="disco__beam disco__beam--3"></span>
-          <span class="disco__floor"></span>
+        <!-- Brinde: taça com bolhas subindo -->
+        <div class="toast" aria-hidden="true">
+          <svg class="toast__glass" viewBox="0 0 110 150">
+            <defs>
+              <clipPath id="bowl">
+                <path d="M33 16 H77 V58 C77 78 68 90 55 93 C42 90 33 78 33 58 Z"/>
+              </clipPath>
+            </defs>
+            <g clip-path="url(#bowl)">
+              <rect class="toast__liquid" x="30" y="44" width="50" height="60"/>
+              <circle class="toast__bubble" cx="45" cy="86" r="2.6"/>
+              <circle class="toast__bubble" cx="55" cy="86" r="1.9"/>
+              <circle class="toast__bubble" cx="64" cy="86" r="2.3"/>
+              <circle class="toast__bubble" cx="50" cy="86" r="1.5"/>
+              <circle class="toast__bubble" cx="60" cy="86" r="2.9"/>
+            </g>
+            <path class="toast__outline" d="M33 16 H77 V58 C77 78 68 90 55 93 C42 90 33 78 33 58 Z"/>
+            <path class="toast__outline" d="M55 93 V126"/>
+            <path class="toast__outline" d="M38 130 Q55 122 72 130"/>
+          </svg>
+          <span class="toast__spark toast__spark--1"></span>
+          <span class="toast__spark toast__spark--2"></span>
+          <span class="toast__spark toast__spark--3"></span>
         </div>
         <h2 class="loading-title">Processando sua análise</h2>
         <p class="loading-step" id="loading-step">Consultando o comitê de churrasco</p>
@@ -141,7 +169,18 @@
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">03</span>
-            <h3 class="section-head__title">Carteira de rolês recomendada</h3>
+            <h3 class="section-head__title">Estratégia ideal</h3>
+          </div>
+          <p class="section-sub">Como você monta o seu fim de semana: escolhendo cada rolê a dedo ou seguindo o que o grupo já marcou.</p>
+          <div class="strategy" id="result-strategy"></div>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">04</span>
+            <h3 class="section-head__title">Sugestão de alocação</h3>
           </div>
           <p class="section-sub" id="result-portfolio-subtitle"></p>
           <div class="chart-panel">
@@ -166,7 +205,7 @@
       <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
-            <span class="section-head__num">04</span>
+            <span class="section-head__num">05</span>
             <h3 class="section-head__title">Recomendação do analista</h3>
           </div>
           <blockquote class="quote" id="result-quote"></blockquote>
@@ -205,6 +244,10 @@
             <a class="nav__link" href="#/carteira" data-view="carteira">Carteira</a>
           </nav>
 
+          <button class="theme-toggle" id="theme-bar" type="button" aria-label="Alternar entre tema claro e escuro">
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.8 5.8 4.3 4.3M19.7 19.7l-1.5-1.5M18.2 5.8l1.5-1.5M4.3 19.7l1.5-1.5"/></g></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4z"/></svg>
+          </button>
           <button class="btn btn--mini" id="btn-redo">Refazer análise</button>
         </div>
       </header>
@@ -235,16 +278,16 @@
                   <span class="scale__marker" id="scale-marker"></span>
                 </div>
                 <div class="scale__labels">
-                  <span>Fica em Casa</span>
-                  <span>Sai às Vezes</span>
-                  <span>Vamos Viver</span>
+                  <span><b>Ermitão</b>Fica em Casa</span>
+                  <span><b>Assombração</b>Sai às Vezes</span>
+                  <span><b>Inimigo do Fim</b>Vamos Viver</span>
                 </div>
               </div>
               <p class="card__note" id="scale-note"></p>
             </article>
 
             <article class="card card--mini-chart">
-              <h3 class="card__title">Composição da carteira</h3>
+              <h3 class="card__title">Sugestão de alocação</h3>
               <div class="mini-chart">
                 <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
                   <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Composição resumida da carteira">
@@ -278,10 +321,6 @@
             </article>
           </div>
 
-          <article class="card" id="history-card">
-            <h3 class="card__title">Histórico de análises</h3>
-            <div class="history" id="dash-history"></div>
-          </article>
         </div>
 
         <!-- ===== Perfil ===== -->
@@ -306,7 +345,13 @@
         <!-- ===== Carteira ===== -->
         <div class="wrap view" id="view-carteira" hidden>
           <article class="card">
-            <h3 class="card__title">Carteira de rolês recomendada</h3>
+            <h3 class="card__title">Estratégia ideal</h3>
+            <p class="section-sub">Como você monta o seu fim de semana: escolhendo cada rolê a dedo ou seguindo o que o grupo já marcou.</p>
+            <div class="strategy" id="dash-strategy"></div>
+          </article>
+
+          <article class="card">
+            <h3 class="card__title">Sugestão de alocação</h3>
             <p class="section-sub" id="dash-portfolio-subtitle"></p>
             <figure class="chart">
               <div class="donut-wrap" id="carteira-donut-wrap">

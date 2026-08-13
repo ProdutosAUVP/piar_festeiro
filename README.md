@@ -15,9 +15,12 @@ fim de semana: o quanto de rolê o seu corpo aguenta.
 
 | Pontos | Perfil | Leitura |
 | --- | --- | --- |
-| 10–19 | **Fica em Casa** | Tesouro Sofá: liquidez diária no controle remoto |
-| 20–30 | **Sai às Vezes** | Multimercado: dança, mas com uma mão no corrimão |
-| 31–40 | **Vamos Viver Essa Experiência** | Day trade de pista: alavancado em glitter |
+| 10–19 | **Ermitão** · Fica em Casa | Tesouro Sofá: liquidez diária no controle remoto |
+| 20–30 | **Assombração** · Sai às Vezes | Multimercado: dança, mas com uma mão no corrimão |
+| 31–40 | **Inimigo do Fim** · Vamos Viver Essa Experiência | Day trade de pista: alavancado em glitter |
+
+A categoria e o título andam sempre juntos — na escala, no resultado, no painel
+e no compartilhamento.
 
 4. O resultado é revelado como uma landing page e fica guardado num **painel**
    permanente, acessível a qualquer momento.
@@ -26,29 +29,31 @@ fim de semana: o quanto de rolê o seu corpo aguenta.
 
 | Tela | O que faz |
 | --- | --- |
-| **Landing** | Fundo escuro onde manchas coloridas de luz nascem no cursor e no rastro dele. Cards com os números da análise. |
+| **Landing** | Rastro verde de luz que segue o cursor, sobre um fundo onde manchas coloridas surgem sozinhas. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
-| **Processamento** | Bola de espelhos girando enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, carteira com gráfico de pizza e recomendação do analista. |
+| **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
+| **Resultado** | Diagnóstico, indicadores, estratégia ideal, sugestão de alocação com gráfico de pizza e recomendação do analista. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
 
-- **Visão geral** — posição na escala festiva, composição resumida da carteira,
-  indicadores, um destaque positivo, um ponto de atenção e o histórico de análises.
+- **Visão geral** — posição na escala festiva, sugestão de alocação resumida,
+  indicadores, um destaque positivo e um ponto de atenção.
 - **Perfil** — diagnóstico completo, três **pontos fortes**, três **pontos de
   atenção** e a recomendação do analista.
-- **Carteira** — gráfico de pizza interativo, legenda e alocação detalhada.
+- **Carteira** — **estratégia ideal** (quanto do seu fim de semana é curadoria
+  própria e quanto é o que o grupo já marcou), gráfico de pizza interativo,
+  legenda e alocação detalhada.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
-seção. Refazer a análise gera uma nova entrada no histórico sem apagar as
-anteriores (as últimas oito ficam guardadas).
+seção.
 
 ## Dados
 
-Tudo fica em `localStorage`, ou seja, **apenas no navegador de quem respondeu**.
-Não existe backend, nenhuma informação sai do dispositivo e nada é enviado para
-servidor algum. Limpar os dados do site apaga o histórico.
+O resultado e a preferência de tema ficam em `localStorage`, ou seja, **apenas
+no navegador de quem respondeu**. Não existe backend, nenhuma informação sai do
+dispositivo e nada é enviado para servidor algum. Limpar os dados do site apaga
+o registro.
 
 ## Interação
 
@@ -57,21 +62,27 @@ servidor algum. Limpar os dados do site apaga o histórico.
   revisitada sem perder as respostas seguintes.
 - **Gráfico**: o hover destaca a fatia e sincroniza legenda, linha da alocação e
   o miolo do donut; clicar fixa o destaque; as fatias são focáveis pelo teclado.
-- **Fundo animado** com rastro de luz na landing e luzes à deriva no resultado e
-  no painel. Pausa quando a aba perde o foco.
+- **Fundo animado** com rastro verde de luz na landing e luzes à deriva no
+  resultado e no painel. Pausa quando a aba perde o foco.
+- **Tema claro e escuro**, com o do sistema como padrão e um botão que fixa a
+  escolha. O tema é aplicado antes da primeira pintura, sem piscar.
 - Seções do resultado revelam no scroll e os indicadores contam até o valor.
 
 ## Design
 
 - **Dark mode como prioridade**, em estética minimalista: tipografia sobre
-  neutros, cards no lugar de linhas divisórias.
-- **Cor reservada a dois usos**: o acento neon (`#b6ff3a`) para os elementos de
-  destaque — botões, números, links, progresso — e a paleta categórica do
-  gráfico, onde a cor carrega dado. O clima de festa vem da luz do fundo.
-- A paleta do gráfico foi validada contra a superfície escura para faixa de
-  luminosidade, piso de croma, separação sob daltonismo e contraste. Cada fatia
-  mantém seu slot de cor; a separação entre fatias é um vão de 2px na cor da
-  superfície, nunca um contorno.
+  neutros, cards no lugar de linhas divisórias. O tema claro usa a mesma
+  estrutura, com sua própria paleta.
+- **Cor reservada a dois usos**: o acento neon (`#b6ff3a` no escuro, um verde
+  mais fechado no claro para garantir contraste) nos elementos de destaque —
+  botões, números, links, progresso — e a paleta categórica do gráfico, onde a
+  cor carrega dado. O clima de festa vem da luz do fundo.
+- A paleta do gráfico tem um jogo por tema, cada um validado contra a sua
+  superfície para faixa de luminosidade, piso de croma, separação sob
+  daltonismo e contraste. Ela vive no CSS (`--series-1..5`), então trocar de
+  tema repinta o gráfico sozinho. Cada fatia mantém seu slot de cor; a
+  separação entre fatias é um vão de 2px na cor da superfície, nunca um
+  contorno.
 - Painéis levemente translúcidos com `backdrop-filter`, para as luzes
   atravessarem sem prejudicar a leitura.
 - `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as

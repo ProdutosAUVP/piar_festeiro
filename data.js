@@ -110,11 +110,11 @@ const QUESTIONS = [
 /* Faixas de pontuação — 10 perguntas × 1 a 4 pontos = mínimo 10, máximo 40 */
 const PROFILES = [
   {
-    id: "casa",
+    id: "ermitao",
     min: 10,
     max: 19,
+    category: "Ermitão",
     name: "Fica em Casa",
-    short: "Fica em Casa",
     tagline: "Perfil Tesouro Sofá — liquidez diária no controle remoto",
     scaleNote:
       "Você está na ponta conservadora da escala: baixa exposição a rolê e altíssima previsibilidade de domingo.",
@@ -154,6 +154,11 @@ const PROFILES = [
         text: "Convite de última hora quase nunca encontra você disponível.",
       },
     ],
+    strategy: {
+      picking: 85,
+      passive: 15,
+      note: "Você não compra o índice: escolhe uma festa por vez, com critério rígido e lista de convidados conhecida. Curadoria altíssima, exposição mínima — e um domingo impecável.",
+    },
     portfolioSubtitle:
       "Alocação de baixo risco, alta previsibilidade e retorno garantido em boas risadas.",
     portfolio: [
@@ -166,11 +171,11 @@ const PROFILES = [
     quote: "“A rentabilidade do seu sofá é passada, mas o conforto é garantido.”",
   },
   {
-    id: "asvezes",
+    id: "assombracao",
     min: 20,
     max: 30,
+    category: "Assombração",
     name: "Sai às Vezes",
-    short: "Sai às Vezes",
     tagline: "Perfil Multimercado — dança, mas com uma mão no corrimão",
     scaleNote:
       "Você está no meio da escala: exposição equilibrada, com reserva de sono preservada para a segunda-feira.",
@@ -210,6 +215,11 @@ const PROFILES = [
         text: "Se ninguém do grupo organiza, sua carteira fica parada esperando iniciativa alheia.",
       },
     ],
+    strategy: {
+      picking: 55,
+      passive: 45,
+      note: "Metade dos seus rolês você escolhe a dedo; a outra metade é simplesmente o que o grupo marcou. Um equilíbrio saudável entre critério próprio e espontaneidade alheia.",
+    },
     portfolioSubtitle:
       "Alocação balanceada: risco na medida, retorno divertido e segunda-feira preservada.",
     portfolio: [
@@ -222,11 +232,11 @@ const PROFILES = [
     quote: "“Diversifique seus rolês, mas nunca em detrimento do brunch de sábado.”",
   },
   {
-    id: "experiencia",
+    id: "inimigo",
     min: 31,
     max: 40,
+    category: "Inimigo do Fim",
     name: "Vamos Viver Essa Experiência",
-    short: "Vamos Viver",
     tagline: "Perfil Day Trade de Pista — alavancado em glitter e disposição",
     scaleNote:
       "Você está na ponta agressiva da escala: exposição máxima a rolê e liquidez social imediata, a qualquer hora.",
@@ -266,6 +276,11 @@ const PROFILES = [
         text: "Com tudo alocado em pista, sobra pouca energia para o imprevisto de terça-feira.",
       },
     ],
+    strategy: {
+      picking: 20,
+      passive: 80,
+      note: "Você compra o índice inteiro: se marcaram, você vai. Curadoria mínima, exposição máxima — o rolê que aparecer é, por definição, o rolê certo.",
+    },
     portfolioSubtitle:
       "Alocação agressiva, exposição máxima ao setor de pista e derivativos de after.",
     portfolio: [
@@ -287,10 +302,29 @@ const LOADING_STEPS = [
   "Rebalanceando sua carteira de rolês",
 ];
 
-/* Paleta categórica do gráfico — ordem fixa, validada para a superfície escura.
-   Slots nunca são reciclados: cada fatia mantém sua cor. */
-const SERIES = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181"];
+/* Rótulos fixos da estratégia ideal */
+const STRATEGY_LABELS = {
+  picking: "Curadoria de rolê (Stock Picking)",
+  passive: "Rolê indexado (ETF do grupo)",
+};
 
-/* Cores das manchas de luz do fundo */
-const NEON = "#b6ff3a";
-const LIGHTS = ["#b6ff3a", "#3987e5", "#d55181", "#00e5ff", "#d95926", "#a06bff"];
+/* A paleta categórica do gráfico vive no CSS, em --series-1..5, com um jogo
+   por tema (validado contra a superfície clara e a escura). O JS referencia as
+   variáveis, então trocar de tema repinta o gráfico sozinho.
+
+   Manchas de luz do fundo. O rastro do cursor é sempre verde; as manchas que
+   surgem sozinhas variam de cor. */
+const AMBIENT = {
+  dark: {
+    trail: "#3f9c5a",
+    lights: ["#2f7d8a", "#3987e5", "#8c5bd6", "#b0473f", "#3f9c5a", "#a67c1f"],
+    trailAlpha: 0.26,
+    lightAlpha: 0.2,
+  },
+  light: {
+    trail: "#3f9c5a",
+    lights: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#7b5cff"],
+    trailAlpha: 0.22,
+    lightAlpha: 0.18,
+  },
+};
