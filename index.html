@@ -6,20 +6,19 @@
   <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
   <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#0a0a0b">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥂</text></svg>">
+  <meta name="theme-color" content="#08080a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪩</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-screen="intro">
-  <!-- Fundo festivo: luzes de festa e confete à deriva -->
   <canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
   <div class="burst" id="burst" aria-hidden="true"></div>
 
   <main class="app">
 
-    <!-- ===================== TELA INICIAL ===================== -->
+    <!-- ===================== LANDING ===================== -->
     <section class="screen screen--active" id="screen-intro">
-      <div class="wrap wrap--narrow">
+      <div class="wrap wrap--narrow intro">
         <p class="kicker">Análise de Perfil Festivo</p>
         <h1 class="display">
           Qual é o seu<br>perfil de <span class="accent-text">festeiro</span>?
@@ -30,24 +29,24 @@
           define o seu fim de semana: o quanto de rolê o seu corpo aguenta.
         </p>
 
-        <ul class="specs">
-          <li>
-            <span class="specs__num">10</span>
-            <span class="specs__text">perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</span>
+        <ul class="spec-cards">
+          <li class="spec-card">
+            <span class="spec-card__num">10</span>
+            <span class="spec-card__text">perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</span>
           </li>
-          <li>
-            <span class="specs__num">03</span>
-            <span class="specs__text">resultados possíveis: <strong>Fica em Casa</strong>, <strong>Sai às Vezes</strong> ou <strong>Vamos Viver Essa Experiência</strong></span>
+          <li class="spec-card">
+            <span class="spec-card__num">03</span>
+            <span class="spec-card__text">resultados possíveis: <strong>Fica em Casa</strong>, <strong>Sai às Vezes</strong> ou <strong>Vamos Viver Essa Experiência</strong></span>
           </li>
-          <li>
-            <span class="specs__num">01</span>
-            <span class="specs__text">carteira de rolês diversificada, com alocação recomendada para o seu perfil</span>
+          <li class="spec-card">
+            <span class="spec-card__num">01</span>
+            <span class="spec-card__text">carteira de rolês diversificada, com alocação recomendada para o seu perfil</span>
           </li>
         </ul>
 
         <div class="intro-actions">
           <button class="btn btn--primary" id="btn-start">Começar análise</button>
-          <button class="btn btn--ghost is-hidden" id="btn-saved">Ver meu último resultado</button>
+          <button class="btn btn--ghost is-hidden" id="btn-dashboard">Acessar meu painel</button>
         </div>
 
         <p class="disclaimer">
@@ -65,7 +64,7 @@
           <button class="icon-btn" id="btn-back" aria-label="Voltar para a pergunta anterior">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="dots" id="dots" role="tablist" aria-label="Progresso das perguntas"></div>
+          <div class="dots" id="dots" aria-label="Progresso das perguntas"></div>
           <span class="counter"><b id="progress-current">1</b> / 10</span>
         </div>
 
@@ -80,7 +79,19 @@
     <!-- ===================== PROCESSANDO ===================== -->
     <section class="screen" id="screen-loading">
       <div class="wrap wrap--narrow center">
-        <div class="spinner" aria-hidden="true"></div>
+        <!-- Bola de espelhos -->
+        <div class="disco" aria-hidden="true">
+          <span class="disco__cord"></span>
+          <span class="disco__cap"></span>
+          <div class="disco__ball">
+            <div class="disco__facets"></div>
+            <span class="disco__shine"></span>
+          </div>
+          <span class="disco__beam disco__beam--1"></span>
+          <span class="disco__beam disco__beam--2"></span>
+          <span class="disco__beam disco__beam--3"></span>
+          <span class="disco__floor"></span>
+        </div>
         <h2 class="loading-title">Processando sua análise</h2>
         <p class="loading-step" id="loading-step">Consultando o comitê de churrasco</p>
         <div class="meter meter--slim">
@@ -89,16 +100,14 @@
       </div>
     </section>
 
-    <!-- ===================== RESULTADO (landing page) ===================== -->
+    <!-- ===================== RESULTADO ===================== -->
     <section class="screen" id="screen-result">
-
       <div class="topbar" id="topbar">
         <span class="topbar__label">Perfil</span>
         <span class="topbar__name" id="topbar-name"></span>
-        <button class="btn btn--mini" id="btn-restart-top">Refazer</button>
+        <button class="btn btn--mini" id="btn-to-dashboard-top">Ir para o painel</button>
       </div>
 
-      <!-- Hero -->
       <header class="lp-hero reveal" id="lp-hero">
         <div class="wrap">
           <p class="kicker">Relatório de perfil festivo</p>
@@ -107,7 +116,6 @@
         </div>
       </header>
 
-      <!-- 01 — Diagnóstico -->
       <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
@@ -118,7 +126,6 @@
         </div>
       </section>
 
-      <!-- 02 — Indicadores -->
       <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
@@ -126,41 +133,36 @@
             <h3 class="section-head__title">Indicadores do perfil</h3>
           </div>
           <p class="section-sub">Métricas apuradas com base nas suas respostas e em nenhuma metodologia aceita pelo mercado.</p>
-          <div class="tiles" id="indicators"></div>
+          <div class="tiles" id="result-indicators"></div>
         </div>
       </section>
 
-      <!-- 03 — Carteira -->
       <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">03</span>
             <h3 class="section-head__title">Carteira de rolês recomendada</h3>
           </div>
-          <p class="section-sub" id="portfolio-subtitle"></p>
-
+          <p class="section-sub" id="result-portfolio-subtitle"></p>
           <div class="chart-panel">
             <figure class="chart">
-              <div class="donut-wrap" id="donut-wrap">
-                <svg class="donut" id="donut" viewBox="0 0 200 200" role="img" aria-labelledby="donut-title">
-                  <title id="donut-title">Distribuição percentual da carteira de rolês</title>
-                  <g id="donut-segments" transform="rotate(-90 100 100)"></g>
+              <div class="donut-wrap" id="result-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da carteira de rolês">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
                 </svg>
                 <div class="donut-center">
-                  <span class="donut-center__value" id="donut-center-value">100%</span>
-                  <span class="donut-center__label" id="donut-center-label">alocado</span>
+                  <span class="donut-center__value">100%</span>
+                  <span class="donut-center__label">alocado</span>
                 </div>
-                <div class="tooltip" id="tooltip" role="status" aria-live="polite"></div>
+                <div class="tooltip"></div>
               </div>
-              <figcaption class="legend" id="legend"></figcaption>
+              <figcaption class="legend"></figcaption>
             </figure>
           </div>
-
-          <div class="alloc" id="portfolio-items"></div>
+          <div class="alloc" id="result-alloc"></div>
         </div>
       </section>
 
-      <!-- 04 — Recomendação -->
       <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
@@ -171,14 +173,13 @@
         </div>
       </section>
 
-      <!-- CTA -->
       <section class="lp-cta reveal">
         <div class="wrap center">
           <h3 class="cta-title">Descobriu o seu. E o resto do grupo?</h3>
           <p class="section-sub">Mande o teste para quem sempre some às 23h — ou para quem nunca vai embora.</p>
           <div class="cta-actions">
             <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
-            <button class="btn btn--ghost" id="btn-restart">Refazer análise</button>
+            <button class="btn btn--ghost" id="btn-to-dashboard">Ir para o meu painel</button>
           </div>
           <p class="disclaimer">
             Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da
@@ -187,7 +188,156 @@
           </p>
         </div>
       </section>
+    </section>
 
+    <!-- ===================== PAINEL ===================== -->
+    <section class="screen" id="screen-dashboard">
+      <header class="appbar">
+        <div class="appbar__inner">
+          <button class="brand" id="brand-home">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <span class="brand__name">PIAR Festeiro</span>
+          </button>
+
+          <nav class="nav" id="nav" aria-label="Seções do painel">
+            <a class="nav__link" href="#/visao-geral" data-view="visao-geral">Visão geral</a>
+            <a class="nav__link" href="#/perfil" data-view="perfil">Perfil</a>
+            <a class="nav__link" href="#/carteira" data-view="carteira">Carteira</a>
+          </nav>
+
+          <button class="btn btn--mini" id="btn-redo">Refazer análise</button>
+        </div>
+      </header>
+
+      <div class="dash">
+        <!-- Cabeçalho do painel -->
+        <div class="wrap">
+          <div class="dash-head">
+            <div>
+              <p class="kicker" id="dash-kicker">Seu perfil festivo</p>
+              <h2 class="dash-title" id="dash-profile"></h2>
+              <p class="dash-tagline" id="dash-tagline"></p>
+            </div>
+            <div class="dash-meta">
+              <span class="dash-meta__label">Última análise</span>
+              <span class="dash-meta__value" id="dash-date"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Visão geral ===== -->
+        <div class="wrap view" id="view-visao-geral">
+          <div class="grid grid--2">
+            <article class="card card--scale">
+              <h3 class="card__title">Posição na escala festiva</h3>
+              <div class="scale">
+                <div class="scale__track">
+                  <span class="scale__marker" id="scale-marker"></span>
+                </div>
+                <div class="scale__labels">
+                  <span>Fica em Casa</span>
+                  <span>Sai às Vezes</span>
+                  <span>Vamos Viver</span>
+                </div>
+              </div>
+              <p class="card__note" id="scale-note"></p>
+            </article>
+
+            <article class="card card--mini-chart">
+              <h3 class="card__title">Composição da carteira</h3>
+              <div class="mini-chart">
+                <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
+                  <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Composição resumida da carteira">
+                    <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                  </svg>
+                  <div class="donut-center">
+                    <span class="donut-center__value">100%</span>
+                    <span class="donut-center__label">alocado</span>
+                  </div>
+                  <div class="tooltip"></div>
+                </div>
+                <div class="legend legend--compact"></div>
+              </div>
+              <a class="card__link" href="#/carteira">Ver carteira completa</a>
+            </article>
+          </div>
+
+          <h3 class="dash-section-title">Indicadores</h3>
+          <div class="tiles" id="dash-indicators"></div>
+
+          <div class="grid grid--2">
+            <article class="card">
+              <h3 class="card__title">Destaque positivo</h3>
+              <div id="dash-top-strength"></div>
+              <a class="card__link" href="#/perfil">Ver análise completa</a>
+            </article>
+            <article class="card">
+              <h3 class="card__title">Ponto de atenção</h3>
+              <div id="dash-top-weakness"></div>
+              <a class="card__link" href="#/perfil">Ver análise completa</a>
+            </article>
+          </div>
+
+          <article class="card" id="history-card">
+            <h3 class="card__title">Histórico de análises</h3>
+            <div class="history" id="dash-history"></div>
+          </article>
+        </div>
+
+        <!-- ===== Perfil ===== -->
+        <div class="wrap view" id="view-perfil" hidden>
+          <article class="card">
+            <h3 class="card__title">Diagnóstico</h3>
+            <p class="prose" id="dash-description"></p>
+          </article>
+
+          <h3 class="dash-section-title">Pontos fortes</h3>
+          <div class="grid grid--3" id="dash-strengths"></div>
+
+          <h3 class="dash-section-title">Pontos de atenção</h3>
+          <div class="grid grid--3" id="dash-weaknesses"></div>
+
+          <article class="card card--quote">
+            <h3 class="card__title">Recomendação do analista</h3>
+            <blockquote class="quote" id="dash-quote"></blockquote>
+          </article>
+        </div>
+
+        <!-- ===== Carteira ===== -->
+        <div class="wrap view" id="view-carteira" hidden>
+          <article class="card">
+            <h3 class="card__title">Carteira de rolês recomendada</h3>
+            <p class="section-sub" id="dash-portfolio-subtitle"></p>
+            <figure class="chart">
+              <div class="donut-wrap" id="carteira-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da carteira de rolês">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value">100%</span>
+                  <span class="donut-center__label">alocado</span>
+                </div>
+                <div class="tooltip"></div>
+              </div>
+              <figcaption class="legend"></figcaption>
+            </figure>
+          </article>
+
+          <h3 class="dash-section-title">Alocação detalhada</h3>
+          <div class="alloc" id="dash-alloc"></div>
+
+          <div class="dash-actions">
+            <a class="btn btn--primary" id="btn-share-dash" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+            <button class="btn btn--ghost" id="btn-redo-2">Refazer análise</button>
+          </div>
+
+          <p class="disclaimer">
+            Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da
+            família marcar almoço no mesmo dia do rolê. Resultados podem variar
+            conforme a qualidade da caixa de som.
+          </p>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -198,6 +348,7 @@
     <span>zero responsabilidade fiduciária</span>
   </footer>
 
+  <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
