@@ -183,22 +183,25 @@
             <h3 class="section-head__title">Sugestão de alocação</h3>
           </div>
           <p class="section-sub" id="result-portfolio-subtitle"></p>
-          <div class="chart-panel">
-            <figure class="chart">
+          <div class="grid grid--alloc">
+            <article class="card">
+              <h3 class="card__title">Alocação por tipo de rolê</h3>
+              <div class="bars" id="result-bars"></div>
+            </article>
+            <article class="card card--chart">
+              <h3 class="card__title">Distribuição</h3>
               <div class="donut-wrap" id="result-donut-wrap">
-                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da carteira de rolês">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da sugestão de alocação">
                   <g class="donut__segments" transform="rotate(-90 100 100)"></g>
                 </svg>
                 <div class="donut-center">
                   <span class="donut-center__value">100%</span>
-                  <span class="donut-center__label">alocado</span>
                 </div>
                 <div class="tooltip"></div>
               </div>
-              <figcaption class="legend"></figcaption>
-            </figure>
+              <div class="legend legend--inline"></div>
+            </article>
           </div>
-          <div class="alloc" id="result-alloc"></div>
         </div>
       </section>
 
@@ -270,7 +273,7 @@
 
         <!-- ===== Visão geral ===== -->
         <div class="wrap view" id="view-visao-geral">
-          <div class="grid grid--2">
+          <div class="grid grid--2 grid--top">
             <article class="card card--scale">
               <h3 class="card__title">Posição na escala festiva</h3>
               <div class="scale">
@@ -280,28 +283,16 @@
                 <div class="scale__labels">
                   <span><b>Ermitão</b>Fica em Casa</span>
                   <span><b>Assombração</b>Sai às Vezes</span>
-                  <span><b>Inimigo do Fim</b>Vamos Viver</span>
+                  <span><b>Inimigo do Fim</b>Vamos Viver Essa Experiência</span>
                 </div>
               </div>
               <p class="card__note" id="scale-note"></p>
             </article>
 
-            <article class="card card--mini-chart">
-              <h3 class="card__title">Sugestão de alocação</h3>
-              <div class="mini-chart">
-                <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
-                  <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Composição resumida da carteira">
-                    <g class="donut__segments" transform="rotate(-90 100 100)"></g>
-                  </svg>
-                  <div class="donut-center">
-                    <span class="donut-center__value">100%</span>
-                    <span class="donut-center__label">alocado</span>
-                  </div>
-                  <div class="tooltip"></div>
-                </div>
-                <div class="legend legend--compact"></div>
-              </div>
-              <a class="card__link" href="#/carteira">Ver carteira completa</a>
+            <article class="card">
+              <h3 class="card__title">Estratégia ideal</h3>
+              <div class="strategy strategy--sm" id="dash-strategy-summary"></div>
+              <a class="card__link" href="#/carteira">Ver estratégia completa</a>
             </article>
           </div>
 
@@ -309,26 +300,47 @@
           <div class="tiles" id="dash-indicators"></div>
 
           <div class="grid grid--2">
-            <article class="card">
-              <h3 class="card__title">Destaque positivo</h3>
-              <div id="dash-top-strength"></div>
-              <a class="card__link" href="#/perfil">Ver análise completa</a>
+            <article class="card card--chart">
+              <h3 class="card__title">Sugestão de alocação</h3>
+              <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição resumida da sugestão de alocação">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value">100%</span>
+                </div>
+                <div class="tooltip"></div>
+              </div>
+              <div class="legend legend--inline"></div>
+              <a class="card__link" href="#/carteira">Ver alocação completa</a>
             </article>
-            <article class="card">
-              <h3 class="card__title">Ponto de atenção</h3>
-              <div id="dash-top-weakness"></div>
-              <a class="card__link" href="#/perfil">Ver análise completa</a>
-            </article>
-          </div>
 
+            <div class="stack">
+              <article class="card">
+                <h3 class="card__title">Destaque positivo</h3>
+                <div id="dash-top-strength"></div>
+              </article>
+              <article class="card">
+                <h3 class="card__title">Ponto de atenção</h3>
+                <div id="dash-top-weakness"></div>
+                <a class="card__link" href="#/perfil">Ver análise completa</a>
+              </article>
+            </div>
+          </div>
         </div>
 
         <!-- ===== Perfil ===== -->
         <div class="wrap view" id="view-perfil" hidden>
-          <article class="card">
-            <h3 class="card__title">Diagnóstico</h3>
-            <p class="prose" id="dash-description"></p>
-          </article>
+          <div class="grid grid--profile">
+            <article class="card">
+              <h3 class="card__title">Diagnóstico</h3>
+              <p class="prose" id="dash-description"></p>
+            </article>
+            <article class="card card--art">
+              <div class="art" id="dash-art"></div>
+              <span class="art__caption" id="dash-art-caption"></span>
+            </article>
+          </div>
 
           <h3 class="dash-section-title">Pontos fortes</h3>
           <div class="grid grid--3" id="dash-strengths"></div>
@@ -347,29 +359,30 @@
           <article class="card">
             <h3 class="card__title">Estratégia ideal</h3>
             <p class="section-sub">Como você monta o seu fim de semana: escolhendo cada rolê a dedo ou seguindo o que o grupo já marcou.</p>
-            <div class="strategy" id="dash-strategy"></div>
+            <div class="strategy strategy--sm" id="dash-strategy"></div>
           </article>
 
-          <article class="card">
-            <h3 class="card__title">Sugestão de alocação</h3>
-            <p class="section-sub" id="dash-portfolio-subtitle"></p>
-            <figure class="chart">
+          <h3 class="dash-section-title">Sugestão de alocação</h3>
+          <p class="section-sub" id="dash-portfolio-subtitle"></p>
+          <div class="grid grid--alloc">
+            <article class="card">
+              <h3 class="card__title">Alocação por tipo de rolê</h3>
+              <div class="bars" id="dash-bars"></div>
+            </article>
+            <article class="card card--chart">
+              <h3 class="card__title">Distribuição</h3>
               <div class="donut-wrap" id="carteira-donut-wrap">
-                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da carteira de rolês">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da sugestão de alocação">
                   <g class="donut__segments" transform="rotate(-90 100 100)"></g>
                 </svg>
                 <div class="donut-center">
                   <span class="donut-center__value">100%</span>
-                  <span class="donut-center__label">alocado</span>
                 </div>
                 <div class="tooltip"></div>
               </div>
-              <figcaption class="legend"></figcaption>
-            </figure>
-          </article>
-
-          <h3 class="dash-section-title">Alocação detalhada</h3>
-          <div class="alloc" id="dash-alloc"></div>
+              <div class="legend legend--inline"></div>
+            </article>
+          </div>
 
           <div class="dash-actions">
             <a class="btn btn--primary" id="btn-share-dash" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>

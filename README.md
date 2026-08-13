@@ -19,6 +19,7 @@ fim de semana: o quanto de rolê o seu corpo aguenta.
 | 20–30 | **Assombração** · Sai às Vezes | Multimercado: dança, mas com uma mão no corrimão |
 | 31–40 | **Inimigo do Fim** · Vamos Viver Essa Experiência | Day trade de pista: alavancado em glitter |
 
+
 A categoria e o título andam sempre juntos — na escala, no resultado, no painel
 e no compartilhamento.
 
@@ -32,18 +33,19 @@ e no compartilhamento.
 | **Landing** | Rastro verde de luz que segue o cursor, sobre um fundo onde manchas coloridas surgem sozinhas. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
 | **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, estratégia ideal, sugestão de alocação com gráfico de pizza e recomendação do analista. |
+| **Resultado** | Diagnóstico, indicadores, estratégia ideal, sugestão de alocação (barras + gráfico de pizza) e recomendação do analista. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
 
-- **Visão geral** — posição na escala festiva, sugestão de alocação resumida,
-  indicadores, um destaque positivo e um ponto de atenção.
-- **Perfil** — diagnóstico completo, três **pontos fortes**, três **pontos de
-  atenção** e a recomendação do analista.
+- **Visão geral** — posição na escala festiva, resumo da estratégia ideal,
+  indicadores, sugestão de alocação resumida, um destaque positivo e um ponto
+  de atenção.
+- **Perfil** — diagnóstico ao lado de uma ilustração do perfil, três **pontos
+  fortes**, três **pontos de atenção** e a recomendação do analista.
 - **Carteira** — **estratégia ideal** (quanto do seu fim de semana é curadoria
-  própria e quanto é o que o grupo já marcou), gráfico de pizza interativo,
-  legenda e alocação detalhada.
+  própria e quanto é o que o grupo já marcou) e a **sugestão de alocação** em
+  duas colunas: barras por tipo de rolê à esquerda, gráfico de pizza à direita.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
 seção.
@@ -60,8 +62,9 @@ o registro.
 - **Teclado**: `A`–`D` ou `1`–`4` respondem, `←` volta, `Enter` inicia.
 - **Trilha de progresso clicável** — qualquer pergunta já respondida pode ser
   revisitada sem perder as respostas seguintes.
-- **Gráfico**: o hover destaca a fatia e sincroniza legenda, linha da alocação e
-  o miolo do donut; clicar fixa o destaque; as fatias são focáveis pelo teclado.
+- **Gráfico**: o hover destaca a fatia e sincroniza legenda, barra de alocação e
+  o miolo do donut, que passa a mostrar o percentual daquele item; clicar fixa o
+  destaque; as fatias são focáveis pelo teclado.
 - **Fundo animado** com rastro verde de luz na landing e luzes à deriva no
   resultado e no painel. Pausa quando a aba perde o foco.
 - **Tema claro e escuro**, com o do sistema como padrão e um botão que fixa a
@@ -85,6 +88,8 @@ o registro.
   contorno.
 - Painéis levemente translúcidos com `backdrop-filter`, para as luzes
   atravessarem sem prejudicar a leitura.
+- Cada perfil tem uma ilustração própria em SVG inline, desenhada com as
+  variáveis de cor do tema — muda de paleta junto com o resto.
 - `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as
   seções já reveladas.
 - Responsivo de 320px para cima.

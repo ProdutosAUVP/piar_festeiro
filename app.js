@@ -582,12 +582,11 @@ function finishQuiz() {
    ========================================================================== */
 const DONUT = { radius: 74, gap: 2 };
 
-function mountDonut(wrap, legend, portfolio, allocHost) {
+function mountDonut(wrap, legend, portfolio, barsHost) {
   const svg = wrap.querySelector(".donut");
   const group = wrap.querySelector(".donut__segments");
   const tooltip = wrap.querySelector(".tooltip");
   const centerValue = wrap.querySelector(".donut-center__value");
-  const centerLabel = wrap.querySelector(".donut-center__label");
   const circumference = 2 * Math.PI * DONUT.radius;
 
   group.innerHTML = "";
@@ -596,7 +595,6 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
   svg.classList.remove("donut--dim");
   centerValue.textContent = "100%";
   centerValue.style.color = "";
-  centerLabel.textContent = "alocado";
 
   let offset = 0;
   let pinned = null;
@@ -623,11 +621,11 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
 
     const row = document.createElement("div");
     row.className = "legend__row";
-    row.innerHTML = `
-      <span class="legend__swatch" style="background:${color}"></span>
-      <span class="legend__name">${item.name}</span>
-      <span class="legend__value">${item.pct}%</span>
-    `;
+    const inline = legend.classList.contains("legend--inline");
+    row.innerHTML =
+      `<span class="legend__swatch" style="background:${color}"></span>` +
+      `<span class="legend__name">${item.name}</span>` +
+      `<span class="legend__value">${inline ? `(${item.pct}%)` : `${item.pct}%`}</span>`;
     legend.appendChild(row);
 
     entries.push({ seg, row, item, color, index: i });
@@ -641,12 +639,12 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
   };
 
   const highlight = (entry) => {
-    const rows = allocHost ? allocHost.querySelectorAll(".alloc__row") : [];
+    const bars = barsHost ? barsHost.querySelectorAll(".bar") : [];
     entries.forEach((e) => {
       const on = entry !== null && e === entry;
       e.seg.classList.toggle("donut__seg--active", on);
       e.row.classList.toggle("legend__row--active", on);
-      if (rows[e.index]) rows[e.index].classList.toggle("alloc__row--active", on);
+      if (bars[e.index]) bars[e.index].classList.toggle("bar--active", on);
     });
     svg.classList.toggle("donut--dim", entry !== null);
     legend.classList.toggle("legend--dim", entry !== null);
@@ -654,7 +652,6 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
     if (entry) {
       centerValue.textContent = `${entry.item.pct}%`;
       centerValue.style.color = entry.color;
-      centerLabel.textContent = "da carteira";
       tooltip.innerHTML = `
         <span class="tooltip__name">${entry.item.name}</span>
         <span class="tooltip__value">${entry.item.pct}% da carteira</span>
@@ -662,7 +659,6 @@ function mountDonut(wrap, legend, portfolio, allocHost) {
     } else {
       centerValue.textContent = "100%";
       centerValue.style.color = "";
-      centerLabel.textContent = "alocado";
     }
     tooltip.classList.toggle("tooltip--visible", entry !== null);
   };
@@ -750,24 +746,27 @@ function renderIndicators(host, profile) {
   });
 }
 
-function renderAlloc(host, profile) {
+function renderBars(host, profile) {
   host.innerHTML = "";
   profile.portfolio.forEach((item, i) => {
-    const row = document.createElement("div");
-    row.className = "alloc__row";
-    row.innerHTML = `
-      <span class="alloc__bar" style="background:${SERIES[i]}"></span>
-      <span>
-        <span class="alloc__name">${item.name}</span>
-        <span class="alloc__note">${item.note}</span>
-      </span>
-      <span class="alloc__pct">${item.pct}%</span>
+    const color = SERIES[i];
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.innerHTML = `
+      <div class="bar__head">
+        <span class="bar__name">${item.name}</span>
+        <span class="bar__pct" style="color:${color};background:color-mix(in srgb, ${color} 16%, transparent)">${item.pct}%</span>
+      </div>
+      <div class="bar__track">
+        <div class="bar__fill" data-width="${item.pct}" style="background:${color}"></div>
+      </div>
+      <span class="bar__note">${item.note}</span>
     `;
-    host.appendChild(row);
+    host.appendChild(bar);
   });
 }
 
-function renderStrategy(host, profile) {
+function renderStrategy(host, profile, withNote = true) {
   const rows = [
     { key: "picking", pct: profile.strategy.picking, color: "var(--series-5)" },
     { key: "passive", pct: profile.strategy.passive, color: "var(--series-1)" },
@@ -785,11 +784,72 @@ function renderStrategy(host, profile) {
     )
     .join("");
 
-  const note = document.createElement("p");
-  note.className = "strategy__note";
-  note.textContent = profile.strategy.note;
-  host.appendChild(note);
+  if (withNote) {
+    const note = document.createElement("p");
+    note.className = "strategy__note";
+    note.textContent = profile.strategy.note;
+    host.appendChild(note);
+  }
 }
+
+
+/* ==========================================================================
+   Ilustração do perfil — SVG inline, herdando as cores do tema
+   ========================================================================== */
+const ART = {
+  ermitao: {
+    caption: "Sofá ocupado, cobertor no lugar, domingo garantido.",
+    svg: `
+      <svg viewBox="0 0 200 200" role="img" aria-label="Um sofá sob a luz da lua">
+        <path d="M162 26a19 19 0 1 0 13 32 15 15 0 1 1-13-32z" fill="var(--series-4)"/>
+        <circle cx="44" cy="34" r="2.6" fill="var(--series-4)" opacity=".8"/>
+        <circle cx="70" cy="20" r="2" fill="var(--series-4)" opacity=".6"/>
+        <circle cx="118" cy="40" r="2.2" fill="var(--series-4)" opacity=".5"/>
+        <rect x="46" y="78" width="108" height="42" rx="14" fill="var(--series-1)" opacity=".55"/>
+        <rect x="30" y="100" width="24" height="50" rx="11" fill="var(--series-1)"/>
+        <rect x="146" y="100" width="24" height="50" rx="11" fill="var(--series-1)"/>
+        <rect x="34" y="112" width="132" height="40" rx="12" fill="var(--series-1)"/>
+        <rect x="48" y="152" width="11" height="16" rx="4" fill="var(--text-2)" opacity=".45"/>
+        <rect x="141" y="152" width="11" height="16" rx="4" fill="var(--text-2)" opacity=".45"/>
+        <circle cx="100" cy="98" r="14" fill="var(--neon)" opacity=".85"/>
+      </svg>`,
+  },
+  assombracao: {
+    caption: "Aparece, assombra por uma hora e some sem se despedir.",
+    svg: `
+      <svg viewBox="0 0 200 200" role="img" aria-label="Um fantasma de chapéu de festa">
+        <path d="M100 22 84 56h32z" fill="var(--series-5)"/>
+        <circle cx="100" cy="20" r="6" fill="var(--neon)"/>
+        <path d="M62 158V96a38 38 0 0 1 76 0v62l-12-11-13 11-13-11-13 11-13-11z" fill="var(--series-5)" opacity=".92"/>
+        <circle cx="86" cy="102" r="6.5" fill="var(--bg)"/>
+        <circle cx="114" cy="102" r="6.5" fill="var(--bg)"/>
+        <path d="M92 120q8 7 16 0" stroke="var(--bg)" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <circle cx="40" cy="70" r="3" fill="var(--series-1)" opacity=".8"/>
+        <circle cx="162" cy="118" r="3.4" fill="var(--series-3)" opacity=".8"/>
+        <circle cx="152" cy="52" r="2.6" fill="var(--series-4)" opacity=".8"/>
+      </svg>`,
+  },
+  inimigo: {
+    caption: "Ainda na pista quando o sol resolve aparecer.",
+    svg: `
+      <svg viewBox="0 0 200 200" role="img" aria-label="Alguém dançando de braços abertos enquanto o sol nasce">
+        <circle cx="100" cy="120" r="52" fill="var(--series-4)" opacity=".9"/>
+        <g stroke="var(--series-4)" stroke-width="5" stroke-linecap="round" opacity=".6">
+          <path d="M100 40v14M44 60l10 11M156 60l-10 11M14 116h14M172 116h14"/>
+        </g>
+        <path d="M14 160h172" stroke="var(--text-2)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+        <g fill="none" stroke="var(--bg)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 92v34"/>
+          <path d="M100 100 66 78M100 100l34-22"/>
+          <path d="M100 126l-20 32M100 126l20 32"/>
+        </g>
+        <circle cx="100" cy="74" r="13" fill="var(--bg)"/>
+        <rect x="32" y="40" width="7" height="12" rx="2" fill="var(--series-5)" transform="rotate(-20 35 46)"/>
+        <rect x="162" y="52" width="7" height="12" rx="2" fill="var(--series-1)" transform="rotate(25 165 58)"/>
+        <rect x="148" y="24" width="7" height="12" rx="2" fill="var(--series-3)" transform="rotate(-15 151 30)"/>
+      </svg>`,
+  },
+};
 
 function renderPoint(item, warn) {
   const el = document.createElement("article");
@@ -827,14 +887,14 @@ function renderResult(profile) {
 
   renderIndicators($("result-indicators"), profile);
   renderStrategy($("result-strategy"), profile);
-  renderAlloc($("result-alloc"), profile);
+  renderBars($("result-bars"), profile);
 
   const wrap = $("result-donut-wrap");
   const animate = mountDonut(
     wrap,
     wrap.parentElement.querySelector(".legend"),
     profile.portfolio,
-    $("result-alloc")
+    $("result-bars")
   );
 
   setupReveal();
@@ -893,6 +953,12 @@ function renderDashboard(attempt) {
   // Indicadores e estratégia
   renderIndicators($("dash-indicators"), profile);
   renderStrategy($("dash-strategy"), profile);
+  renderStrategy($("dash-strategy-summary"), profile, false);
+
+  // Ilustração do perfil
+  const art = ART[profile.id];
+  $("dash-art").innerHTML = art.svg;
+  $("dash-art-caption").textContent = art.caption;
 
   // Destaques
   $("dash-top-strength").replaceChildren(renderPoint(profile.strengths[0], false));
@@ -906,7 +972,7 @@ function renderDashboard(attempt) {
   profile.weaknesses.forEach((w) => weaknesses.appendChild(renderPoint(w, true)));
 
   // Carteira
-  renderAlloc($("dash-alloc"), profile);
+  renderBars($("dash-bars"), profile);
   const miniWrap = $("dash-donut-wrap");
   const fullWrap = $("carteira-donut-wrap");
   const animateMini = mountDonut(
@@ -918,7 +984,7 @@ function renderDashboard(attempt) {
     fullWrap,
     fullWrap.parentElement.querySelector(".legend"),
     profile.portfolio,
-    $("dash-alloc")
+    $("dash-bars")
   );
 
   setTimeout(() => {

@@ -932,6 +932,37 @@ body[data-screen="dashboard"] .theme-toggle--float {
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
+/* barras à esquerda, gráfico à direita */
+.grid--alloc {
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+  align-items: start;
+}
+
+/* diagnóstico ao lado da ilustração do perfil */
+.grid--profile {
+  grid-template-columns: minmax(0, 1.55fr) minmax(240px, 1fr);
+  align-items: stretch;
+}
+
+.stack {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+/* cada card com a altura do seu conteúdo, sem sobra no rodapé */
+.grid--top {
+  align-items: start;
+}
+
+/* cards irmãos nunca ficam colados */
+.view .card + .card,
+.view .grid + .card,
+.view .card + .grid,
+.view .grid + .grid {
+  margin-top: 12px;
+}
+
 .card {
   background: var(--surface);
   backdrop-filter: blur(10px);
@@ -978,6 +1009,48 @@ body[data-screen="dashboard"] .theme-toggle--float {
   margin-top: 12px;
 }
 
+.card--chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card--chart .card__title {
+  align-self: flex-start;
+}
+
+.card--chart .card__link {
+  align-self: flex-start;
+  margin-top: 12px;
+}
+
+/* ===== Ilustração do perfil ===== */
+.card--art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.art {
+  width: min(180px, 100%);
+}
+
+.art svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.art__caption {
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 26ch;
+}
+
 /* Card dentro de card não ganha moldura de novo */
 .card .point {
   border: 0;
@@ -995,9 +1068,12 @@ body[data-screen="dashboard"] .theme-toggle--float {
   flex-direction: column;
 }
 
+.card--scale .scale {
+  margin-bottom: 4px;
+}
+
 .card--scale .card__note {
-  margin-top: auto;
-  padding-top: 16px;
+  padding-top: 18px;
 }
 
 /* ===== Escala de perfil ===== */
@@ -1041,6 +1117,16 @@ body[data-screen="dashboard"] .theme-toggle--float {
   flex-direction: column;
   line-height: 1.25;
   flex: 1;
+  min-width: 0;
+  hyphens: auto;
+}
+
+.scale__labels span:nth-child(2) {
+  align-items: center;
+}
+
+.scale__labels span:last-child {
+  align-items: flex-end;
 }
 
 .scale__labels b {
@@ -1360,6 +1446,30 @@ body[data-screen="dashboard"] .theme-toggle--float {
   padding: 3px 8px;
 }
 
+.legend--inline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 2px 8px;
+  width: 100%;
+  margin-top: 18px;
+  min-width: 0;
+}
+
+.legend--inline .legend__row {
+  gap: 7px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+.legend--inline .legend__name {
+  flex: none;
+}
+
+.legend--inline .legend__value {
+  color: var(--muted);
+  font-weight: 400;
+}
+
 .legend__row:hover {
   background: color-mix(in srgb, var(--text) 6%, transparent);
 }
@@ -1398,7 +1508,19 @@ body[data-screen="dashboard"] .theme-toggle--float {
 /* ===== Estratégia ideal ===== */
 .strategy {
   display: grid;
-  gap: 18px;
+  gap: 16px;
+}
+
+.strategy--sm {
+  gap: 12px;
+}
+
+.strategy--sm .strategy__track {
+  height: 26px;
+}
+
+.strategy--sm .strategy__label {
+  font-size: 0.84rem;
 }
 
 .strategy__row {
@@ -1412,7 +1534,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 }
 
 .strategy__track {
-  height: 34px;
+  height: 30px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--text) 8%, transparent);
   overflow: hidden;
@@ -1440,6 +1562,68 @@ body[data-screen="dashboard"] .theme-toggle--float {
   line-height: 1.5;
   color: var(--muted);
   max-width: 68ch;
+}
+
+/* ===== Alocação por tipo de rolê ===== */
+.bars {
+  display: grid;
+  gap: 16px;
+}
+
+.bar {
+  display: grid;
+  gap: 6px;
+  cursor: default;
+}
+
+.bar__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar__name {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.bar__pct {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.bar__track {
+  height: 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.16s ease;
+}
+
+.bar__note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.bar--active .bar__fill {
+  filter: brightness(1.15);
+}
+
+.bar--active .bar__name {
+  color: var(--accent-ink);
 }
 
 /* ===== Alocação ===== */
