@@ -940,7 +940,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 
 /* diagnóstico ao lado da ilustração do perfil */
 .grid--profile {
-  grid-template-columns: minmax(0, 1.55fr) minmax(240px, 1fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(250px, 1fr);
   align-items: stretch;
 }
 
@@ -950,17 +950,34 @@ body[data-screen="dashboard"] .theme-toggle--float {
   align-content: start;
 }
 
-/* cada card com a altura do seu conteúdo, sem sobra no rodapé */
-.grid--top {
-  align-items: start;
+/* Ritmo vertical do painel: um espaçamento só, entre blocos de topo.
+   Nunca atinge cards dentro de um grid — é o gap do grid que cuida deles. */
+.view > * + * {
+  margin-top: 18px;
 }
 
-/* cards irmãos nunca ficam colados */
-.view .card + .card,
-.view .grid + .card,
-.view .card + .grid,
-.view .grid + .grid {
-  margin-top: 12px;
+.view > .dash-section-title {
+  margin: 34px 0 0;
+}
+
+.view > .dash-section-title--first {
+  margin-top: 0;
+}
+
+.view > .dash-section-title + * {
+  margin-top: 10px;
+}
+
+.view > .section-sub {
+  margin-bottom: 0;
+}
+
+.view > .section-sub + * {
+  margin-top: 14px;
+}
+
+.view > .disclaimer {
+  margin-top: 24px;
 }
 
 .card {
@@ -1036,7 +1053,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 }
 
 .art {
-  width: min(180px, 100%);
+  width: min(190px, 100%);
 }
 
 .art svg {
@@ -1063,17 +1080,27 @@ body[data-screen="dashboard"] .theme-toggle--float {
   transform: none;
 }
 
-.card--scale {
+.card--scale,
+.card--strategy {
   display: flex;
   flex-direction: column;
 }
 
 .card--scale .scale {
-  margin-bottom: 4px;
+  margin-block: 4px 18px;
 }
 
 .card--scale .card__note {
-  padding-top: 18px;
+  margin-top: auto;
+  padding-top: 0;
+}
+
+.card--strategy .strategy {
+  margin-bottom: 18px;
+}
+
+.card--strategy .card__link {
+  margin-top: auto;
 }
 
 /* ===== Escala de perfil ===== */
@@ -1148,6 +1175,18 @@ body[data-screen="dashboard"] .theme-toggle--float {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 10px;
+}
+
+.tiles--flat {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+}
+
+.tiles--flat .tile {
+  background: none;
+  border: 0;
+  padding: 0;
+  backdrop-filter: none;
 }
 
 .tile {
@@ -1284,14 +1323,6 @@ body[data-screen="dashboard"] .theme-toggle--float {
 }
 
 /* ===== Gráfico ===== */
-.chart-panel {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  padding: clamp(18px, 5vw, 30px);
-  margin-bottom: 12px;
-}
 
 .chart {
   display: flex;
@@ -1446,28 +1477,29 @@ body[data-screen="dashboard"] .theme-toggle--float {
   padding: 3px 8px;
 }
 
+/* abaixo do gráfico: uma linha por item, valor alinhado à direita */
 .legend--inline {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 2px 8px;
+  gap: 2px;
   width: 100%;
-  margin-top: 18px;
+  margin-top: 20px;
   min-width: 0;
 }
 
 .legend--inline .legend__row {
-  gap: 7px;
-  padding: 4px 8px;
-  font-size: 0.8rem;
+  gap: 9px;
+  padding: 5px 8px;
+  font-size: 0.82rem;
 }
 
 .legend--inline .legend__name {
-  flex: none;
+  min-width: 0;
 }
 
 .legend--inline .legend__value {
   color: var(--muted);
   font-weight: 400;
+  padding-left: 8px;
 }
 
 .legend__row:hover {
@@ -1626,58 +1658,11 @@ body[data-screen="dashboard"] .theme-toggle--float {
   color: var(--accent-ink);
 }
 
-/* ===== Alocação ===== */
-.alloc {
-  display: grid;
-  gap: 8px;
-}
 
-.alloc__row {
-  display: grid;
-  grid-template-columns: 3px 1fr auto;
-  gap: 14px;
-  align-items: center;
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  transition: border-color 0.2s ease;
-}
 
-.alloc__row:hover,
-.alloc__row--active {
-  border-color: var(--border-strong);
-}
 
-.alloc__bar {
-  width: 3px;
-  height: 30px;
-  border-radius: 2px;
-  transition: height 0.2s ease;
-}
 
-.alloc__row--active .alloc__bar {
-  height: 40px;
-}
 
-.alloc__name {
-  display: block;
-  font-size: clamp(0.9rem, 2.5vw, 0.94rem);
-  font-weight: 500;
-}
-
-.alloc__note {
-  display: block;
-  font-size: clamp(0.78rem, 2.2vw, 0.82rem);
-  color: var(--muted);
-}
-
-.alloc__pct {
-  font-size: 1.05rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
 
 /* ===== Citação ===== */
 .quote {
@@ -1730,6 +1715,18 @@ body[data-screen="dashboard"] .theme-toggle--float {
 /* ==========================================================================
    Responsivo
    ========================================================================== */
+
+/* grids de duas colunas fixas precisam quebrar antes de espremer */
+@media (max-width: 900px) {
+  .grid--alloc,
+  .grid--profile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card--art {
+    padding-block: 26px;
+  }
+}
 
 @media (max-width: 760px) {
   .spec-cards {
@@ -1796,11 +1793,6 @@ body[data-screen="dashboard"] .theme-toggle--float {
   .option {
     gap: 12px;
     padding: 14px;
-  }
-
-  .alloc__row {
-    gap: 12px;
-    padding: 13px 14px;
   }
 
   .quote {

@@ -169,17 +169,6 @@
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">03</span>
-            <h3 class="section-head__title">Estratégia ideal</h3>
-          </div>
-          <p class="section-sub">Como você monta o seu fim de semana: escolhendo cada rolê a dedo ou seguindo o que o grupo já marcou.</p>
-          <div class="strategy" id="result-strategy"></div>
-        </div>
-      </section>
-
-      <section class="lp-section reveal">
-        <div class="wrap">
-          <div class="section-head">
-            <span class="section-head__num">04</span>
             <h3 class="section-head__title">Sugestão de alocação</h3>
           </div>
           <p class="section-sub" id="result-portfolio-subtitle"></p>
@@ -202,6 +191,17 @@
               <div class="legend legend--inline"></div>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">04</span>
+            <h3 class="section-head__title">Estratégia ideal</h3>
+          </div>
+          <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
+          <div class="strategy" id="result-strategy"></div>
         </div>
       </section>
 
@@ -273,7 +273,7 @@
 
         <!-- ===== Visão geral ===== -->
         <div class="wrap view" id="view-visao-geral">
-          <div class="grid grid--2 grid--top">
+          <div class="grid grid--2">
             <article class="card card--scale">
               <h3 class="card__title">Posição na escala festiva</h3>
               <div class="scale">
@@ -290,14 +290,10 @@
             </article>
 
             <article class="card">
-              <h3 class="card__title">Estratégia ideal</h3>
-              <div class="strategy strategy--sm" id="dash-strategy-summary"></div>
-              <a class="card__link" href="#/carteira">Ver estratégia completa</a>
+              <h3 class="card__title">Indicadores</h3>
+              <div class="tiles tiles--flat" id="dash-indicators"></div>
             </article>
           </div>
-
-          <h3 class="dash-section-title">Indicadores</h3>
-          <div class="tiles" id="dash-indicators"></div>
 
           <div class="grid grid--2">
             <article class="card card--chart">
@@ -315,17 +311,23 @@
               <a class="card__link" href="#/carteira">Ver alocação completa</a>
             </article>
 
-            <div class="stack">
-              <article class="card">
-                <h3 class="card__title">Destaque positivo</h3>
-                <div id="dash-top-strength"></div>
-              </article>
-              <article class="card">
-                <h3 class="card__title">Ponto de atenção</h3>
-                <div id="dash-top-weakness"></div>
-                <a class="card__link" href="#/perfil">Ver análise completa</a>
-              </article>
-            </div>
+            <article class="card card--strategy">
+              <h3 class="card__title">Estratégia ideal</h3>
+              <div class="strategy strategy--sm" id="dash-strategy-summary"></div>
+              <a class="card__link" href="#/carteira">Ver estratégia completa</a>
+            </article>
+          </div>
+
+          <div class="grid grid--2">
+            <article class="card">
+              <h3 class="card__title">Destaque positivo</h3>
+              <div id="dash-top-strength"></div>
+            </article>
+            <article class="card">
+              <h3 class="card__title">Ponto de atenção</h3>
+              <div id="dash-top-weakness"></div>
+              <a class="card__link" href="#/perfil">Ver análise completa</a>
+            </article>
           </div>
         </div>
 
@@ -356,13 +358,7 @@
 
         <!-- ===== Carteira ===== -->
         <div class="wrap view" id="view-carteira" hidden>
-          <article class="card">
-            <h3 class="card__title">Estratégia ideal</h3>
-            <p class="section-sub">Como você monta o seu fim de semana: escolhendo cada rolê a dedo ou seguindo o que o grupo já marcou.</p>
-            <div class="strategy strategy--sm" id="dash-strategy"></div>
-          </article>
-
-          <h3 class="dash-section-title">Sugestão de alocação</h3>
+          <h3 class="dash-section-title dash-section-title--first">Sugestão de alocação</h3>
           <p class="section-sub" id="dash-portfolio-subtitle"></p>
           <div class="grid grid--alloc">
             <article class="card">
@@ -383,6 +379,12 @@
               <div class="legend legend--inline"></div>
             </article>
           </div>
+
+          <h3 class="dash-section-title">Estratégia ideal</h3>
+          <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
+          <article class="card">
+            <div class="strategy strategy--sm" id="dash-strategy"></div>
+          </article>
 
           <div class="dash-actions">
             <a class="btn btn--primary" id="btn-share-dash" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>

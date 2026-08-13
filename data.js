@@ -157,7 +157,7 @@ const PROFILES = [
     strategy: {
       picking: 85,
       passive: 15,
-      note: "Você não compra o índice: escolhe uma festa por vez, com critério rígido e lista de convidados conhecida. Curadoria altíssima, exposição mínima — e um domingo impecável.",
+      note: "Você não vai no que aparece: escolhe uma festa por vez, com critério rígido e lista de convidados conhecida. Seleção altíssima, exposição mínima — e um domingo impecável.",
     },
     portfolioSubtitle:
       "Alocação de baixo risco, alta previsibilidade e retorno garantido em boas risadas.",
@@ -279,7 +279,7 @@ const PROFILES = [
     strategy: {
       picking: 20,
       passive: 80,
-      note: "Você compra o índice inteiro: se marcaram, você vai. Curadoria mínima, exposição máxima — o rolê que aparecer é, por definição, o rolê certo.",
+      note: "Você vai em tudo que marcarem, sem filtro: se tem festa, você aparece. Seleção mínima, exposição máxima — o rolê que surgir é, por definição, o rolê certo.",
     },
     portfolioSubtitle:
       "Alocação agressiva, exposição máxima ao setor de pista e derivativos de after.",
@@ -304,8 +304,8 @@ const LOADING_STEPS = [
 
 /* Rótulos fixos da estratégia ideal */
 const STRATEGY_LABELS = {
-  picking: "Curadoria de rolê (Stock Picking)",
-  passive: "Rolê indexado (ETF do grupo)",
+  picking: "Rolê escolhido a dedo",
+  passive: "Rolê que o grupo marcou",
 };
 
 /* A paleta categórica do gráfico vive no CSS, em --series-1..5, com um jogo

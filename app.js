@@ -621,11 +621,10 @@ function mountDonut(wrap, legend, portfolio, barsHost) {
 
     const row = document.createElement("div");
     row.className = "legend__row";
-    const inline = legend.classList.contains("legend--inline");
     row.innerHTML =
       `<span class="legend__swatch" style="background:${color}"></span>` +
       `<span class="legend__name">${item.name}</span>` +
-      `<span class="legend__value">${inline ? `(${item.pct}%)` : `${item.pct}%`}</span>`;
+      `<span class="legend__value">${item.pct}%</span>`;
     legend.appendChild(row);
 
     entries.push({ seg, row, item, color, index: i });
@@ -953,7 +952,7 @@ function renderDashboard(attempt) {
   // Indicadores e estratégia
   renderIndicators($("dash-indicators"), profile);
   renderStrategy($("dash-strategy"), profile);
-  renderStrategy($("dash-strategy-summary"), profile, false);
+  renderStrategy($("dash-strategy-summary"), profile);
 
   // Ilustração do perfil
   const art = ART[profile.id];

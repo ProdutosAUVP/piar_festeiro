@@ -33,19 +33,20 @@ e no compartilhamento.
 | **Landing** | Rastro verde de luz que segue o cursor, sobre um fundo onde manchas coloridas surgem sozinhas. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
 | **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, estratégia ideal, sugestão de alocação (barras + gráfico de pizza) e recomendação do analista. |
+| **Resultado** | Diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), estratégia ideal e recomendação do analista. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
 
-- **Visão geral** — posição na escala festiva, resumo da estratégia ideal,
-  indicadores, sugestão de alocação resumida, um destaque positivo e um ponto
-  de atenção.
+- **Visão geral** — três pares de cards de mesma altura: escala festiva e
+  indicadores; sugestão de alocação e estratégia ideal; destaque positivo e
+  ponto de atenção.
 - **Perfil** — diagnóstico ao lado de uma ilustração do perfil, três **pontos
   fortes**, três **pontos de atenção** e a recomendação do analista.
-- **Carteira** — **estratégia ideal** (quanto do seu fim de semana é curadoria
-  própria e quanto é o que o grupo já marcou) e a **sugestão de alocação** em
-  duas colunas: barras por tipo de rolê à esquerda, gráfico de pizza à direita.
+- **Carteira** — **sugestão de alocação** em duas colunas (barras por tipo de
+  rolê à esquerda, gráfico de pizza à direita) e a **estratégia ideal**: quanto
+  do seu fim de semana é rolê escolhido a dedo e quanto é rolê que o grupo
+  marcou.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
 seção.
@@ -92,7 +93,9 @@ o registro.
   variáveis de cor do tema — muda de paleta junto com o resto.
 - `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as
   seções já reveladas.
-- Responsivo de 320px para cima.
+- Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
+  espaço entre cards de uma mesma linha vem sempre do `gap` do grid.
+- Responsivo de 320px para cima; os grids de duas colunas quebram em 900px.
 
 ## Rodando localmente
 
