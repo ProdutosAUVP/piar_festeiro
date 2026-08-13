@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
+  <meta name="description" content="O teste de suitability mais importante da sua vida: descubra se você é um festeiro conservador, moderado ou arrojado e receba sua carteira de rolês recomendada.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ===== TELA INICIAL ===== -->
+    <section class="screen screen--active" id="screen-intro">
+      <div class="card card--intro">
+        <div class="intro-badge">🎉 Análise de Perfil Festivo (APF)</div>
+        <h1 class="intro-title">Qual é o seu<br><span class="gradient-text">Perfil de Festeiro?</span></h1>
+        <p class="intro-subtitle">
+          Todo banco te pergunta seu perfil de investidor antes de deixar você
+          perder dinheiro. Nós perguntamos seu perfil de festeiro antes de deixar
+          você perder a hora, a dignidade ou o sapato.
+        </p>
+        <ul class="intro-features">
+          <li><span>📋</span><p>10 perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</p></li>
+          <li><span>📊</span><p>Classificação oficial: <strong>Conservador</strong>, <strong>Moderado</strong> ou <strong>Arrojado</strong></p></li>
+          <li><span>💼</span><p>Uma carteira de rolês diversificada e recomendada pro seu perfil</p></li>
+        </ul>
+        <button class="btn btn--primary" id="btn-start">Começar minha análise 🚀</button>
+        <p class="disclaimer">
+          * Este teste não constitui recomendação de rolê. Festa passada não é garantia de ressaca futura.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== TELA DO QUIZ ===== -->
+    <section class="screen" id="screen-quiz">
+      <div class="card card--quiz">
+        <div class="quiz-header">
+          <button class="btn-back" id="btn-back" aria-label="Voltar pergunta">←</button>
+          <div class="progress">
+            <div class="progress__track">
+              <div class="progress__fill" id="progress-fill"></div>
+            </div>
+            <span class="progress__label" id="progress-label">1 / 10</span>
+          </div>
+        </div>
+        <div class="quiz-body" id="quiz-body">
+          <p class="question-kicker" id="question-kicker"></p>
+          <h2 class="question-title" id="question-title"></h2>
+          <div class="options" id="options"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TELA DE ANÁLISE (loading fake) ===== -->
+    <section class="screen" id="screen-loading">
+      <div class="card card--loading">
+        <div class="loading-emoji" id="loading-emoji">🥁</div>
+        <h2 class="loading-title">Processando sua análise...</h2>
+        <p class="loading-step" id="loading-step">Consultando o comitê de churrasco...</p>
+        <div class="progress__track progress__track--loading">
+          <div class="progress__fill" id="loading-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TELA DE RESULTADO ===== -->
+    <section class="screen" id="screen-result">
+      <div class="card card--result">
+        <p class="result-kicker">📑 Relatório oficial de suitability festivo</p>
+        <div class="result-emoji" id="result-emoji"></div>
+        <p class="result-label">Seu perfil de festeiro é</p>
+        <h2 class="result-title" id="result-title"></h2>
+        <p class="result-tagline" id="result-tagline"></p>
+        <p class="result-description" id="result-description"></p>
+
+        <div class="indicators" id="indicators"></div>
+
+        <div class="portfolio">
+          <h3 class="portfolio-title">💼 Sua carteira de rolês recomendada</h3>
+          <p class="portfolio-subtitle" id="portfolio-subtitle"></p>
+          <div class="portfolio-items" id="portfolio-items"></div>
+        </div>
+
+        <div class="result-quote" id="result-quote"></div>
+
+        <div class="result-actions">
+          <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp 💬</a>
+          <button class="btn btn--ghost" id="btn-restart">Refazer análise 🔄</button>
+        </div>
+        <p class="disclaimer">
+          * Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da família marcar almoço no mesmo dia do rolê.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    Feito com 🍻 e zero responsabilidade fiduciária — PIAR Festeiro
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
