@@ -2,15 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
   <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
   <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0a0a0b">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥂</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
+<body data-screen="intro">
+  <!-- Fundo festivo: luzes de festa e confete à deriva -->
+  <canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
+  <div class="burst" id="burst" aria-hidden="true"></div>
 
   <main class="app">
 
@@ -42,7 +45,10 @@
           </li>
         </ul>
 
-        <button class="btn btn--primary" id="btn-start">Começar análise</button>
+        <div class="intro-actions">
+          <button class="btn btn--primary" id="btn-start">Começar análise</button>
+          <button class="btn btn--ghost is-hidden" id="btn-saved">Ver meu último resultado</button>
+        </div>
 
         <p class="disclaimer">
           Este teste não constitui recomendação de rolê. Festa passada não é
@@ -59,9 +65,7 @@
           <button class="icon-btn" id="btn-back" aria-label="Voltar para a pergunta anterior">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="meter meter--progress">
-            <div class="meter__fill" id="progress-fill"></div>
-          </div>
+          <div class="dots" id="dots" role="tablist" aria-label="Progresso das perguntas"></div>
           <span class="counter"><b id="progress-current">1</b> / 10</span>
         </div>
 
@@ -88,29 +92,23 @@
     <!-- ===================== RESULTADO (landing page) ===================== -->
     <section class="screen" id="screen-result">
 
-      <!-- Barra fixa -->
       <div class="topbar" id="topbar">
         <span class="topbar__label">Perfil</span>
         <span class="topbar__name" id="topbar-name"></span>
         <button class="btn btn--mini" id="btn-restart-top">Refazer</button>
       </div>
 
-      <!-- 01 — Hero -->
-      <header class="lp-hero">
+      <!-- Hero -->
+      <header class="lp-hero reveal" id="lp-hero">
         <div class="wrap">
           <p class="kicker">Relatório de perfil festivo</p>
           <h2 class="display display--result" id="result-title"></h2>
           <p class="lede lede--result" id="result-tagline"></p>
-          <div class="hero-figure">
-            <span class="hero-figure__value" id="result-score"></span>
-            <span class="hero-figure__unit">/ 40</span>
-            <span class="hero-figure__label">pontos de festividade</span>
-          </div>
         </div>
       </header>
 
-      <!-- 02 — Diagnóstico -->
-      <section class="lp-section">
+      <!-- 01 — Diagnóstico -->
+      <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">01</span>
@@ -120,8 +118,8 @@
         </div>
       </section>
 
-      <!-- 03 — Indicadores -->
-      <section class="lp-section">
+      <!-- 02 — Indicadores -->
+      <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">02</span>
@@ -132,8 +130,8 @@
         </div>
       </section>
 
-      <!-- 04 — Carteira -->
-      <section class="lp-section">
+      <!-- 03 — Carteira -->
+      <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">03</span>
@@ -142,8 +140,8 @@
           <p class="section-sub" id="portfolio-subtitle"></p>
 
           <div class="chart-panel">
-            <figure class="chart" id="chart-figure">
-              <div class="donut-wrap">
+            <figure class="chart">
+              <div class="donut-wrap" id="donut-wrap">
                 <svg class="donut" id="donut" viewBox="0 0 200 200" role="img" aria-labelledby="donut-title">
                   <title id="donut-title">Distribuição percentual da carteira de rolês</title>
                   <g id="donut-segments" transform="rotate(-90 100 100)"></g>
@@ -162,8 +160,8 @@
         </div>
       </section>
 
-      <!-- 05 — Recomendação -->
-      <section class="lp-section">
+      <!-- 04 — Recomendação -->
+      <section class="lp-section reveal">
         <div class="wrap">
           <div class="section-head">
             <span class="section-head__num">04</span>
@@ -173,8 +171,8 @@
         </div>
       </section>
 
-      <!-- 06 — CTA -->
-      <section class="lp-cta">
+      <!-- CTA -->
+      <section class="lp-cta reveal">
         <div class="wrap center">
           <h3 class="cta-title">Descobriu o seu. E o resto do grupo?</h3>
           <p class="section-sub">Mande o teste para quem sempre some às 23h — ou para quem nunca vai embora.</p>

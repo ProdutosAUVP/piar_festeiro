@@ -196,21 +196,171 @@ const LOADING_STEPS = [
 
 /* Paleta categórica do gráfico — ordem fixa, validada para a superfície escura.
    Slots nunca são reciclados: cada fatia mantém sua cor. */
-const SERIES_COLORS = [
-  "var(--series-1)",
-  "var(--series-2)",
-  "var(--series-3)",
-  "var(--series-4)",
-  "var(--series-5)",
-];
+const SERIES = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181"];
+const ACCENT = "#e0b252";
 
-/* ========================== Estado ========================== */
+const STORAGE_KEY = "piar-festeiro:resultado";
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const $ = (id) => document.getElementById(id);
+
+/* ==========================================================================
+   Fundo festivo — luzes de festa e confete à deriva, em canvas.
+   Reage ao ponteiro com um leve paralaxe.
+   ========================================================================== */
+const Ambient = (() => {
+  const canvas = $("ambient");
+  const ctx = canvas.getContext("2d");
+  let width = 0;
+  let height = 0;
+  let lights = [];
+  let bits = [];
+  let pointer = { x: 0.5, y: 0.5 };
+  let eased = { x: 0.5, y: 0.5 };
+  let frame = null;
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+
+  function build() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const small = width < 720;
+    const lightCount = small ? 5 : 7;
+    const bitCount = small ? 20 : 38;
+
+    lights = Array.from({ length: lightCount }, (_, i) => ({
+      x: rand(0, width),
+      y: rand(0, height),
+      r: rand(width * 0.18, width * 0.34),
+      color: [...SERIES, ACCENT][i % 6],
+      vx: rand(-0.09, 0.09),
+      vy: rand(-0.07, 0.07),
+      phase: rand(0, Math.PI * 2),
+      pulse: rand(0.0006, 0.0014),
+      depth: rand(0.4, 1),
+    }));
+
+    bits = Array.from({ length: bitCount }, () => ({
+      x: rand(0, width),
+      y: rand(0, height),
+      w: rand(3, 6),
+      h: rand(6, 12),
+      color: [...SERIES, ACCENT][Math.floor(rand(0, 6))],
+      vy: rand(0.15, 0.5),
+      vx: rand(-0.18, 0.18),
+      rot: rand(0, Math.PI * 2),
+      spin: rand(-0.012, 0.012),
+      alpha: rand(0.18, 0.5),
+      depth: rand(0.3, 1),
+    }));
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, width, height);
+
+    // paralaxe suavizado
+    eased.x += (pointer.x - eased.x) * 0.045;
+    eased.y += (pointer.y - eased.y) * 0.045;
+    const px = (eased.x - 0.5) * 60;
+    const py = (eased.y - 0.5) * 60;
+
+    // luzes de festa: manchas suaves que pulsam devagar
+    ctx.globalCompositeOperation = "lighter";
+    lights.forEach((l) => {
+      l.x += l.vx;
+      l.y += l.vy;
+      if (l.x < -l.r) l.x = width + l.r;
+      if (l.x > width + l.r) l.x = -l.r;
+      if (l.y < -l.r) l.y = height + l.r;
+      if (l.y > height + l.r) l.y = -l.r;
+
+      const pulse = 0.5 + 0.5 * Math.sin(time * l.pulse + l.phase);
+      const x = l.x + px * l.depth;
+      const y = l.y + py * l.depth;
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, l.r);
+      gradient.addColorStop(0, hexToRgba(l.color, 0.16 + pulse * 0.12));
+      gradient.addColorStop(1, hexToRgba(l.color, 0));
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(x, y, l.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // confete à deriva
+    ctx.globalCompositeOperation = "source-over";
+    bits.forEach((b) => {
+      b.y += b.vy;
+      b.x += b.vx;
+      b.rot += b.spin;
+      if (b.y > height + 20) {
+        b.y = -20;
+        b.x = rand(0, width);
+      }
+      if (b.x < -20) b.x = width + 20;
+      if (b.x > width + 20) b.x = -20;
+
+      ctx.save();
+      ctx.translate(b.x + px * b.depth * 0.6, b.y + py * b.depth * 0.6);
+      ctx.rotate(b.rot);
+      ctx.globalAlpha = b.alpha;
+      ctx.fillStyle = b.color;
+      ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * (0.4 + 0.6 * Math.abs(Math.cos(b.rot))));
+      ctx.restore();
+    });
+    ctx.globalAlpha = 1;
+
+    frame = reduceMotion ? null : requestAnimationFrame(draw);
+  }
+
+  function hexToRgba(hex, alpha) {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+  }
+
+  function start() {
+    build();
+    if (reduceMotion) {
+      draw(0);
+      return;
+    }
+    if (!frame) frame = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", () => {
+    build();
+    if (reduceMotion) draw(0);
+  });
+
+  window.addEventListener("pointermove", (e) => {
+    pointer.x = e.clientX / window.innerWidth;
+    pointer.y = e.clientY / window.innerHeight;
+  });
+
+  // Pausa quando a aba sai de foco: nada de animar de graça
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(frame);
+      frame = null;
+    } else if (!reduceMotion && !frame) {
+      frame = requestAnimationFrame(draw);
+    }
+  });
+
+  return { start };
+})();
+
+/* ==========================================================================
+   Estado e navegação
+   ========================================================================== */
 const state = {
   current: 0,
   answers: new Array(QUESTIONS.length).fill(null),
 };
-
-const $ = (id) => document.getElementById(id);
 
 const screens = {
   intro: $("screen-intro"),
@@ -222,23 +372,50 @@ const screens = {
 function showScreen(name) {
   Object.values(screens).forEach((s) => s.classList.remove("screen--active"));
   screens[name].classList.add("screen--active");
+  document.body.dataset.screen = name;
   window.scrollTo(0, 0);
 }
 
-/* ========================== Quiz ========================== */
+/* ==========================================================================
+   Quiz
+   ========================================================================== */
+function renderDots() {
+  const host = $("dots");
+  host.innerHTML = "";
+  QUESTIONS.forEach((_, i) => {
+    const dot = document.createElement("button");
+    const answered = state.answers[i] !== null;
+    dot.className = "dot";
+    dot.type = "button";
+    if (answered) dot.classList.add("dot--done");
+    if (i === state.current) dot.classList.add("dot--current");
+    dot.setAttribute("aria-label", `Pergunta ${i + 1}`);
+    dot.setAttribute("aria-current", i === state.current ? "step" : "false");
+    // navega livremente pelo que já foi respondido, sem pular pergunta em branco
+    const firstOpen = state.answers.indexOf(null);
+    dot.disabled = i > (firstOpen === -1 ? QUESTIONS.length - 1 : firstOpen);
+    dot.addEventListener("click", () => {
+      state.current = i;
+      renderQuestion();
+    });
+    host.appendChild(dot);
+  });
+}
+
 function renderQuestion() {
   const q = QUESTIONS[state.current];
   $("question-kicker").textContent = q.kicker;
   $("question-title").textContent = q.title;
   $("progress-current").textContent = state.current + 1;
-  $("progress-fill").style.width = `${(state.current / QUESTIONS.length) * 100}%`;
   $("btn-back").style.visibility = state.current === 0 ? "hidden" : "visible";
+  renderDots();
 
   const container = $("options");
   container.innerHTML = "";
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.className = "option";
+    btn.type = "button";
     if (state.answers[state.current] === i) btn.classList.add("option--selected");
     btn.innerHTML =
       `<span class="option__letter">${"ABCD"[i]}</span><span>${opt.text}</span>`;
@@ -256,6 +433,7 @@ function selectOption(index, btn) {
   state.answers[state.current] = index;
   document.querySelectorAll(".option").forEach((o) => o.classList.remove("option--selected"));
   btn.classList.add("option--selected");
+  renderDots();
 
   setTimeout(() => {
     if (state.current < QUESTIONS.length - 1) {
@@ -267,15 +445,49 @@ function selectOption(index, btn) {
   }, 320);
 }
 
-$("btn-back").addEventListener("click", () => {
+function goBack() {
   if (state.current > 0) {
     state.current--;
     renderQuestion();
   }
+}
+
+$("btn-back").addEventListener("click", goBack);
+
+/* Atalhos de teclado: A–D ou 1–4 respondem, seta esquerda volta. */
+document.addEventListener("keydown", (e) => {
+  const screen = document.body.dataset.screen;
+
+  if (screen === "intro" && e.key === "Enter" && document.activeElement === document.body) {
+    startQuiz();
+    return;
+  }
+
+  if (screen !== "quiz") return;
+
+  if (e.key === "ArrowLeft" || e.key === "Backspace") {
+    e.preventDefault();
+    goBack();
+    return;
+  }
+
+  const letters = ["a", "b", "c", "d"];
+  const key = e.key.toLowerCase();
+  const index = letters.includes(key) ? letters.indexOf(key) : ["1", "2", "3", "4"].indexOf(e.key);
+  if (index >= 0) {
+    const btn = document.querySelectorAll(".option")[index];
+    if (btn) {
+      e.preventDefault();
+      selectOption(index, btn);
+    }
+  }
 });
 
-/* ========================== Processando ========================== */
+/* ==========================================================================
+   Processando
+   ========================================================================== */
 function startLoading() {
+  saveResult(computeScore());
   showScreen("loading");
   let step = 0;
   $("loading-step").textContent = LOADING_STEPS[0];
@@ -285,7 +497,7 @@ function startLoading() {
     step++;
     if (step >= LOADING_STEPS.length) {
       clearInterval(interval);
-      showResult();
+      showResult(computeScore(), true);
       return;
     }
     $("loading-step").textContent = LOADING_STEPS[step];
@@ -297,7 +509,9 @@ function startLoading() {
   });
 }
 
-/* ========================== Resultado ========================== */
+/* ==========================================================================
+   Resultado
+   ========================================================================== */
 function computeScore() {
   return state.answers.reduce(
     (sum, answerIndex, qIndex) => sum + QUESTIONS[qIndex].options[answerIndex].points,
@@ -309,6 +523,23 @@ function getProfile(score) {
   return PROFILES.find((p) => score >= p.min && score <= p.max) || PROFILES[PROFILES.length - 1];
 }
 
+/* Anima um número de 0 até o alvo. */
+function countUp(el, target, suffix = "%") {
+  if (reduceMotion) {
+    el.textContent = target + suffix;
+    return;
+  }
+  const duration = 800;
+  const start = performance.now();
+  const tick = (now) => {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(target * eased) + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
 function renderIndicators(profile) {
   const host = $("indicators");
   host.innerHTML = "";
@@ -317,7 +548,7 @@ function renderIndicators(profile) {
     tile.className = "tile";
     tile.innerHTML = `
       <span class="tile__label">${ind.label}</span>
-      <span class="tile__value">${ind.value}%</span>
+      <span class="tile__value" data-count="${ind.value}">0%</span>
       <div class="tile__track"><div class="tile__fill" data-width="${ind.value}"></div></div>
     `;
     host.appendChild(tile);
@@ -326,7 +557,7 @@ function renderIndicators(profile) {
 
 /* --- Gráfico de pizza (donut) em SVG puro ---------------------------------
    Cada fatia é um arco do mesmo círculo desenhado com stroke-dasharray.
-   O separador entre fatias é um vão de 2px na cor da superfície, e não um
+   A separação entre fatias é um vão de 2px na cor da superfície, e não um
    contorno — traço em volta da marca adicionaria tinta que não é dado.      */
 const DONUT = { radius: 74, gap: 2 };
 
@@ -334,29 +565,36 @@ function renderDonut(profile) {
   const group = $("donut-segments");
   const tooltip = $("tooltip");
   const svg = $("donut");
+  const wrap = $("donut-wrap");
   const legend = $("legend");
+  const centerValue = $("donut-center-value");
+  const centerLabel = $("donut-center-label");
   const circumference = 2 * Math.PI * DONUT.radius;
 
   group.innerHTML = "";
   legend.innerHTML = "";
 
   let offset = 0;
-  const segments = [];
+  const entries = [];
+  let pinned = null;
 
   profile.portfolio.forEach((item, i) => {
     const length = (item.pct / 100) * circumference;
-    const color = SERIES_COLORS[i];
+    const color = SERIES[i];
+    const visible = Math.max(length - DONUT.gap, 0);
 
     const seg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     seg.setAttribute("class", "donut__seg");
     seg.setAttribute("cx", "100");
     seg.setAttribute("cy", "100");
     seg.setAttribute("r", String(DONUT.radius));
-    // via style (e não atributo) porque atributo de apresentação não resolve var()
-    seg.style.stroke = color;
+    seg.setAttribute("stroke", color);
     seg.setAttribute("stroke-dasharray", `0 ${circumference}`);
     seg.setAttribute("stroke-dashoffset", String(-offset));
-    seg.dataset.target = `${Math.max(length - DONUT.gap, 0)} ${circumference - Math.max(length - DONUT.gap, 0)}`;
+    seg.setAttribute("tabindex", "0");
+    seg.setAttribute("role", "button");
+    seg.setAttribute("aria-label", `${item.name}: ${item.pct}%`);
+    seg.dataset.target = `${visible} ${circumference - visible}`;
     group.appendChild(seg);
 
     const row = document.createElement("div");
@@ -368,48 +606,88 @@ function renderDonut(profile) {
     `;
     legend.appendChild(row);
 
-    segments.push({ seg, row, item });
+    entries.push({ seg, row, item, color, index: i });
     offset += length;
   });
 
-  /* Mantém o tooltip dentro do painel: acima do cursor, mas nunca estourando
-     a borda superior do gráfico. */
   const placeTooltip = (x, y) => {
-    tooltip.style.left = `${x}px`;
+    const w = tooltip.offsetWidth;
+    const clampedX = Math.min(Math.max(x, w / 2), wrap.offsetWidth - w / 2);
+    tooltip.style.left = `${clampedX}px`;
     tooltip.style.top = `${Math.max(y, tooltip.offsetHeight + 8)}px`;
   };
 
-  /* Camada de hover: destaca a fatia, escurece as demais e abre o tooltip. */
-  const highlight = (entry, on) => {
-    svg.classList.toggle("donut--dim", on);
-    legend.classList.toggle("legend--dim", on);
-    entry.seg.classList.toggle("donut__seg--active", on);
-    entry.row.classList.toggle("legend__row--active", on);
-    if (on) {
+  /* Destaca a fatia, escurece as demais e sincroniza legenda, linha da
+     alocação e o miolo do donut. */
+  const highlight = (entry) => {
+    const rows = document.querySelectorAll(".alloc__row");
+    entries.forEach((e) => {
+      const on = entry !== null && e === entry;
+      e.seg.classList.toggle("donut__seg--active", on);
+      e.row.classList.toggle("legend__row--active", on);
+      if (rows[e.index]) rows[e.index].classList.toggle("alloc__row--active", on);
+    });
+
+    svg.classList.toggle("donut--dim", entry !== null);
+    legend.classList.toggle("legend--dim", entry !== null);
+
+    if (entry) {
+      centerValue.textContent = `${entry.item.pct}%`;
+      centerValue.style.color = entry.color;
+      centerLabel.textContent = "da carteira";
       tooltip.innerHTML = `
         <span class="tooltip__name">${entry.item.name}</span>
         <span class="tooltip__value">${entry.item.pct}% da carteira</span>
       `;
+    } else {
+      centerValue.textContent = "100%";
+      centerValue.style.color = "";
+      centerLabel.textContent = "alocado";
     }
-    tooltip.classList.toggle("tooltip--visible", on);
+    tooltip.classList.toggle("tooltip--visible", entry !== null);
   };
 
-  segments.forEach((entry) => {
-    const enter = () => highlight(entry, true);
-    const leave = () => highlight(entry, false);
+  const enter = (entry) => {
+    if (pinned) return;
+    highlight(entry);
+  };
+  const leave = () => {
+    if (pinned) return;
+    highlight(null);
+  };
 
-    entry.seg.addEventListener("mouseenter", enter);
+  entries.forEach((entry) => {
+    entry.seg.addEventListener("mouseenter", () => enter(entry));
     entry.seg.addEventListener("mouseleave", leave);
-
     entry.seg.addEventListener("mousemove", (e) => {
-      const box = svg.parentElement.getBoundingClientRect();
+      const box = wrap.getBoundingClientRect();
       placeTooltip(e.clientX - box.left, e.clientY - box.top);
     });
 
-    // Pela legenda o cursor está fora do gráfico: ancora o tooltip no centro.
+    // clique fixa o destaque; clicar de novo solta
+    const toggle = () => {
+      pinned = pinned === entry ? null : entry;
+      highlight(pinned);
+      placeTooltip(wrap.offsetWidth / 2, wrap.offsetHeight / 2);
+    };
+    entry.seg.addEventListener("click", toggle);
+    entry.row.addEventListener("click", toggle);
+
+    entry.seg.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggle();
+      }
+    });
+    entry.seg.addEventListener("focus", () => {
+      enter(entry);
+      placeTooltip(wrap.offsetWidth / 2, wrap.offsetHeight / 2);
+    });
+    entry.seg.addEventListener("blur", leave);
+
     entry.row.addEventListener("mouseenter", () => {
-      enter();
-      placeTooltip(svg.parentElement.offsetWidth / 2, svg.parentElement.offsetHeight / 2);
+      enter(entry);
+      placeTooltip(wrap.offsetWidth / 2, wrap.offsetHeight / 2);
     });
     entry.row.addEventListener("mouseleave", leave);
   });
@@ -422,7 +700,7 @@ function renderPortfolio(profile) {
     const row = document.createElement("div");
     row.className = "alloc__row";
     row.innerHTML = `
-      <span class="alloc__bar" style="background:${SERIES_COLORS[i]}"></span>
+      <span class="alloc__bar" style="background:${SERIES[i]}"></span>
       <span>
         <span class="alloc__name">${item.name}</span>
         <span class="alloc__note">${item.note}</span>
@@ -433,21 +711,46 @@ function renderPortfolio(profile) {
   });
 }
 
-function showResult() {
-  const score = computeScore();
+/* Revela as seções conforme entram na viewport. */
+function setupReveal() {
+  const els = document.querySelectorAll("#screen-result .reveal");
+  els.forEach((el) => el.classList.remove("in-view"));
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    els.forEach((el) => el.classList.add("in-view"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (items) => {
+      items.forEach((item) => {
+        if (item.isIntersecting) {
+          item.target.classList.add("in-view");
+          io.unobserve(item.target);
+        }
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.04 }
+  );
+  els.forEach((el) => io.observe(el));
+  requestAnimationFrame(() => $("lp-hero").classList.add("in-view"));
+}
+
+function showResult(score, celebrate) {
   const profile = getProfile(score);
 
   $("result-title").textContent = profile.name;
   $("topbar-name").textContent = profile.name;
   $("result-tagline").textContent = profile.tagline;
-  $("result-score").textContent = score;
   $("result-description").textContent = profile.description;
   $("portfolio-subtitle").textContent = profile.portfolioSubtitle;
   $("result-quote").textContent = profile.quote;
+  $("donut-center-value").textContent = "100%";
+  $("donut-center-label").textContent = "alocado";
 
   renderIndicators(profile);
-  renderDonut(profile);
   renderPortfolio(profile);
+  renderDonut(profile);
 
   const shareText =
     `Fiz a Análise de Perfil Festivo e o resultado saiu: "${profile.name}".\n` +
@@ -455,12 +758,15 @@ function showResult() {
   $("btn-share").href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 
   showScreen("result");
-  launchConfetti();
+  setupReveal();
+  if (celebrate) burst();
 
-  // Anima as barras e as fatias depois que a tela entra
   setTimeout(() => {
     document.querySelectorAll("[data-width]").forEach((el) => {
       el.style.width = `${el.dataset.width}%`;
+    });
+    document.querySelectorAll("[data-count]").forEach((el) => {
+      countUp(el, Number(el.dataset.count));
     });
     document.querySelectorAll(".donut__seg").forEach((seg, i) => {
       // o atraso vale só para o desenho da fatia; hover continua respondendo na hora
@@ -472,31 +778,76 @@ function showResult() {
   }, 250);
 }
 
-/* ========================== Barra fixa ========================== */
-const topbar = $("topbar");
-window.addEventListener("scroll", () => {
-  if (!screens.result.classList.contains("screen--active")) return;
-  topbar.classList.toggle("topbar--visible", window.scrollY > 260);
-});
-
-/* ========================== Confete ========================== */
-function launchConfetti() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  const container = $("confetti");
-  container.innerHTML = "";
-  for (let i = 0; i < 26; i++) {
-    const piece = document.createElement("span");
-    piece.className = "confetti__piece";
-    piece.style.left = `${Math.random() * 100}%`;
-    piece.style.animationDelay = `${Math.random() * 1.2}s`;
-    piece.style.animationDuration = `${1.8 + Math.random() * 1.4}s`;
-    container.appendChild(piece);
+/* ==========================================================================
+   Persistência — fica só neste navegador, nada é enviado para servidor
+   ========================================================================== */
+function saveResult(score) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ score, answers: state.answers, savedAt: new Date().toISOString() })
+    );
+  } catch (err) {
+    /* modo privativo ou storage cheio: seguimos sem salvar */
   }
-  setTimeout(() => (container.innerHTML = ""), 4200);
 }
 
-/* ========================== Navegação ========================== */
+function loadResult() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (typeof data.score !== "number" || !Array.isArray(data.answers)) return null;
+    return data;
+  } catch (err) {
+    return null;
+  }
+}
+
+/* ==========================================================================
+   Estouro de confete ao revelar o resultado
+   ========================================================================== */
+function burst() {
+  if (reduceMotion) return;
+  const host = $("burst");
+  host.innerHTML = "";
+  const palette = [...SERIES, ACCENT];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement("span");
+    piece.className = "burst__piece";
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.background = palette[i % palette.length];
+    piece.style.setProperty("--spin", `${Math.random() * 900 - 450}deg`);
+    piece.style.animationDelay = `${Math.random() * 0.9}s`;
+    piece.style.animationDuration = `${1.9 + Math.random() * 1.6}s`;
+    host.appendChild(piece);
+  }
+  setTimeout(() => (host.innerHTML = ""), 4400);
+}
+
+/* ==========================================================================
+   Barra fixa
+   ========================================================================== */
+const topbar = $("topbar");
+window.addEventListener(
+  "scroll",
+  () => {
+    if (document.body.dataset.screen !== "result") return;
+    topbar.classList.toggle("topbar--visible", window.scrollY > 240);
+  },
+  { passive: true }
+);
+
+/* ==========================================================================
+   Navegação de alto nível
+   ========================================================================== */
+function startQuiz() {
+  state.current = 0;
+  state.answers.fill(null);
+  renderQuestion();
+  showScreen("quiz");
+}
+
 function restart() {
   state.current = 0;
   state.answers.fill(null);
@@ -505,12 +856,20 @@ function restart() {
   showScreen("intro");
 }
 
-$("btn-start").addEventListener("click", () => {
-  state.current = 0;
-  state.answers.fill(null);
-  renderQuestion();
-  showScreen("quiz");
-});
-
+$("btn-start").addEventListener("click", startQuiz);
 $("btn-restart").addEventListener("click", restart);
 $("btn-restart-top").addEventListener("click", restart);
+
+$("btn-saved").addEventListener("click", () => {
+  const saved = loadResult();
+  if (!saved) return;
+  state.answers = saved.answers;
+  showResult(saved.score, false);
+});
+
+/* ==========================================================================
+   Início
+   ========================================================================== */
+Ambient.start();
+renderQuestion();
+if (loadResult()) $("btn-saved").classList.remove("is-hidden");
