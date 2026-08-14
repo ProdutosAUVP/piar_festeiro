@@ -15,13 +15,12 @@ fim de semana: o quanto de rolê o seu corpo aguenta.
 
 | Pontos | Perfil | Leitura |
 | --- | --- | --- |
-| 10–19 | **Ermitão** · Fica em Casa | Tesouro Sofá: liquidez diária no controle remoto |
-| 20–30 | **Assombração** · Sai às Vezes | Multimercado: dança, mas com uma mão no corrimão |
-| 31–40 | **Inimigo do Fim** · Vamos Viver Essa Experiência | Day trade de pista: alavancado em glitter |
+| 10–19 | **Ermitão** — Fica em casa | Tesouro sofá: liquidez diária no controle remoto |
+| 20–30 | **Assombração** — Sai às vezes | Multimercado: dança, mas com uma mão no corrimão |
+| 31–40 | **Inimigo do fim** — Vamos viver essa experiência | Day trade de pista: alavancado em glitter |
 
-
-A categoria e o título andam sempre juntos — na escala, no resultado, no painel
-e no compartilhamento.
+A categoria é o título e o descritor é o subtítulo logo abaixo. Os dois andam
+sempre juntos — na escala, no resultado, no painel e no compartilhamento.
 
 4. O resultado é revelado como uma landing page e fica guardado num **painel**
    permanente, acessível a qualquer momento.
@@ -38,10 +37,10 @@ e no compartilhamento.
 
 ### O painel
 
-- **Visão geral** — card de resumo no topo (retrato, categoria, data e as
-  primeiras linhas do diagnóstico, com atalho para os detalhes) e três pares de
-  cards de mesma altura: escala festiva e indicadores; sugestão de alocação e
-  estratégia ideal; destaque positivo e ponto de atenção.
+- **Visão geral** — resumo em dois cards no topo (texto à esquerda, retrato do
+  perfil à direita), o par escala festiva + indicadores, os cards horizontais de
+  sugestão de alocação e estratégia ideal, e o par destaque positivo + ponto de
+  atenção.
 - **Perfil** — diagnóstico ao lado do retrato do perfil, três **pontos fortes**,
   três **pontos de atenção** e a recomendação do analista.
 - **Carteira** — **por que essa carteira** foi montada assim, a **sugestão de
@@ -96,7 +95,12 @@ o registro.
 - `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as
   seções já reveladas.
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
-  espaço entre cards de uma mesma linha vem sempre do `gap` do grid.
+  espaço entre cards de uma mesma linha vem sempre do `gap` do grid. Blocos que
+  não têm par natural ocupam a largura inteira em vez de deixar meia coluna
+  vazia.
+- Todos os textos em sentence case, sem títulos em caixa alta. As únicas
+  maiúsculas que sobram são siglas (CDB, IPO, AAA), nomes próprios (WhatsApp,
+  PIAR Festeiro) e as ênfases do humor ("você É a festa", "sabe A HORA de sair").
 - Responsivo de 320px para cima; os grids de duas colunas quebram em 900px.
 
 ## Rodando localmente

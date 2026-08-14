@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
+  <title>PIAR Festeiro — descubra seu perfil de festeiro</title>
   <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#08080a">
@@ -36,7 +36,7 @@
     <!-- ===================== LANDING ===================== -->
     <section class="screen screen--active" id="screen-intro">
       <div class="wrap wrap--narrow intro">
-        <p class="kicker">Análise de Perfil Festivo</p>
+        <p class="kicker">Análise de perfil festivo</p>
         <h1 class="display">
           Qual é o seu<br>perfil de <span class="accent-text">festeiro</span>?
         </h1>
@@ -53,7 +53,7 @@
           </li>
           <li class="spec-card">
             <span class="spec-card__num">03</span>
-            <span class="spec-card__text">resultados possíveis: <strong>Ermitão</strong> (fica em casa), <strong>Assombração</strong> (sai às vezes) ou <strong>Inimigo do Fim</strong> (vamos viver essa experiência)</span>
+            <span class="spec-card__text">resultados possíveis: <strong>Ermitão</strong> (fica em casa), <strong>Assombração</strong> (sai às vezes) ou <strong>Inimigo do fim</strong> (vamos viver essa experiência)</span>
           </li>
           <li class="spec-card">
             <span class="spec-card__num">01</span>
@@ -140,6 +140,7 @@
         <div class="wrap">
           <p class="kicker">Relatório de perfil festivo</p>
           <h2 class="display display--result" id="result-title"></h2>
+          <p class="subtitle" id="result-subtitle"></p>
           <p class="lede lede--result" id="result-tagline"></p>
         </div>
       </header>
@@ -210,7 +211,7 @@
             <h3 class="section-head__title">Estratégia ideal</h3>
           </div>
           <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
-          <div class="strategy" id="result-strategy"></div>
+          <div class="strategy strategy--row" id="result-strategy"></div>
         </div>
       </section>
 
@@ -271,6 +272,7 @@
             <div>
               <p class="kicker" id="dash-kicker">Seu perfil festivo</p>
               <h2 class="dash-title" id="dash-profile"></h2>
+              <p class="subtitle subtitle--dash" id="dash-subtitle"></p>
               <p class="dash-tagline" id="dash-tagline"></p>
             </div>
           </div>
@@ -278,22 +280,26 @@
 
         <!-- ===== Visão geral ===== -->
         <div class="wrap view" id="view-visao-geral">
-          <article class="card summary">
-            <div class="summary__head">
-              <img class="summary__avatar" id="summary-avatar" alt="" width="56" height="56" decoding="async">
-              <div>
+          <div class="grid grid--summary">
+            <article class="card summary">
+              <div class="summary__head">
                 <h3 class="summary__title">Meu perfil de festeiro</h3>
                 <p class="summary__sub">Sua análise personalizada</p>
               </div>
-            </div>
-            <div class="summary__meta">
-              <span class="badge" id="summary-badge"></span>
-              <span class="summary__date" id="summary-date"></span>
-            </div>
-            <h4 class="summary__label">Resumo personalizado</h4>
-            <p class="summary__text" id="summary-text"></p>
-            <a class="btn btn--primary summary__cta" href="#/perfil">Ver detalhes</a>
-          </article>
+              <div class="summary__meta">
+                <span class="badge" id="summary-badge"></span>
+                <span class="summary__date" id="summary-date"></span>
+              </div>
+              <h4 class="summary__label">Resumo personalizado</h4>
+              <p class="summary__text" id="summary-text"></p>
+              <a class="btn btn--primary summary__cta" href="#/perfil">Ver detalhes</a>
+            </article>
+
+            <article class="card card--portrait">
+              <img class="portrait" id="summary-portrait" alt="" width="230" height="282" decoding="async">
+              <span class="portrait__caption" id="summary-caption"></span>
+            </article>
+          </div>
 
           <div class="grid grid--2">
             <article class="card card--scale">
@@ -303,9 +309,9 @@
                   <span class="scale__marker" id="scale-marker"></span>
                 </div>
                 <div class="scale__labels">
-                  <span><b>Ermitão</b>Fica em Casa</span>
-                  <span><b>Assombração</b>Sai às Vezes</span>
-                  <span><b>Inimigo do Fim</b>Vamos Viver Essa Experiência</span>
+                  <span><b>Ermitão</b>Fica em casa</span>
+                  <span><b>Assombração</b>Sai às vezes</span>
+                  <span><b>Inimigo do fim</b>Vamos viver essa experiência</span>
                 </div>
               </div>
               <p class="card__note" id="scale-note"></p>
@@ -317,9 +323,9 @@
             </article>
           </div>
 
-          <div class="grid grid--2">
-            <article class="card card--chart">
-              <h3 class="card__title">Sugestão de alocação</h3>
+          <article class="card card--chart-row">
+            <h3 class="card__title">Sugestão de alocação</h3>
+            <div class="chart-row">
               <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
                 <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição resumida da sugestão de alocação">
                   <g class="donut__segments" transform="rotate(-90 100 100)"></g>
@@ -329,16 +335,16 @@
                 </div>
                 <div class="tooltip"></div>
               </div>
-              <div class="legend legend--inline"></div>
-              <a class="card__link" href="#/carteira">Ver alocação completa</a>
-            </article>
+              <div class="legend"></div>
+            </div>
+            <a class="card__link" href="#/carteira">Ver alocação completa</a>
+          </article>
 
-            <article class="card card--strategy">
-              <h3 class="card__title">Estratégia ideal</h3>
-              <div class="strategy strategy--sm" id="dash-strategy-summary"></div>
-              <a class="card__link" href="#/carteira">Ver estratégia completa</a>
-            </article>
-          </div>
+          <article class="card card--strategy">
+            <h3 class="card__title">Estratégia ideal</h3>
+            <div class="strategy strategy--sm strategy--row" id="dash-strategy-summary"></div>
+            <a class="card__link" href="#/carteira">Ver estratégia completa</a>
+          </article>
 
           <div class="grid grid--2">
             <article class="card">
@@ -348,7 +354,6 @@
             <article class="card">
               <h3 class="card__title">Ponto de atenção</h3>
               <div id="dash-top-weakness"></div>
-              <a class="card__link" href="#/perfil">Ver análise completa</a>
             </article>
           </div>
         </div>
@@ -415,7 +420,7 @@
           <h3 class="dash-section-title">Estratégia ideal</h3>
           <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
           <article class="card">
-            <div class="strategy strategy--sm" id="dash-strategy"></div>
+            <div class="strategy strategy--row" id="dash-strategy"></div>
           </article>
 
           <div class="dash-actions">

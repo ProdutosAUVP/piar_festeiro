@@ -417,14 +417,6 @@ function profileText(profile) {
   return `${profile.category} · ${profile.name}`;
 }
 
-function profileMarkup(profile) {
-  return (
-    `<span class="pname__cat">${profile.category}</span>` +
-    `<span class="pname__sep">·</span>` +
-    `<span class="pname__desc">${profile.name}</span>`
-  );
-}
-
 function shareLink(profile) {
   const text =
     `Fiz a Análise de Perfil Festivo e o resultado saiu: "${profileText(profile)}".\n` +
@@ -855,7 +847,8 @@ function animateMetrics(root) {
 function renderResult(profile) {
   state.profile = profile;
 
-  $("result-title").innerHTML = profileMarkup(profile);
+  $("result-title").textContent = profile.category;
+  $("result-subtitle").textContent = profile.name;
   $("topbar-name").textContent = profileText(profile);
   $("result-tagline").textContent = profile.tagline;
   $("result-description").textContent = profile.description;
@@ -918,7 +911,8 @@ function renderDashboard(attempt) {
   const profile = getProfile(attempt.score);
   state.profile = profile;
 
-  $("dash-profile").innerHTML = profileMarkup(profile);
+  $("dash-profile").textContent = profile.category;
+  $("dash-subtitle").textContent = profile.name;
   $("dash-tagline").textContent = profile.tagline;
   $("dash-description").textContent = profile.description;
   $("dash-quote").textContent = profile.quote;
@@ -942,9 +936,10 @@ function renderDashboard(attempt) {
   $("dash-art-caption").textContent = art.caption;
 
   // Cartão de resumo
-  $("summary-avatar").src = art.src;
-  $("summary-avatar").alt = art.alt;
-  $("summary-badge").textContent = profile.category;
+  $("summary-portrait").src = art.src;
+  $("summary-portrait").alt = art.alt;
+  $("summary-caption").textContent = art.caption;
+  $("summary-badge").textContent = `${profile.category} · ${profile.name}`;
   $("summary-date").textContent = formatDate(attempt.savedAt);
   $("summary-text").textContent = profile.description;
 

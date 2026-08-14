@@ -114,8 +114,8 @@ const PROFILES = [
     min: 10,
     max: 19,
     category: "Ermitão",
-    name: "Fica em Casa",
-    tagline: "Perfil Tesouro Sofá — liquidez diária no controle remoto",
+    name: "Fica em casa",
+    tagline: "Perfil tesouro sofá — liquidez diária no controle remoto",
     scaleNote:
       "Você está na ponta conservadora da escala: baixa exposição a rolê e altíssima previsibilidade de domingo.",
     description:
@@ -199,8 +199,8 @@ const PROFILES = [
     min: 20,
     max: 30,
     category: "Assombração",
-    name: "Sai às Vezes",
-    tagline: "Perfil Multimercado — dança, mas com uma mão no corrimão",
+    name: "Sai às vezes",
+    tagline: "Perfil multimercado — dança, mas com uma mão no corrimão",
     scaleNote:
       "Você está no meio da escala: exposição equilibrada, com reserva de sono preservada para a segunda-feira.",
     description:
@@ -283,9 +283,9 @@ const PROFILES = [
     id: "inimigo",
     min: 31,
     max: 40,
-    category: "Inimigo do Fim",
-    name: "Vamos Viver Essa Experiência",
-    tagline: "Perfil Day Trade de Pista — alavancado em glitter e disposição",
+    category: "Inimigo do fim",
+    name: "Vamos viver essa experiência",
+    tagline: "Perfil day trade de pista — alavancado em glitter e disposição",
     scaleNote:
       "Você está na ponta agressiva da escala: exposição máxima a rolê e liquidez social imediata, a qualquer hora.",
     description:
@@ -357,7 +357,7 @@ const PROFILES = [
     ],
     portfolio: [
       { pct: 30, name: "Balada até o sol nascer", note: "Small caps: potencial explosivo, liquidez só no dia seguinte" },
-      { pct: 25, name: "Festivais e Carnaval", note: "IPO anual: fila enorme, preço absurdo, você vai mesmo assim" },
+      { pct: 25, name: "Festivais e carnaval", note: "IPO anual: fila enorme, preço absurdo, você vai mesmo assim" },
       { pct: 20, name: "After de local incerto", note: "Cripto: ninguém sabe onde é, pode zerar sua semana" },
       { pct: 15, name: "Rolê aleatório com desconhecidos", note: "Day trade: 90% se machuca, você jura que é os 10%" },
       { pct: 10, name: "Reserva de soro e isotônico", note: "Hedge de ressaca: o único ativo garantido da carteira" },
