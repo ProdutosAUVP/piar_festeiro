@@ -793,62 +793,41 @@ function renderStrategy(host, profile, withNote = true) {
 
 
 /* ==========================================================================
-   Ilustração do perfil — SVG inline, herdando as cores do tema
+   Retrato do perfil
    ========================================================================== */
 const ART = {
   ermitao: {
+    src: "perfil%20festeiro_pessoa.png",
+    alt: "Rosto sorridente e descansado",
     caption: "Sofá ocupado, cobertor no lugar, domingo garantido.",
-    svg: `
-      <svg viewBox="0 0 200 200" role="img" aria-label="Um sofá sob a luz da lua">
-        <path d="M162 26a19 19 0 1 0 13 32 15 15 0 1 1-13-32z" fill="var(--series-4)"/>
-        <circle cx="44" cy="34" r="2.6" fill="var(--series-4)" opacity=".8"/>
-        <circle cx="70" cy="20" r="2" fill="var(--series-4)" opacity=".6"/>
-        <circle cx="118" cy="40" r="2.2" fill="var(--series-4)" opacity=".5"/>
-        <rect x="46" y="78" width="108" height="42" rx="14" fill="var(--series-1)" opacity=".55"/>
-        <rect x="30" y="100" width="24" height="50" rx="11" fill="var(--series-1)"/>
-        <rect x="146" y="100" width="24" height="50" rx="11" fill="var(--series-1)"/>
-        <rect x="34" y="112" width="132" height="40" rx="12" fill="var(--series-1)"/>
-        <rect x="48" y="152" width="11" height="16" rx="4" fill="var(--text-2)" opacity=".45"/>
-        <rect x="141" y="152" width="11" height="16" rx="4" fill="var(--text-2)" opacity=".45"/>
-        <circle cx="100" cy="98" r="14" fill="var(--neon)" opacity=".85"/>
-      </svg>`,
   },
   assombracao: {
+    src: "perfil%20festeiro_fantasma.png",
+    alt: "Um fantasma",
     caption: "Aparece, assombra por uma hora e some sem se despedir.",
-    svg: `
-      <svg viewBox="0 0 200 200" role="img" aria-label="Um fantasma de chapéu de festa">
-        <path d="M100 22 84 56h32z" fill="var(--series-5)"/>
-        <circle cx="100" cy="20" r="6" fill="var(--neon)"/>
-        <path d="M62 158V96a38 38 0 0 1 76 0v62l-12-11-13 11-13-11-13 11-13-11z" fill="var(--series-5)" opacity=".92"/>
-        <circle cx="86" cy="102" r="6.5" fill="var(--bg)"/>
-        <circle cx="114" cy="102" r="6.5" fill="var(--bg)"/>
-        <path d="M92 120q8 7 16 0" stroke="var(--bg)" stroke-width="4" stroke-linecap="round" fill="none"/>
-        <circle cx="40" cy="70" r="3" fill="var(--series-1)" opacity=".8"/>
-        <circle cx="162" cy="118" r="3.4" fill="var(--series-3)" opacity=".8"/>
-        <circle cx="152" cy="52" r="2.6" fill="var(--series-4)" opacity=".8"/>
-      </svg>`,
   },
   inimigo: {
+    src: "perfil%20festeiro_zumbi.png",
+    alt: "Rosto de zumbi com olheiras",
     caption: "Ainda na pista quando o sol resolve aparecer.",
-    svg: `
-      <svg viewBox="0 0 200 200" role="img" aria-label="Alguém dançando de braços abertos enquanto o sol nasce">
-        <circle cx="100" cy="120" r="52" fill="var(--series-4)" opacity=".9"/>
-        <g stroke="var(--series-4)" stroke-width="5" stroke-linecap="round" opacity=".6">
-          <path d="M100 40v14M44 60l10 11M156 60l-10 11M14 116h14M172 116h14"/>
-        </g>
-        <path d="M14 160h172" stroke="var(--text-2)" stroke-width="3" stroke-linecap="round" opacity=".35"/>
-        <g fill="none" stroke="var(--bg)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M100 92v34"/>
-          <path d="M100 100 66 78M100 100l34-22"/>
-          <path d="M100 126l-20 32M100 126l20 32"/>
-        </g>
-        <circle cx="100" cy="74" r="13" fill="var(--bg)"/>
-        <rect x="32" y="40" width="7" height="12" rx="2" fill="var(--series-5)" transform="rotate(-20 35 46)"/>
-        <rect x="162" y="52" width="7" height="12" rx="2" fill="var(--series-1)" transform="rotate(25 165 58)"/>
-        <rect x="148" y="24" width="7" height="12" rx="2" fill="var(--series-3)" transform="rotate(-15 151 30)"/>
-      </svg>`,
   },
 };
+
+function renderPicks(host, profile) {
+  host.innerHTML = "";
+  profile.picks.forEach((pick) => {
+    const el = document.createElement("article");
+    el.className = "pick";
+    el.innerHTML = `
+      <div class="pick__head">
+        <h4 class="pick__name">${pick.name}</h4>
+        <span class="pick__tag">${pick.tag}</span>
+      </div>
+      <p class="pick__text">${pick.text}</p>
+    `;
+    host.appendChild(el);
+  });
+}
 
 function renderPoint(item, warn) {
   const el = document.createElement("article");
@@ -884,9 +863,12 @@ function renderResult(profile) {
   $("result-quote").textContent = profile.quote;
   $("btn-share").href = shareLink(profile);
 
+  $("result-portfolio-why").textContent = profile.portfolioWhy;
+
   renderIndicators($("result-indicators"), profile);
   renderStrategy($("result-strategy"), profile);
   renderBars($("result-bars"), profile);
+  renderPicks($("result-picks"), profile);
 
   const wrap = $("result-donut-wrap");
   const animate = mountDonut(
@@ -938,7 +920,6 @@ function renderDashboard(attempt) {
 
   $("dash-profile").innerHTML = profileMarkup(profile);
   $("dash-tagline").textContent = profile.tagline;
-  $("dash-date").textContent = formatDate(attempt.savedAt);
   $("dash-description").textContent = profile.description;
   $("dash-quote").textContent = profile.quote;
   $("dash-portfolio-subtitle").textContent = profile.portfolioSubtitle;
@@ -954,10 +935,18 @@ function renderDashboard(attempt) {
   renderStrategy($("dash-strategy"), profile);
   renderStrategy($("dash-strategy-summary"), profile);
 
-  // Ilustração do perfil
+  // Retrato do perfil
   const art = ART[profile.id];
-  $("dash-art").innerHTML = art.svg;
+  $("dash-art").src = art.src;
+  $("dash-art").alt = art.alt;
   $("dash-art-caption").textContent = art.caption;
+
+  // Cartão de resumo
+  $("summary-avatar").src = art.src;
+  $("summary-avatar").alt = art.alt;
+  $("summary-badge").textContent = profile.category;
+  $("summary-date").textContent = formatDate(attempt.savedAt);
+  $("summary-text").textContent = profile.description;
 
   // Destaques
   $("dash-top-strength").replaceChildren(renderPoint(profile.strengths[0], false));
@@ -971,7 +960,9 @@ function renderDashboard(attempt) {
   profile.weaknesses.forEach((w) => weaknesses.appendChild(renderPoint(w, true)));
 
   // Carteira
+  $("dash-portfolio-why").textContent = profile.portfolioWhy;
   renderBars($("dash-bars"), profile);
+  renderPicks($("dash-picks"), profile);
   const miniWrap = $("dash-donut-wrap");
   const fullWrap = $("carteira-donut-wrap");
   const animateMini = mountDonut(

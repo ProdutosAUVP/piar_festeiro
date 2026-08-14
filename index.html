@@ -172,6 +172,12 @@
             <h3 class="section-head__title">Sugestão de alocação</h3>
           </div>
           <p class="section-sub" id="result-portfolio-subtitle"></p>
+
+          <article class="card card--why">
+            <h3 class="card__title">Por que essa carteira</h3>
+            <p class="prose" id="result-portfolio-why"></p>
+          </article>
+
           <div class="grid grid--alloc">
             <article class="card">
               <h3 class="card__title">Alocação por tipo de rolê</h3>
@@ -191,6 +197,9 @@
               <div class="legend legend--inline"></div>
             </article>
           </div>
+
+          <h4 class="picks-title">Ativos recomendados</h4>
+          <div class="grid grid--picks" id="result-picks"></div>
         </div>
       </section>
 
@@ -264,15 +273,28 @@
               <h2 class="dash-title" id="dash-profile"></h2>
               <p class="dash-tagline" id="dash-tagline"></p>
             </div>
-            <div class="dash-meta">
-              <span class="dash-meta__label">Última análise</span>
-              <span class="dash-meta__value" id="dash-date"></span>
-            </div>
           </div>
         </div>
 
         <!-- ===== Visão geral ===== -->
         <div class="wrap view" id="view-visao-geral">
+          <article class="card summary">
+            <div class="summary__head">
+              <img class="summary__avatar" id="summary-avatar" alt="" width="56" height="56" decoding="async">
+              <div>
+                <h3 class="summary__title">Meu perfil de festeiro</h3>
+                <p class="summary__sub">Sua análise personalizada</p>
+              </div>
+            </div>
+            <div class="summary__meta">
+              <span class="badge" id="summary-badge"></span>
+              <span class="summary__date" id="summary-date"></span>
+            </div>
+            <h4 class="summary__label">Resumo personalizado</h4>
+            <p class="summary__text" id="summary-text"></p>
+            <a class="btn btn--primary summary__cta" href="#/perfil">Ver detalhes</a>
+          </article>
+
           <div class="grid grid--2">
             <article class="card card--scale">
               <h3 class="card__title">Posição na escala festiva</h3>
@@ -339,7 +361,7 @@
               <p class="prose" id="dash-description"></p>
             </article>
             <article class="card card--art">
-              <div class="art" id="dash-art"></div>
+              <img class="art" id="dash-art" alt="" width="230" height="282" decoding="async">
               <span class="art__caption" id="dash-art-caption"></span>
             </article>
           </div>
@@ -360,6 +382,12 @@
         <div class="wrap view" id="view-carteira" hidden>
           <h3 class="dash-section-title dash-section-title--first">Sugestão de alocação</h3>
           <p class="section-sub" id="dash-portfolio-subtitle"></p>
+
+          <article class="card">
+            <h3 class="card__title">Por que essa carteira</h3>
+            <p class="prose" id="dash-portfolio-why"></p>
+          </article>
+
           <div class="grid grid--alloc">
             <article class="card">
               <h3 class="card__title">Alocação por tipo de rolê</h3>
@@ -379,6 +407,10 @@
               <div class="legend legend--inline"></div>
             </article>
           </div>
+
+          <h3 class="dash-section-title">Ativos recomendados</h3>
+          <p class="section-sub">Onde colocar o seu próximo aporte de fim de semana, segundo o comitê.</p>
+          <div class="grid grid--picks" id="dash-picks"></div>
 
           <h3 class="dash-section-title">Estratégia ideal</h3>
           <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>

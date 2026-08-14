@@ -161,6 +161,30 @@ const PROFILES = [
     },
     portfolioSubtitle:
       "Alocação de baixo risco, alta previsibilidade e retorno garantido em boas risadas.",
+    portfolioWhy:
+      "Essa carteira não tenta te empurrar para a pista — ela concentra o que você já faz bem. Encontros com gente conhecida, em lugar conhecido e com hora para acabar rendem mais para você do que qualquer noite imprevisível. A ideia é garantir que os poucos rolês que você aceita valham cada minuto fora de casa, e que o domingo continue intacto.",
+    picks: [
+      {
+        name: "Churrasco do cunhado",
+        tag: "Renda fixa",
+        text: "Mesmo domingo, mesma carne, mesma cadeira. Previsibilidade máxima e zero surpresa.",
+      },
+      {
+        name: "Rodízio com os amigos de infância",
+        tag: "Baixa volatilidade",
+        text: "Conversa boa, conta dividida e todo mundo em casa antes das 22h.",
+      },
+      {
+        name: "Aniversário de sobrinho",
+        tag: "Título público",
+        text: "Obrigatório, curto e sempre paga: você sai de lá com bolo e crédito na família.",
+      },
+      {
+        name: "Maratona de série no sofá",
+        tag: "Liquidez diária",
+        text: "O ativo mais líquido da carteira: resgatável a qualquer hora, sem multa e sem carência.",
+      },
+    ],
     portfolio: [
       { pct: 35, name: "Churrasco de domingo", note: "Renda fixa raiz: rende amizade acima do CDI" },
       { pct: 25, name: "Jantar na casa de amigos", note: "CDB — Comida, Descontração e Boa conversa" },
@@ -222,6 +246,30 @@ const PROFILES = [
     },
     portfolioSubtitle:
       "Alocação balanceada: risco na medida, retorno divertido e segunda-feira preservada.",
+    portfolioWhy:
+      "Essa carteira aposta no seu maior talento, que é dosar. Metade fica em rolês de baixo risco que você já domina de olhos fechados; a outra metade abre espaço para as ocasiões que realmente valem uma noite mais longa. Nada aqui compromete a segunda-feira — e é exatamente por isso que você consegue manter o ritmo o ano inteiro.",
+    picks: [
+      {
+        name: "Bar com mesa na calçada",
+        tag: "Multimercado",
+        text: "Começa como happy hour e pode virar noite. Você decide na hora, sem compromisso prévio.",
+      },
+      {
+        name: "Show de banda que você já ouvia",
+        tag: "Renda variável",
+        text: "Uma vez por mês, com hora para acabar e o carro de app já engatilhado.",
+      },
+      {
+        name: "Aniversário de amigo próximo",
+        tag: "Dividendos",
+        text: "Presença que rende afeto recorrente, com bônus ocasional de bolo e karaokê.",
+      },
+      {
+        name: "Festival de um dia só",
+        tag: "Previdência festiva",
+        text: "Você aporta o ano inteiro em expectativa e resgata tudo numa tarde de sol.",
+      },
+    ],
     portfolio: [
       { pct: 30, name: "Happy hour prolongável", note: "Multimercado: começa renda fixa, pode virar variável" },
       { pct: 25, name: "Barzinho com música ao vivo", note: "Fundo imobiliário: você praticamente mora nele" },
@@ -283,6 +331,30 @@ const PROFILES = [
     },
     portfolioSubtitle:
       "Alocação agressiva, exposição máxima ao setor de pista e derivativos de after.",
+    portfolioWhy:
+      "Essa carteira não tenta te frear, porque isso nunca funcionou. Ela assume que você vai aceitar o convite de qualquer jeito e concentra a exposição onde o retorno em história é maior. Em compensação, reserva uma fatia fixa para o único hedge que você vive esquecendo: água, comida decente e algumas horas de sono.",
+    picks: [
+      {
+        name: "Balada que só abre às 2h",
+        tag: "Small cap",
+        text: "Ninguém conhece o lugar, o line-up é duvidoso, e você jura que vai bombar. Às vezes bomba.",
+      },
+      {
+        name: "Carnaval fora da sua cidade",
+        tag: "IPO anual",
+        text: "Caro, lotado e disputadíssimo. Você entra na primeira oferta e não olha o preço.",
+      },
+      {
+        name: "After de endereço desconhecido",
+        tag: "Alto risco",
+        text: "Volatilidade máxima: pode render a melhor história do ano ou custar a semana inteira.",
+      },
+      {
+        name: "Isotônico, soro e um prato de comida",
+        tag: "Hedge",
+        text: "O único ativo defensivo da carteira e, convenhamos, o mais importante deles.",
+      },
+    ],
     portfolio: [
       { pct: 30, name: "Balada até o sol nascer", note: "Small caps: potencial explosivo, liquidez só no dia seguinte" },
       { pct: 25, name: "Festivais e Carnaval", note: "IPO anual: fila enorme, preço absurdo, você vai mesmo assim" },

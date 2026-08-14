@@ -38,15 +38,17 @@ e no compartilhamento.
 
 ### O painel
 
-- **Visão geral** — três pares de cards de mesma altura: escala festiva e
-  indicadores; sugestão de alocação e estratégia ideal; destaque positivo e
-  ponto de atenção.
-- **Perfil** — diagnóstico ao lado de uma ilustração do perfil, três **pontos
-  fortes**, três **pontos de atenção** e a recomendação do analista.
-- **Carteira** — **sugestão de alocação** em duas colunas (barras por tipo de
-  rolê à esquerda, gráfico de pizza à direita) e a **estratégia ideal**: quanto
-  do seu fim de semana é rolê escolhido a dedo e quanto é rolê que o grupo
-  marcou.
+- **Visão geral** — card de resumo no topo (retrato, categoria, data e as
+  primeiras linhas do diagnóstico, com atalho para os detalhes) e três pares de
+  cards de mesma altura: escala festiva e indicadores; sugestão de alocação e
+  estratégia ideal; destaque positivo e ponto de atenção.
+- **Perfil** — diagnóstico ao lado do retrato do perfil, três **pontos fortes**,
+  três **pontos de atenção** e a recomendação do analista.
+- **Carteira** — **por que essa carteira** foi montada assim, a **sugestão de
+  alocação** em duas colunas (barras por tipo de rolê à esquerda, gráfico de
+  pizza à direita), quatro **ativos recomendados** com classe e justificativa, e
+  a **estratégia ideal**: quanto do seu fim de semana é rolê escolhido a dedo e
+  quanto é rolê que o grupo marcou.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
 seção.
@@ -89,8 +91,8 @@ o registro.
   contorno.
 - Painéis levemente translúcidos com `backdrop-filter`, para as luzes
   atravessarem sem prejudicar a leitura.
-- Cada perfil tem uma ilustração própria em SVG inline, desenhada com as
-  variáveis de cor do tema — muda de paleta junto com o resto.
+- Cada perfil tem um retrato próprio (`perfil festeiro_*.png`), usado tanto no
+  card de resumo, em miniatura redonda, quanto na análise de perfil.
 - `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as
   seções já reveladas.
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
@@ -109,10 +111,11 @@ python3 -m http.server 8000
 ## Estrutura
 
 ```
-index.html   # landing, questionário, processamento, resultado e painel
-data.js      # perguntas, perfis, análise e carteiras
-app.js       # fundo de luz, questionário, gráfico, painel e roteamento
-styles.css   # tokens de cor, tipografia e layout
+index.html              # landing, questionário, processamento, resultado e painel
+data.js                 # perguntas, perfis, análise, carteiras e ativos
+app.js                  # fundo de luz, questionário, gráfico, painel e roteamento
+styles.css              # tokens de cor, tipografia e layout
+perfil festeiro_*.png   # retratos dos três perfis
 ```
 
 ---
