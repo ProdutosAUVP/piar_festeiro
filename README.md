@@ -41,8 +41,9 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
   perfil à direita), o par escala festiva + indicadores, os cards horizontais de
   sugestão de alocação e estratégia ideal, e o par destaque positivo + ponto de
   atenção.
-- **Perfil** — diagnóstico ao lado do retrato do perfil, três **pontos fortes**,
-  três **pontos de atenção** e a recomendação do analista.
+- **Perfil** — diagnóstico ao lado do retrato do perfil, assinado no rodapé com
+  a tagline, três **pontos fortes**, três **pontos de atenção** e a recomendação
+  do analista.
 - **Carteira** — **por que essa carteira** foi montada assim, a **sugestão de
   alocação** em duas colunas (barras por tipo de rolê à esquerda, gráfico de
   pizza à direita), quatro **ativos recomendados** com classe e justificativa, e
@@ -98,6 +99,8 @@ o registro.
   espaço entre cards de uma mesma linha vem sempre do `gap` do grid. Blocos que
   não têm par natural ocupam a largura inteira em vez de deixar meia coluna
   vazia.
+- Dentro de card, quem define a quebra de linha é o padding do container: os
+  textos não carregam `max-width` próprio e vão até a borda útil.
 - Todos os textos em sentence case, sem títulos em caixa alta. As únicas
   maiúsculas que sobram são siglas (CDB, IPO, AAA), nomes próprios (WhatsApp,
   PIAR Festeiro) e as ênfases do humor ("você É a festa", "sabe A HORA de sair").

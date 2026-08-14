@@ -915,6 +915,7 @@ function renderDashboard(attempt) {
   $("dash-subtitle").textContent = profile.name;
   $("dash-tagline").textContent = profile.tagline;
   $("dash-description").textContent = profile.description;
+  $("dash-signature").textContent = profile.tagline;
   $("dash-quote").textContent = profile.quote;
   $("dash-portfolio-subtitle").textContent = profile.portfolioSubtitle;
   $("btn-share-dash").href = shareLink(profile);

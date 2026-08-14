@@ -207,10 +207,15 @@ body[data-screen="dashboard"] .ambient {
   max-width: 66ch;
 }
 
+/* dentro de um card, quem limita a linha é o padding do card */
+.card .prose,
+.card .summary__text {
+  max-width: none;
+}
+
 .section-sub {
   color: var(--muted);
   font-size: 0.9rem;
-  max-width: 60ch;
   margin-bottom: 22px;
 }
 
@@ -987,6 +992,18 @@ body[data-screen="dashboard"] .theme-toggle--float {
   margin-top: 16px;
 }
 
+.card__signature {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: 0.92rem;
+  color: var(--accent-ink);
+}
+
+.card--diagnosis {
+  display: flex;
+  flex-direction: column;
+}
+
 .card__link {
   display: inline-block;
   margin-top: 16px;
@@ -1001,8 +1018,8 @@ body[data-screen="dashboard"] .theme-toggle--float {
   border-bottom-color: var(--accent-ink);
 }
 
-.card--quote {
-  margin-top: 12px;
+.view > .card--quote {
+  margin-top: 38px;
 }
 
 .card--chart {
@@ -1105,7 +1122,6 @@ body[data-screen="dashboard"] .theme-toggle--float {
 .summary__text {
   color: var(--text-2);
   font-size: 0.94rem;
-  max-width: 82ch;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -1451,7 +1467,19 @@ body[data-screen="dashboard"] .theme-toggle--float {
   min-width: min(260px, 100%);
 }
 
-.card--chart-row .card__link {
+.card--chart-row .card__signature {
+  margin-top: auto;
+  padding-top: 20px;
+  font-size: 0.92rem;
+  color: var(--accent-ink);
+}
+
+.card--diagnosis {
+  display: flex;
+  flex-direction: column;
+}
+
+.card__link {
   display: inline-block;
   margin-top: 18px;
 }
@@ -1720,7 +1748,6 @@ body[data-screen="dashboard"] .theme-toggle--float {
   font-style: italic;
   line-height: 1.5;
   color: var(--muted);
-  max-width: 68ch;
 }
 
 /* ===== Alocação por tipo de rolê ===== */
@@ -1796,7 +1823,6 @@ body[data-screen="dashboard"] .theme-toggle--float {
   font-size: clamp(1rem, 3.2vw, 1.1rem);
   line-height: 1.5;
   color: var(--text);
-  max-width: 46ch;
   padding-left: 18px;
   border-left: 2px solid var(--accent-ink);
 }
