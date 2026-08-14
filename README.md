@@ -29,18 +29,18 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
 
 | Tela | O que faz |
 | --- | --- |
-| **Landing** | Rastro verde de luz que segue o cursor, sobre um fundo onde manchas coloridas surgem sozinhas. Cards com os números da análise. |
+| **Landing** | Rastro discreto de luz verde acompanhando o cursor. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
 | **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), estratégia ideal e recomendação do analista. |
+| **Resultado** | Diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), estratégia ideal, recomendação do analista e os eventos da AUVP. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
 
 - **Visão geral** — resumo em dois cards no topo (texto à esquerda, retrato do
   perfil à direita), o par escala festiva + indicadores, os cards horizontais de
-  sugestão de alocação e estratégia ideal, e o par destaque positivo + ponto de
-  atenção.
+  sugestão de alocação e estratégia ideal, o par destaque positivo + ponto de
+  atenção e o convite para os eventos da AUVP.
 - **Perfil** — diagnóstico ao lado do retrato do perfil, assinado no rodapé com
   a tagline, três **pontos fortes**, três **pontos de atenção** e a recomendação
   do analista.
@@ -74,36 +74,43 @@ o registro.
   escolha. O tema é aplicado antes da primeira pintura, sem piscar.
 - Seções do resultado revelam no scroll e os indicadores contam até o valor.
 
+## Eventos
+
+No fim do resultado e no painel entra a sugestão de eventos da AUVP — **Giro da
+Bolsa Itinerante** e **Private Day**. A descrição de cada evento é sempre a
+mesma; o que muda por perfil é a leitura: o Ermitão é orientado a ir pelo
+conteúdo e pular a festa, a Assombração a aparecer e sair antes do bis, e o
+Inimigo do fim a ficar até o fim e perguntar onde é o after.
+
 ## Design
 
-- **Dark mode como prioridade**, em estética minimalista: tipografia sobre
-  neutros, cards no lugar de linhas divisórias. O tema claro usa a mesma
-  estrutura, com sua própria paleta.
-- **Cor reservada a dois usos**: o acento neon (`#b6ff3a` no escuro, um verde
-  mais fechado no claro para garantir contraste) nos elementos de destaque —
-  botões, números, links, progresso — e a paleta categórica do gráfico, onde a
-  cor carrega dado. O clima de festa vem da luz do fundo.
-- A paleta do gráfico tem um jogo por tema, cada um validado contra a sua
-  superfície para faixa de luminosidade, piso de croma, separação sob
-  daltonismo e contraste. Ela vive no CSS (`--series-1..5`), então trocar de
-  tema repinta o gráfico sozinho. Cada fatia mantém seu slot de cor; a
-  separação entre fatias é um vão de 2px na cor da superfície, nunca um
-  contorno.
-- Painéis levemente translúcidos com `backdrop-filter`, para as luzes
-  atravessarem sem prejudicar a leitura.
-- Cada perfil tem um retrato próprio (`perfil festeiro_*.png`), usado tanto no
-  card de resumo, em miniatura redonda, quanto na análise de perfil.
-- `prefers-reduced-motion` congela o fundo, desliga o confete e entrega todas as
-  seções já reveladas.
+Segue o **design system da AUVP Capital**
+(https://produtosauvp.github.io/central/design-system):
+
+- **Cor.** Verde `#023620` no tema claro e `#5a8770` no escuro, reservado a
+  acentos pontuais. Base preto/branco/cinza no escuro (`#000` de fundo, `#0f0f0f`
+  de card, `#292929` de borda) e branco/cinza no claro, com contraste baixo entre
+  card e fundo.
+- **Proibições da marca respeitadas**: sem vidro/`backdrop-filter`, sem gradiente
+  colorido, sem neon, sem transparência em card.
+- **Tipografia.** Anek Latin nos títulos, Roboto no corpo e Sora exclusivamente
+  nos botões, em caixa alta com `letter-spacing` de 0.05em.
+- **Forma.** Raio de 12px em cards, 5px em botões e 4px em tags e badges, que
+  usam fundo sólido. Pílula só em barra de dados.
+- **Motion.** 150ms em micro-interações, 240ms como padrão, com o easing
+  `cubic-bezier(0.22, 1, 0.36, 1)`. Hover de card é `0 8px 24px rgba(0,0,0,0.06)`.
+- **Data viz.** O gráfico usa a paleta categórica documentada (`chart-1..5`), com
+  um jogo por tema. Ela vive no CSS (`--series-1..5`), então trocar de tema
+  repinta o gráfico sozinho. Cada fatia mantém seu slot de cor; a separação entre
+  fatias é um vão de 2px na cor da superfície, nunca um contorno.
+- Cada perfil tem um retrato próprio (`perfil festeiro_*.png`), usado no card de
+  resumo e na análise de perfil.
+- `prefers-reduced-motion` congela o fundo e entrega todas as seções reveladas.
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
-  espaço entre cards de uma mesma linha vem sempre do `gap` do grid. Blocos que
-  não têm par natural ocupam a largura inteira em vez de deixar meia coluna
-  vazia.
-- Dentro de card, quem define a quebra de linha é o padding do container: os
-  textos não carregam `max-width` próprio e vão até a borda útil.
-- Todos os textos em sentence case, sem títulos em caixa alta. As únicas
-  maiúsculas que sobram são siglas (CDB, IPO, AAA), nomes próprios (WhatsApp,
-  PIAR Festeiro) e as ênfases do humor ("você É a festa", "sabe A HORA de sair").
+  espaço entre cards de uma mesma linha vem sempre do `gap` do grid.
+- Dentro de card, quem define a quebra de linha é o padding do container.
+- Textos em sentence case, exceto os botões, que o design system exige em caixa
+  alta.
 - Responsivo de 320px para cima; os grids de duas colunas quebram em 900px.
 
 ## Rodando localmente

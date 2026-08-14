@@ -154,6 +154,11 @@ const PROFILES = [
         text: "Convite de última hora quase nunca encontra você disponível.",
       },
     ],
+    events: {
+      lead: "Dois eventos por ano já dão conta da sua exposição a rolê. Comece pelo mais curto.",
+      giro: "Feito para você: sentado, com mesa, comida na frente e um programa que já conhece do canal. Assiste ao vivo, ri quando quiser, e às 22h a conta já está pedida.",
+      private: "Dois dias é bastante para o seu horizonte, mas o conteúdo compensa. Vá pelas palestras, aproveite o intervalo para conversar com quem você só conhece da internet, e sinta-se livre para pular a festa do último dia.",
+    },
     strategy: {
       picking: 85,
       passive: 15,
@@ -239,6 +244,11 @@ const PROFILES = [
         text: "Se ninguém do grupo organiza, sua carteira fica parada esperando iniciativa alheia.",
       },
     ],
+    events: {
+      lead: "Os dois cabem na sua agenda sem estourar o orçamento de sono. É exatamente o seu tipo de alocação.",
+      giro: "O rolê perfeito para o seu perfil: dura o suficiente, tem hora para acabar e você sai de lá com assunto para a semana inteira. Vá, fique até o fim da gravação e depois decida se estica.",
+      private: "Aqui você faz o que faz de melhor: aproveita os dois dias de conteúdo, aparece na festa do último dia, dança as boas e vai embora antes do bis. Ninguém nem percebe que você sumiu.",
+    },
     strategy: {
       picking: 55,
       passive: 45,
@@ -324,6 +334,11 @@ const PROFILES = [
         text: "Com tudo alocado em pista, sobra pouca energia para o imprevisto de terça-feira.",
       },
     ],
+    events: {
+      lead: "Dois eventos por ano é pouco para o seu ritmo, mas são os dois que você não pode perder.",
+      giro: "Você vai chegar cedo, sentar na primeira fila e virar parte da gravação. Quando o programa acabar, o bar continua aberto — e é aí que o seu evento começa de verdade.",
+      private: "Este é o seu. Dois dias de conteúdo, uma cidade cheia de gente da comunidade e, no encerramento, a festa oficial com tema exclusivo. Você vai ficar até o fim e ainda vai perguntar onde é o after.",
+    },
     strategy: {
       picking: 20,
       passive: 80,
@@ -374,6 +389,26 @@ const LOADING_STEPS = [
   "Rebalanceando sua carteira de rolês",
 ];
 
+
+/* ==========================================================================
+   Eventos da AUVP — o mesmo par de eventos para todos, com a leitura ajustada
+   ao perfil de quem respondeu.
+   ========================================================================== */
+const EVENTS = {
+  giro: {
+    name: "Giro da Bolsa Itinerante",
+    when: "A cada trimestre, em uma cidade diferente",
+    about:
+      "Edição presencial do quadro semanal do canal Investidor Sardinha, gravada em bares e restaurantes para uma plateia de cerca de 150 pessoas. A cidade é escolhida por votação da comunidade.",
+  },
+  private: {
+    name: "Private Day",
+    when: "Uma vez por ano, no fim do ano, em Goiânia",
+    about:
+      "O principal evento anual da comunidade AUVP: dois dias de palestras sobre mercado, investimentos, negócios e performance, encerrados pela festa oficial, que todo ano ganha um tema exclusivo.",
+  },
+};
+
 /* Rótulos fixos da estratégia ideal */
 const STRATEGY_LABELS = {
   picking: "Rolê escolhido a dedo",
@@ -387,16 +422,6 @@ const STRATEGY_LABELS = {
    Manchas de luz do fundo. O rastro do cursor é sempre verde; as manchas que
    surgem sozinhas variam de cor. */
 const AMBIENT = {
-  dark: {
-    trail: "#3f9c5a",
-    lights: ["#2f7d8a", "#3987e5", "#8c5bd6", "#b0473f", "#3f9c5a", "#a67c1f"],
-    trailAlpha: 0.26,
-    lightAlpha: 0.2,
-  },
-  light: {
-    trail: "#3f9c5a",
-    lights: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#7b5cff"],
-    trailAlpha: 0.22,
-    lightAlpha: 0.18,
-  },
+  dark: { trail: "#5a8770", trailAlpha: 0.16, driftAlpha: 0.07 },
+  light: { trail: "#023620", trailAlpha: 0.06, driftAlpha: 0.03 },
 };

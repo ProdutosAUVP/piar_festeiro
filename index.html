@@ -6,8 +6,11 @@
   <title>PIAR Festeiro — descubra seu perfil de festeiro</title>
   <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#08080a">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪩</text></svg>">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥂</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&family=Sora:wght@600;700&display=swap">
   <link rel="stylesheet" href="styles.css">
   <script>
     // aplicado antes da primeira pintura para não piscar o tema errado
@@ -24,7 +27,6 @@
 </head>
 <body data-screen="intro">
   <canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
-  <div class="burst" id="burst" aria-hidden="true"></div>
 
   <button class="theme-toggle theme-toggle--float" id="theme-float" type="button" aria-label="Alternar entre tema claro e escuro">
     <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.8 5.8 4.3 4.3M19.7 19.7l-1.5-1.5M18.2 5.8l1.5-1.5M4.3 19.7l1.5-1.5"/></g></svg>
@@ -225,6 +227,17 @@
         </div>
       </section>
 
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">06</span>
+            <h3 class="section-head__title">Onde a AUVP te espera</h3>
+          </div>
+          <p class="section-sub" id="result-events-lead"></p>
+          <div class="events" id="result-events"></div>
+        </div>
+      </section>
+
       <section class="lp-cta reveal">
         <div class="wrap center">
           <h3 class="cta-title">Descobriu o seu. E o resto do grupo?</h3>
@@ -356,6 +369,12 @@
               <div id="dash-top-weakness"></div>
             </article>
           </div>
+
+          <article class="card pitch">
+            <h3 class="card__title">Onde a AUVP te espera</h3>
+            <p class="pitch__lead" id="dash-events-lead"></p>
+            <div class="events" id="dash-events"></div>
+          </article>
         </div>
 
         <!-- ===== Perfil ===== -->
