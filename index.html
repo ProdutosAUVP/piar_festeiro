@@ -2,108 +2,450 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PIAR Festeiro — Descubra seu Perfil de Festeiro</title>
-  <meta name="description" content="O teste de suitability mais importante da sua vida: descubra se você é um festeiro conservador, moderado ou arrojado e receba sua carteira de rolês recomendada.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PIAR Festeiro — descubra seu perfil de festeiro</title>
+  <meta name="description" content="Dez perguntas para descobrir se você fica em casa, sai às vezes ou vive cada experiência — e qual carteira de rolês combina com você.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#08080a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪩</text></svg>">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // aplicado antes da primeira pintura para não piscar o tema errado
+    (function () {
+      try {
+        var saved = localStorage.getItem("piar-festeiro:tema");
+        var system = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = saved === "light" || saved === "dark" ? saved : system;
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    })();
+  </script>
 </head>
-<body>
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
+<body data-screen="intro">
+  <canvas class="ambient" id="ambient" aria-hidden="true"></canvas>
+  <div class="burst" id="burst" aria-hidden="true"></div>
+
+  <button class="theme-toggle theme-toggle--float" id="theme-float" type="button" aria-label="Alternar entre tema claro e escuro">
+    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.8 5.8 4.3 4.3M19.7 19.7l-1.5-1.5M18.2 5.8l1.5-1.5M4.3 19.7l1.5-1.5"/></g></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4z"/></svg>
+  </button>
 
   <main class="app">
 
-    <!-- ===== TELA INICIAL ===== -->
+    <!-- ===================== LANDING ===================== -->
     <section class="screen screen--active" id="screen-intro">
-      <div class="card card--intro">
-        <div class="intro-badge">🎉 Análise de Perfil Festivo (APF)</div>
-        <h1 class="intro-title">Qual é o seu<br><span class="gradient-text">Perfil de Festeiro?</span></h1>
-        <p class="intro-subtitle">
-          Todo banco te pergunta seu perfil de investidor antes de deixar você
-          perder dinheiro. Nós perguntamos seu perfil de festeiro antes de deixar
-          você perder a hora, a dignidade ou o sapato.
+      <div class="wrap wrap--narrow intro">
+        <p class="kicker">Análise de perfil festivo</p>
+        <h1 class="display">
+          Qual é o seu<br>perfil de <span class="accent-text">festeiro</span>?
+        </h1>
+        <p class="lede">
+          Bancos aplicam um questionário para descobrir quanto risco cabe na sua
+          carteira. Nós adaptamos o mesmo método para a variável que realmente
+          define o seu fim de semana: o quanto de rolê o seu corpo aguenta.
         </p>
-        <ul class="intro-features">
-          <li><span>📋</span><p>10 perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</p></li>
-          <li><span>📊</span><p>Classificação oficial: <strong>Conservador</strong>, <strong>Moderado</strong> ou <strong>Arrojado</strong></p></li>
-          <li><span>💼</span><p>Uma carteira de rolês diversificada e recomendada pro seu perfil</p></li>
+
+        <ul class="spec-cards">
+          <li class="spec-card">
+            <span class="spec-card__num">10</span>
+            <span class="spec-card__text">perguntas de <em>suitability</em> festivo, rigorosamente não regulamentadas</span>
+          </li>
+          <li class="spec-card">
+            <span class="spec-card__num">03</span>
+            <span class="spec-card__text">resultados possíveis: <strong>Ermitão</strong> (fica em casa), <strong>Assombração</strong> (sai às vezes) ou <strong>Inimigo do fim</strong> (vamos viver essa experiência)</span>
+          </li>
+          <li class="spec-card">
+            <span class="spec-card__num">01</span>
+            <span class="spec-card__text">carteira de rolês diversificada, com alocação recomendada para o seu perfil</span>
+          </li>
         </ul>
-        <button class="btn btn--primary" id="btn-start">Começar minha análise 🚀</button>
+
+        <div class="intro-actions">
+          <button class="btn btn--primary" id="btn-start">Começar análise</button>
+          <button class="btn btn--ghost is-hidden" id="btn-dashboard">Acessar meu painel</button>
+        </div>
+
         <p class="disclaimer">
-          * Este teste não constitui recomendação de rolê. Festa passada não é garantia de ressaca futura.
+          Este teste não constitui recomendação de rolê. Festa passada não é
+          garantia de ressaca futura. Rentabilidade emocional sujeita à
+          disponibilidade dos seus amigos.
         </p>
       </div>
     </section>
 
-    <!-- ===== TELA DO QUIZ ===== -->
+    <!-- ===================== QUIZ ===================== -->
     <section class="screen" id="screen-quiz">
-      <div class="card card--quiz">
-        <div class="quiz-header">
-          <button class="btn-back" id="btn-back" aria-label="Voltar pergunta">←</button>
-          <div class="progress">
-            <div class="progress__track">
-              <div class="progress__fill" id="progress-fill"></div>
+      <div class="wrap wrap--narrow">
+        <div class="quiz-top">
+          <button class="icon-btn" id="btn-back" aria-label="Voltar para a pergunta anterior">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="dots" id="dots" aria-label="Progresso das perguntas"></div>
+          <span class="counter"><b id="progress-current">1</b> / 10</span>
+        </div>
+
+        <div class="quiz-body" id="quiz-body">
+          <p class="kicker" id="question-kicker"></p>
+          <h2 class="question" id="question-title"></h2>
+          <div class="options" id="options" role="group" aria-labelledby="question-title"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROCESSANDO ===================== -->
+    <section class="screen" id="screen-loading">
+      <div class="wrap wrap--narrow center">
+        <!-- Brinde: taça com bolhas subindo -->
+        <div class="toast" aria-hidden="true">
+          <svg class="toast__glass" viewBox="0 0 110 150">
+            <defs>
+              <clipPath id="bowl">
+                <path d="M33 16 H77 V58 C77 78 68 90 55 93 C42 90 33 78 33 58 Z"/>
+              </clipPath>
+            </defs>
+            <g clip-path="url(#bowl)">
+              <rect class="toast__liquid" x="30" y="44" width="50" height="60"/>
+              <circle class="toast__bubble" cx="45" cy="86" r="2.6"/>
+              <circle class="toast__bubble" cx="55" cy="86" r="1.9"/>
+              <circle class="toast__bubble" cx="64" cy="86" r="2.3"/>
+              <circle class="toast__bubble" cx="50" cy="86" r="1.5"/>
+              <circle class="toast__bubble" cx="60" cy="86" r="2.9"/>
+            </g>
+            <path class="toast__outline" d="M33 16 H77 V58 C77 78 68 90 55 93 C42 90 33 78 33 58 Z"/>
+            <path class="toast__outline" d="M55 93 V126"/>
+            <path class="toast__outline" d="M38 130 Q55 122 72 130"/>
+          </svg>
+          <span class="toast__spark toast__spark--1"></span>
+          <span class="toast__spark toast__spark--2"></span>
+          <span class="toast__spark toast__spark--3"></span>
+        </div>
+        <h2 class="loading-title">Processando sua análise</h2>
+        <p class="loading-step" id="loading-step">Consultando o comitê de churrasco</p>
+        <div class="meter meter--slim">
+          <div class="meter__fill" id="loading-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RESULTADO ===================== -->
+    <section class="screen" id="screen-result">
+      <div class="topbar" id="topbar">
+        <span class="topbar__label">Perfil</span>
+        <span class="topbar__name" id="topbar-name"></span>
+        <button class="btn btn--mini" id="btn-to-dashboard-top">Ir para o painel</button>
+      </div>
+
+      <header class="lp-hero reveal" id="lp-hero">
+        <div class="wrap">
+          <p class="kicker">Relatório de perfil festivo</p>
+          <h2 class="display display--result" id="result-title"></h2>
+          <p class="subtitle" id="result-subtitle"></p>
+          <p class="lede lede--result" id="result-tagline"></p>
+        </div>
+      </header>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">01</span>
+            <h3 class="section-head__title">Diagnóstico</h3>
+          </div>
+          <p class="prose" id="result-description"></p>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">02</span>
+            <h3 class="section-head__title">Indicadores do perfil</h3>
+          </div>
+          <p class="section-sub">Métricas apuradas com base nas suas respostas e em nenhuma metodologia aceita pelo mercado.</p>
+          <div class="tiles" id="result-indicators"></div>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">03</span>
+            <h3 class="section-head__title">Sugestão de alocação</h3>
+          </div>
+          <p class="section-sub" id="result-portfolio-subtitle"></p>
+
+          <article class="card card--why">
+            <h3 class="card__title">Por que essa carteira</h3>
+            <p class="prose" id="result-portfolio-why"></p>
+          </article>
+
+          <div class="grid grid--alloc">
+            <article class="card">
+              <h3 class="card__title">Alocação por tipo de rolê</h3>
+              <div class="bars" id="result-bars"></div>
+            </article>
+            <article class="card card--chart">
+              <h3 class="card__title">Distribuição</h3>
+              <div class="donut-wrap" id="result-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da sugestão de alocação">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value">100%</span>
+                </div>
+                <div class="tooltip"></div>
+              </div>
+              <div class="legend legend--inline"></div>
+            </article>
+          </div>
+
+          <h4 class="picks-title">Ativos recomendados</h4>
+          <div class="grid grid--picks" id="result-picks"></div>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">04</span>
+            <h3 class="section-head__title">Estratégia ideal</h3>
+          </div>
+          <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
+          <div class="strategy strategy--row" id="result-strategy"></div>
+        </div>
+      </section>
+
+      <section class="lp-section reveal">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="section-head__num">05</span>
+            <h3 class="section-head__title">Recomendação do analista</h3>
+          </div>
+          <blockquote class="quote" id="result-quote"></blockquote>
+        </div>
+      </section>
+
+      <section class="lp-cta reveal">
+        <div class="wrap center">
+          <h3 class="cta-title">Descobriu o seu. E o resto do grupo?</h3>
+          <p class="section-sub">Mande o teste para quem sempre some às 23h — ou para quem nunca vai embora.</p>
+          <div class="cta-actions">
+            <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+            <button class="btn btn--ghost" id="btn-to-dashboard">Ir para o meu painel</button>
+          </div>
+          <p class="disclaimer">
+            Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da
+            família marcar almoço no mesmo dia do rolê. Resultados podem variar
+            conforme a qualidade da caixa de som.
+          </p>
+        </div>
+      </section>
+    </section>
+
+    <!-- ===================== PAINEL ===================== -->
+    <section class="screen" id="screen-dashboard">
+      <header class="appbar">
+        <div class="appbar__inner">
+          <button class="brand" id="brand-home">
+            <span class="brand__mark" aria-hidden="true"></span>
+            <span class="brand__name">PIAR Festeiro</span>
+          </button>
+
+          <nav class="nav" id="nav" aria-label="Seções do painel">
+            <a class="nav__link" href="#/visao-geral" data-view="visao-geral">Visão geral</a>
+            <a class="nav__link" href="#/perfil" data-view="perfil">Perfil</a>
+            <a class="nav__link" href="#/carteira" data-view="carteira">Carteira</a>
+          </nav>
+
+          <button class="theme-toggle" id="theme-bar" type="button" aria-label="Alternar entre tema claro e escuro">
+            <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.8 5.8 4.3 4.3M19.7 19.7l-1.5-1.5M18.2 5.8l1.5-1.5M4.3 19.7l1.5-1.5"/></g></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.4A8.4 8.4 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4z"/></svg>
+          </button>
+          <button class="btn btn--mini" id="btn-redo">Refazer análise</button>
+        </div>
+      </header>
+
+      <div class="dash">
+        <!-- Cabeçalho do painel -->
+        <div class="wrap">
+          <div class="dash-head">
+            <div>
+              <p class="kicker" id="dash-kicker">Seu perfil festivo</p>
+              <h2 class="dash-title" id="dash-profile"></h2>
+              <p class="subtitle subtitle--dash" id="dash-subtitle"></p>
+              <p class="dash-tagline" id="dash-tagline"></p>
             </div>
-            <span class="progress__label" id="progress-label">1 / 10</span>
           </div>
         </div>
-        <div class="quiz-body" id="quiz-body">
-          <p class="question-kicker" id="question-kicker"></p>
-          <h2 class="question-title" id="question-title"></h2>
-          <div class="options" id="options"></div>
+
+        <!-- ===== Visão geral ===== -->
+        <div class="wrap view" id="view-visao-geral">
+          <div class="grid grid--summary">
+            <article class="card summary">
+              <div class="summary__head">
+                <h3 class="summary__title">Meu perfil de festeiro</h3>
+                <p class="summary__sub">Sua análise personalizada</p>
+              </div>
+              <div class="summary__meta">
+                <span class="badge" id="summary-badge"></span>
+                <span class="summary__date" id="summary-date"></span>
+              </div>
+              <h4 class="summary__label">Resumo personalizado</h4>
+              <p class="summary__text" id="summary-text"></p>
+              <a class="btn btn--primary summary__cta" href="#/perfil">Ver detalhes</a>
+            </article>
+
+            <article class="card card--portrait">
+              <img class="portrait" id="summary-portrait" alt="" width="230" height="282" decoding="async">
+              <span class="portrait__caption" id="summary-caption"></span>
+            </article>
+          </div>
+
+          <div class="grid grid--2">
+            <article class="card card--scale">
+              <h3 class="card__title">Posição na escala festiva</h3>
+              <div class="scale">
+                <div class="scale__track">
+                  <span class="scale__marker" id="scale-marker"></span>
+                </div>
+                <div class="scale__labels">
+                  <span><b>Ermitão</b>Fica em casa</span>
+                  <span><b>Assombração</b>Sai às vezes</span>
+                  <span><b>Inimigo do fim</b>Vamos viver essa experiência</span>
+                </div>
+              </div>
+              <p class="card__note" id="scale-note"></p>
+            </article>
+
+            <article class="card">
+              <h3 class="card__title">Indicadores</h3>
+              <div class="tiles tiles--flat" id="dash-indicators"></div>
+            </article>
+          </div>
+
+          <article class="card card--chart-row">
+            <h3 class="card__title">Sugestão de alocação</h3>
+            <div class="chart-row">
+              <div class="donut-wrap donut-wrap--sm" id="dash-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição resumida da sugestão de alocação">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value">100%</span>
+                </div>
+                <div class="tooltip"></div>
+              </div>
+              <div class="legend"></div>
+            </div>
+            <a class="card__link" href="#/carteira">Ver alocação completa</a>
+          </article>
+
+          <article class="card card--strategy">
+            <h3 class="card__title">Estratégia ideal</h3>
+            <div class="strategy strategy--sm strategy--row" id="dash-strategy-summary"></div>
+            <a class="card__link" href="#/carteira">Ver estratégia completa</a>
+          </article>
+
+          <div class="grid grid--2">
+            <article class="card">
+              <h3 class="card__title">Destaque positivo</h3>
+              <div id="dash-top-strength"></div>
+            </article>
+            <article class="card">
+              <h3 class="card__title">Ponto de atenção</h3>
+              <div id="dash-top-weakness"></div>
+            </article>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ===== TELA DE ANÁLISE (loading fake) ===== -->
-    <section class="screen" id="screen-loading">
-      <div class="card card--loading">
-        <div class="loading-emoji" id="loading-emoji">🥁</div>
-        <h2 class="loading-title">Processando sua análise...</h2>
-        <p class="loading-step" id="loading-step">Consultando o comitê de churrasco...</p>
-        <div class="progress__track progress__track--loading">
-          <div class="progress__fill" id="loading-fill"></div>
-        </div>
-      </div>
-    </section>
+        <!-- ===== Perfil ===== -->
+        <div class="wrap view" id="view-perfil" hidden>
+          <div class="grid grid--profile">
+            <article class="card">
+              <h3 class="card__title">Diagnóstico</h3>
+              <p class="prose" id="dash-description"></p>
+            </article>
+            <article class="card card--art">
+              <img class="art" id="dash-art" alt="" width="230" height="282" decoding="async">
+              <span class="art__caption" id="dash-art-caption"></span>
+            </article>
+          </div>
 
-    <!-- ===== TELA DE RESULTADO ===== -->
-    <section class="screen" id="screen-result">
-      <div class="card card--result">
-        <p class="result-kicker">📑 Relatório oficial de suitability festivo</p>
-        <div class="result-emoji" id="result-emoji"></div>
-        <p class="result-label">Seu perfil de festeiro é</p>
-        <h2 class="result-title" id="result-title"></h2>
-        <p class="result-tagline" id="result-tagline"></p>
-        <p class="result-description" id="result-description"></p>
+          <h3 class="dash-section-title">Pontos fortes</h3>
+          <div class="grid grid--3" id="dash-strengths"></div>
 
-        <div class="indicators" id="indicators"></div>
+          <h3 class="dash-section-title">Pontos de atenção</h3>
+          <div class="grid grid--3" id="dash-weaknesses"></div>
 
-        <div class="portfolio">
-          <h3 class="portfolio-title">💼 Sua carteira de rolês recomendada</h3>
-          <p class="portfolio-subtitle" id="portfolio-subtitle"></p>
-          <div class="portfolio-items" id="portfolio-items"></div>
+          <article class="card card--quote">
+            <h3 class="card__title">Recomendação do analista</h3>
+            <blockquote class="quote" id="dash-quote"></blockquote>
+          </article>
         </div>
 
-        <div class="result-quote" id="result-quote"></div>
+        <!-- ===== Carteira ===== -->
+        <div class="wrap view" id="view-carteira" hidden>
+          <h3 class="dash-section-title dash-section-title--first">Sugestão de alocação</h3>
+          <p class="section-sub" id="dash-portfolio-subtitle"></p>
 
-        <div class="result-actions">
-          <a class="btn btn--primary" id="btn-share" target="_blank" rel="noopener">Compartilhar no WhatsApp 💬</a>
-          <button class="btn btn--ghost" id="btn-restart">Refazer análise 🔄</button>
+          <article class="card">
+            <h3 class="card__title">Por que essa carteira</h3>
+            <p class="prose" id="dash-portfolio-why"></p>
+          </article>
+
+          <div class="grid grid--alloc">
+            <article class="card">
+              <h3 class="card__title">Alocação por tipo de rolê</h3>
+              <div class="bars" id="dash-bars"></div>
+            </article>
+            <article class="card card--chart">
+              <h3 class="card__title">Distribuição</h3>
+              <div class="donut-wrap" id="carteira-donut-wrap">
+                <svg class="donut" viewBox="0 0 200 200" role="img" aria-label="Distribuição percentual da sugestão de alocação">
+                  <g class="donut__segments" transform="rotate(-90 100 100)"></g>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center__value">100%</span>
+                </div>
+                <div class="tooltip"></div>
+              </div>
+              <div class="legend legend--inline"></div>
+            </article>
+          </div>
+
+          <h3 class="dash-section-title">Ativos recomendados</h3>
+          <p class="section-sub">Onde colocar o seu próximo aporte de fim de semana, segundo o comitê.</p>
+          <div class="grid grid--picks" id="dash-picks"></div>
+
+          <h3 class="dash-section-title">Estratégia ideal</h3>
+          <p class="section-sub">Como você monta o seu fim de semana: garimpando cada festa com critério ou embarcando no que o grupo já combinou.</p>
+          <article class="card">
+            <div class="strategy strategy--row" id="dash-strategy"></div>
+          </article>
+
+          <div class="dash-actions">
+            <a class="btn btn--primary" id="btn-share-dash" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+            <button class="btn btn--ghost" id="btn-redo-2">Refazer análise</button>
+          </div>
+
+          <p class="disclaimer">
+            Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da
+            família marcar almoço no mesmo dia do rolê. Resultados podem variar
+            conforme a qualidade da caixa de som.
+          </p>
         </div>
-        <p class="disclaimer">
-          * Carteira meramente ilustrativa. Rebalanceie sempre que o grupo da família marcar almoço no mesmo dia do rolê.
-        </p>
       </div>
     </section>
 
   </main>
 
   <footer class="footer">
-    Feito com 🍻 e zero responsabilidade fiduciária — PIAR Festeiro
+    <span>PIAR Festeiro</span>
+    <span class="footer__sep">·</span>
+    <span>zero responsabilidade fiduciária</span>
   </footer>
 
+  <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
