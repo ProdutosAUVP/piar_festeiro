@@ -784,10 +784,18 @@ const ART = {
 };
 
 function renderPicks(host, profile) {
+  // os eventos da AUVP entram na carteira como ativos, no fim da lista
+  const eventPicks = ["giro", "private"].map((key) => ({
+    name: EVENTS[key].name,
+    tag: "Evento AUVP",
+    text: profile.events[key],
+    event: true,
+  }));
+
   host.innerHTML = "";
-  profile.picks.forEach((pick) => {
+  [...profile.picks, ...eventPicks].forEach((pick) => {
     const el = document.createElement("article");
-    el.className = "pick";
+    el.className = `pick${pick.event ? " pick--event" : ""}`;
     el.innerHTML = `
       <div class="pick__head">
         <h4 class="pick__name">${pick.name}</h4>
