@@ -33,7 +33,7 @@ const Theme = (() => {
     const theme = resolved();
     document.documentElement.dataset.theme = theme;
     const color = document.querySelector('meta[name="theme-color"]');
-    if (color) color.setAttribute("content", theme === "light" ? "#f6f6f4" : "#08080a");
+    if (color) color.setAttribute("content", theme === "light" ? "#ffffff" : "#000000");
     const scheme = document.querySelector('meta[name="color-scheme"]');
     if (scheme) scheme.setAttribute("content", theme);
     listeners.forEach((fn) => fn(theme));
@@ -79,8 +79,6 @@ const Ambient = (() => {
   let lights = [];
   let bits = [];
   let palette = AMBIENT.dark;
-  let sinceAmbient = 0;
-  let colorIndex = 0;
 
   const pointer = { x: 0.5, y: 0.5 };
   const eased = { x: 0.5, y: 0.5 };
@@ -108,7 +106,6 @@ const Ambient = (() => {
       x: rand(0, width),
       y: rand(0, height),
       r: rand(width * 0.2, width * 0.38),
-      colorIndex: i % palette.lights.length,
       vx: rand(-0.09, 0.09),
       vy: rand(-0.07, 0.07),
       phase: rand(0, Math.PI * 2),
@@ -121,7 +118,6 @@ const Ambient = (() => {
       y: rand(0, height),
       w: rand(3, 6),
       h: rand(6, 12),
-      colorIndex: Math.floor(rand(0, palette.lights.length)),
       vy: rand(0.15, 0.5),
       vx: rand(-0.18, 0.18),
       rot: rand(0, Math.PI * 2),
@@ -145,25 +141,7 @@ const Ambient = (() => {
   }
 
   /* Manchas que surgem sozinhas no fundo: maiores e mais frequentes. */
-  function spawnAmbient() {
-    blobs.push({
-      x: rand(-0.05, 1.05) * width,
-      y: rand(-0.05, 1.05) * height,
-      r: rand(220, 440),
-      index: colorIndex++ % palette.lights.length,
-      life: 0,
-      max: rand(4200, 6400),
-    });
-    if (blobs.length > 80) blobs.shift();
-  }
-
   function drawTrail(dt) {
-    sinceAmbient += dt;
-    if (sinceAmbient > 480) {
-      sinceAmbient = 0;
-      spawnAmbient();
-    }
-
     ctx.globalCompositeOperation = palette === AMBIENT.light ? "source-over" : "lighter";
     blobs = blobs.filter((b) => {
       b.life += dt;
@@ -172,8 +150,8 @@ const Ambient = (() => {
 
       // acende rápido, some devagar
       const fade = t < 0.16 ? t / 0.16 : 1 - (t - 0.16) / 0.84;
-      const peak = b.trail ? palette.trailAlpha : palette.lightAlpha;
-      const color = b.trail ? palette.trail : palette.lights[b.index];
+      const peak = palette.trailAlpha;
+      const color = palette.trail;
       const radius = b.r * (0.78 + t * 0.42);
 
       const gradient = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, radius);
@@ -207,9 +185,9 @@ const Ambient = (() => {
       const pulse = 0.5 + 0.5 * Math.sin(time * l.pulse + l.phase);
       const x = l.x + px * l.depth;
       const y = l.y + py * l.depth;
-      const color = palette.lights[l.colorIndex];
+      const color = palette.trail;
       const gradient = ctx.createRadialGradient(x, y, 0, x, y, l.r);
-      gradient.addColorStop(0, rgba(color, palette.lightAlpha * (0.7 + pulse * 0.5)));
+      gradient.addColorStop(0, rgba(color, palette.driftAlpha * (0.7 + pulse * 0.5)));
       gradient.addColorStop(1, rgba(color, 0));
       ctx.fillStyle = gradient;
       ctx.beginPath();
@@ -233,7 +211,7 @@ const Ambient = (() => {
       ctx.translate(b.x + px * b.depth * 0.6, b.y + py * b.depth * 0.6);
       ctx.rotate(b.rot);
       ctx.globalAlpha = b.alpha;
-      ctx.fillStyle = palette.lights[b.colorIndex];
+      ctx.fillStyle = palette.trail;
       ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * (0.4 + 0.6 * Math.abs(Math.cos(b.rot))));
       ctx.restore();
     });
@@ -298,9 +276,6 @@ const Ambient = (() => {
       });
 
       if (reduceMotion) {
-        // estático: acende algumas manchas e para
-        for (let i = 0; i < 6; i++) spawnAmbient();
-        blobs.forEach((b) => (b.life = b.max * 0.25));
         loop(0);
         return;
       }
@@ -554,7 +529,6 @@ function finishQuiz() {
       clearInterval(interval);
       renderResult(getProfile(score));
       showScreen("result");
-      burst();
       return;
     }
     $("loading-step").textContent = LOADING_STEPS[step];
@@ -806,16 +780,43 @@ const ART = {
 };
 
 function renderPicks(host, profile) {
+  // os eventos da AUVP entram na carteira como ativos, no fim da lista
+  const eventPicks = ["giro", "private"].map((key) => ({
+    name: EVENTS[key].name,
+    tag: "Evento AUVP",
+    text: profile.events[key],
+    event: true,
+  }));
+
   host.innerHTML = "";
-  profile.picks.forEach((pick) => {
+  [...profile.picks, ...eventPicks].forEach((pick) => {
     const el = document.createElement("article");
-    el.className = "pick";
+    el.className = `pick${pick.event ? " pick--event" : ""}`;
     el.innerHTML = `
       <div class="pick__head">
         <h4 class="pick__name">${pick.name}</h4>
         <span class="pick__tag">${pick.tag}</span>
       </div>
       <p class="pick__text">${pick.text}</p>
+    `;
+    host.appendChild(el);
+  });
+}
+
+function renderEvents(host, leadEl, profile) {
+  leadEl.textContent = profile.events.lead;
+  host.innerHTML = "";
+  ["giro", "private"].forEach((key) => {
+    const event = EVENTS[key];
+    const el = document.createElement("article");
+    el.className = "event";
+    el.innerHTML = `
+      <div class="event__head">
+        <h4 class="event__name">${event.name}</h4>
+        <span class="event__when">${event.when}</span>
+      </div>
+      <p class="event__pitch">${profile.events[key]}</p>
+      <p class="event__about">${event.about}</p>
     `;
     host.appendChild(el);
   });
@@ -862,6 +863,7 @@ function renderResult(profile) {
   renderStrategy($("result-strategy"), profile);
   renderBars($("result-bars"), profile);
   renderPicks($("result-picks"), profile);
+  renderEvents($("result-events"), $("result-events-lead"), profile);
 
   const wrap = $("result-donut-wrap");
   const animate = mountDonut(
@@ -915,6 +917,7 @@ function renderDashboard(attempt) {
   $("dash-subtitle").textContent = profile.name;
   $("dash-tagline").textContent = profile.tagline;
   $("dash-description").textContent = profile.description;
+  $("dash-signature").textContent = profile.tagline;
   $("dash-quote").textContent = profile.quote;
   $("dash-portfolio-subtitle").textContent = profile.portfolioSubtitle;
   $("btn-share-dash").href = shareLink(profile);
@@ -958,6 +961,7 @@ function renderDashboard(attempt) {
   $("dash-portfolio-why").textContent = profile.portfolioWhy;
   renderBars($("dash-bars"), profile);
   renderPicks($("dash-picks"), profile);
+  renderEvents($("dash-events"), $("dash-events-lead"), profile);
   const miniWrap = $("dash-donut-wrap");
   const fullWrap = $("carteira-donut-wrap");
   const animateMini = mountDonut(
@@ -1024,27 +1028,6 @@ window.addEventListener("hashchange", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 });
-
-/* ==========================================================================
-   Confete
-   ========================================================================== */
-function burst() {
-  if (reduceMotion) return;
-  const host = $("burst");
-  host.innerHTML = "";
-  const palette = (AMBIENT[Theme.resolved()] || AMBIENT.dark).lights;
-  for (let i = 0; i < 60; i++) {
-    const piece = document.createElement("span");
-    piece.className = "burst__piece";
-    piece.style.left = `${Math.random() * 100}%`;
-    piece.style.background = palette[i % palette.length];
-    piece.style.setProperty("--spin", `${Math.random() * 900 - 450}deg`);
-    piece.style.animationDelay = `${Math.random() * 0.9}s`;
-    piece.style.animationDuration = `${1.9 + Math.random() * 1.6}s`;
-    host.appendChild(piece);
-  }
-  setTimeout(() => (host.innerHTML = ""), 4400);
-}
 
 /* ==========================================================================
    Barra fixa do resultado
