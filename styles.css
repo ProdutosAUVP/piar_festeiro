@@ -1207,6 +1207,16 @@ body[data-screen="dashboard"] .theme-toggle--float {
   color: var(--text-2);
 }
 
+/* os eventos da casa ficam marcados na lista de ativos */
+.pick--event {
+  border-color: var(--accent);
+}
+
+.pick--event .pick__tag {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
 .picks-title {
   font-family: var(--font-display);
   font-size: 1.02rem;

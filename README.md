@@ -46,9 +46,10 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
   do analista.
 - **Carteira** — **por que essa carteira** foi montada assim, a **sugestão de
   alocação** em duas colunas (barras por tipo de rolê à esquerda, gráfico de
-  pizza à direita), quatro **ativos recomendados** com classe e justificativa, e
-  a **estratégia ideal**: quanto do seu fim de semana é rolê escolhido a dedo e
-  quanto é rolê que o grupo marcou.
+  pizza à direita), os **ativos recomendados** — quatro do perfil mais o Giro da
+  Bolsa Itinerante e o Private Day, marcados como Evento AUVP — e a **estratégia
+  ideal**: quanto do seu fim de semana é rolê escolhido a dedo e quanto é rolê
+  que o grupo marcou.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
 seção.
@@ -76,8 +77,9 @@ o registro.
 
 ## Eventos
 
-No fim do resultado e no painel entra a sugestão de eventos da AUVP — **Giro da
-Bolsa Itinerante** e **Private Day**. A descrição de cada evento é sempre a
+No fim do resultado e na visão geral do painel entra a sugestão de eventos da
+AUVP — **Giro da Bolsa Itinerante** e **Private Day** —, e os dois também
+aparecem entre os ativos recomendados da carteira, com a tag Evento AUVP. A descrição de cada evento é sempre a
 mesma; o que muda por perfil é a leitura: o Ermitão é orientado a ir pelo
 conteúdo e pular a festa, a Assombração a aparecer e sair antes do bis, e o
 Inimigo do fim a ficar até o fim e perguntar onde é o after.
