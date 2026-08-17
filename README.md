@@ -15,8 +15,8 @@ fim de semana: o quanto de rolê o seu corpo aguenta.
 
 | Pontos | Perfil | Leitura |
 | --- | --- | --- |
-| 10–19 | **Ermitão** — Fica em casa | Tesouro sofá: liquidez diária no controle remoto |
-| 20–30 | **Assombração** — Sai às vezes | Multimercado: dança, mas com uma mão no corrimão |
+| 10–19 | **Ermitão** — Só fica em casa | Tesouro sofá: liquidez diária no controle remoto |
+| 20–30 | **Assombração** — Só aparece às vezes | Multimercado: dança, mas com uma mão no corrimão |
 | 31–40 | **Inimigo do fim** — Vamos viver essa experiência | Day trade de pista: alavancado em glitter |
 
 A categoria é o título e o descritor é o subtítulo logo abaixo. Os dois andam
@@ -38,17 +38,19 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
 ### O painel
 
 - **Visão geral** — resumo em dois cards no topo (texto à esquerda, retrato do
-  perfil à direita), o par escala festiva + indicadores, os cards horizontais de
-  sugestão de alocação e estratégia ideal, o par destaque positivo + ponto de
-  atenção e o convite para os eventos da AUVP.
+  perfil à direita), o par escala festiva + indicadores, o card de sugestão de
+  alocação seguido pelo convite para os eventos da AUVP, a estratégia ideal e o
+  par destaque positivo + ponto de atenção.
 - **Perfil** — diagnóstico ao lado do retrato do perfil, assinado no rodapé com
   a tagline, três **pontos fortes**, três **pontos de atenção** e a recomendação
   do analista.
 - **Carteira** — **por que essa carteira** foi montada assim, a **sugestão de
   alocação** em duas colunas (barras por tipo de rolê à esquerda, gráfico de
-  pizza à direita), quatro **ativos recomendados** com classe e justificativa, e
-  a **estratégia ideal**: quanto do seu fim de semana é rolê escolhido a dedo e
-  quanto é rolê que o grupo marcou.
+  pizza à direita), seis **ativos recomendados** com classe e justificativa —
+  quatro tipos de rolê mais os dois eventos da AUVP, que aparecem aqui em
+  formato de ativo, com a data no lugar da tese — e a **estratégia ideal**:
+  quanto do seu fim de semana é rolê escolhido a dedo e quanto é rolê que o
+  grupo marcou.
 
 Cada área tem URL própria, então dá para recarregar ou favoritar direto numa
 seção.
@@ -62,7 +64,8 @@ o registro.
 
 ## Interação
 
-- **Teclado**: `A`–`D` ou `1`–`4` respondem, `←` volta, `Enter` inicia.
+- **Teclado**: `A`–`D` ou `1`–`4` respondem, `←` volta, `Enter` inicia. Combinação
+  com modificador é ignorada, então `Ctrl+C` copia texto sem marcar a alternativa C.
 - **Trilha de progresso clicável** — qualquer pergunta já respondida pode ser
   revisitada sem perder as respostas seguintes.
 - **Gráfico**: o hover destaca a fatia e sincroniza legenda, barra de alocação e
