@@ -94,7 +94,7 @@ Segue o **design system da AUVP Capital**
 - **Proibições da marca respeitadas**: sem vidro/`backdrop-filter`, sem gradiente
   colorido, sem neon, sem transparência em card.
 - **Tipografia.** Anek Latin nos títulos, Roboto no corpo e Sora exclusivamente
-  nos botões, em caixa alta com `letter-spacing` de 0.05em.
+  nos botões.
 - **Forma.** Raio de 12px em cards, 5px em botões e 4px em tags e badges, que
   usam fundo sólido. Pílula só em barra de dados.
 - **Motion.** 150ms em micro-interações, 240ms como padrão, com o easing
@@ -109,8 +109,9 @@ Segue o **design system da AUVP Capital**
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
   espaço entre cards de uma mesma linha vem sempre do `gap` do grid.
 - Dentro de card, quem define a quebra de linha é o padding do container.
-- Textos em sentence case, exceto os botões, que o design system exige em caixa
-  alta.
+- **Capitalização** em sentence case no site inteiro, inclusive nos botões e
+  tags. É uma divergência deliberada do design system, que pede caixa alta em
+  botões: aqui vale o padrão do produto.
 - Responsivo de 320px para cima; os grids de duas colunas quebram em 900px.
 
 ## Rodando localmente
