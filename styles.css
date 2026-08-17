@@ -1359,6 +1359,8 @@ body[data-screen="dashboard"] .theme-toggle--float {
   margin-bottom: 12px;
 }
 
+/* Marcador sempre branco. No tema claro ganha um anel de acento, senão
+   sumiria contra o fundo branco. */
 .scale__marker {
   position: absolute;
   top: 50%;
@@ -1366,10 +1368,14 @@ body[data-screen="dashboard"] .theme-toggle--float {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #ffffff;
   border: 3px solid var(--bg);
   transform: translate(-50%, -50%);
   transition: left 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="light"] .scale__marker {
+  border-color: var(--accent);
 }
 
 .scale__labels {
