@@ -10,7 +10,7 @@ const QUESTIONS = [
     title: "Sexta-feira, 19h. Chega no grupo: “rolê hoje, bora?”. Qual sua reação?",
     options: [
       { text: "Já estou de pijama. Rolê sem 5 dias úteis de antecedência é golpe.", points: 1 },
-      { text: "Depende: quem vai, onde é, tem cadeira? Faço minha due diligence antes.", points: 2 },
+      { text: "Depende: quem vai, onde é, tem cadeira? Faço minha análise de risco antes.", points: 2 },
       { text: "Topo, mas com horário de saída definido em contrato.", points: 3 },
       { text: "Já respondi “bora” antes de ler a mensagem inteira.", points: 4 },
     ],
@@ -29,7 +29,7 @@ const QUESTIONS = [
     kicker: "Pergunta 3 · Tolerância a volatilidade",
     title: "Te oferecem uma caipirinha de origem duvidosa numa barraca de praia. Você:",
     options: [
-      { text: "Recuso. Só consumo bebida com selo de rating AAA e nota fiscal.", points: 1 },
+      { text: "Recuso na hora. Bebida sem procedência é risco que não cabe na minha carteira.", points: 1 },
       { text: "Peço pra ver o preparo. Transparência é tudo numa boa gestão.", points: 2 },
       { text: "Aceito uma. Diversificar fornecedores faz parte da estratégia.", points: 3 },
       { text: "Peço duas e ainda pergunto se tem versão alavancada com absinto.", points: 4 },
@@ -49,10 +49,10 @@ const QUESTIONS = [
     kicker: "Pergunta 5 · Liquidez",
     title: "Qual é a sua liquidez social? Em quanto tempo você fica pronto pra sair de casa?",
     options: [
-      { text: "D+30. Preciso de aviso prévio, plano logístico e uma soneca.", points: 1 },
-      { text: "D+2. Consigo, mas vou reclamar durante todo o processo.", points: 2 },
-      { text: "D+0. Me ligou, tô pronto no mesmo dia útil.", points: 3 },
-      { text: "Liquidez imediata. Eu JÁ estou pronto. Eu durmo pronto.", points: 4 },
+      { text: "Liquidez travada: preciso de aviso com semanas de antecedência, plano logístico e uma soneca.", points: 1 },
+      { text: "Liquidez baixa: em uns dois dias eu consigo, mas vou reclamar durante todo o processo.", points: 2 },
+      { text: "Liquidez alta: me chamou de manhã, à noite eu estou lá.", points: 3 },
+      { text: "Liquidez imediata: eu JÁ estou pronto. Eu durmo pronto.", points: 4 },
     ],
   },
   {
@@ -99,7 +99,7 @@ const QUESTIONS = [
     kicker: "Pergunta 10 · Planejamento de longo prazo",
     title: "Carnaval está chegando. Qual é o seu plano de alocação?",
     options: [
-      { text: "Alugar filme, fechar a cortina e fingir que é um feriado normal.", points: 1 },
+      { text: "Assistir algo no streaming, fechar a cortina e fingir que é um feriado normal.", points: 1 },
       { text: "Uma matinê ou um bloquinho leve, com protetor solar e saída estratégica.", points: 2 },
       { text: "Bloco sim, bloco não. Alternância saudável entre festa e soro caseiro.", points: 3 },
       { text: "Os 5 dias, 3 cidades, 2 fantasias e 1 promessa de nunca mais (mentira).", points: 4 },
@@ -114,7 +114,7 @@ const PROFILES = [
     min: 10,
     max: 19,
     category: "Ermitão",
-    name: "Fica em casa",
+    name: "Só fica em casa",
     tagline: "Perfil tesouro sofá — liquidez diária no controle remoto",
     scaleNote:
       "Você está na ponta conservadora da escala: baixa exposição a rolê e altíssima previsibilidade de domingo.",
@@ -204,7 +204,7 @@ const PROFILES = [
     min: 20,
     max: 30,
     category: "Assombração",
-    name: "Sai às vezes",
+    name: "Só aparece às vezes",
     tagline: "Perfil multimercado — dança, mas com uma mão no corrimão",
     scaleNote:
       "Você está no meio da escala: exposição equilibrada, com reserva de sono preservada para a segunda-feira.",

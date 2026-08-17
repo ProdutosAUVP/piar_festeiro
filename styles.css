@@ -877,8 +877,10 @@ body[data-screen="dashboard"] .theme-toggle--float {
   background: color-mix(in srgb, var(--text) 6%, transparent);
 }
 
+/* A seção aberta usa a tinta cheia — branca no escuro — sobre o verde suave,
+   para o item selecionado ler mais forte que os outros dois. */
 .nav__link--active {
-  color: var(--accent-ink);
+  color: var(--text);
   background: var(--accent-soft);
 }
 
@@ -1207,14 +1209,19 @@ body[data-screen="dashboard"] .theme-toggle--float {
   color: var(--text-2);
 }
 
-/* os eventos da casa ficam marcados na lista de ativos */
-.pick--event {
-  border-color: var(--accent);
+/* Eventos da AUVP dentro de "Ativos recomendados": a moldura é a mesma dos
+   outros ativos, e só a tag sólida e a data marcam que ali existe uma data
+   real para colocar na agenda. */
+.pick--event .pick__tag {
+  color: var(--on-accent);
+  background: var(--accent);
 }
 
-.pick--event .pick__tag {
-  background: var(--accent);
-  color: var(--on-accent);
+.pick__when {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent-ink);
+  margin-bottom: 8px;
 }
 
 .picks-title {
@@ -1359,6 +1366,9 @@ body[data-screen="dashboard"] .theme-toggle--float {
   margin-bottom: 12px;
 }
 
+/* Marcador branco: a trilha já é colorida, então a posição precisa de um ponto
+   neutro para não competir com o gradiente. No claro o branco desapareceria na
+   superfície, e o verde de acento assume. */
 .scale__marker {
   position: absolute;
   top: 50%;
@@ -1366,10 +1376,14 @@ body[data-screen="dashboard"] .theme-toggle--float {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #ffffff;
   border: 3px solid var(--bg);
   transform: translate(-50%, -50%);
   transition: left 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="light"] .scale__marker {
+  background: var(--accent);
 }
 
 .scale__labels {
