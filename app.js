@@ -487,6 +487,10 @@ function goBack() {
 document.addEventListener("keydown", (e) => {
   const screen = document.body.dataset.screen;
 
+  /* Combinação com modificador é do sistema, não do questionário: Ctrl+C para
+     copiar uma resposta não pode marcar a alternativa C e avançar a pergunta. */
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
   if (screen === "intro" && e.key === "Enter" && document.activeElement === document.body) {
     startQuiz();
     return;
@@ -803,6 +807,26 @@ function renderPicks(host, profile) {
   });
 }
 
+/* Na carteira os dois eventos da AUVP entram como ativos: mesma moldura dos
+   picks, com a data no lugar da tag de classe e a leitura do perfil no corpo.
+   É o mesmo conteúdo do card "Onde a AUVP te espera", em outro formato. */
+function appendEventPicks(host, profile) {
+  ["giro", "private"].forEach((key) => {
+    const event = EVENTS[key];
+    const el = document.createElement("article");
+    el.className = "pick pick--event";
+    el.innerHTML = `
+      <div class="pick__head">
+        <h4 class="pick__name">${event.name}</h4>
+        <span class="pick__tag">Evento AUVP</span>
+      </div>
+      <span class="pick__when">${event.when}</span>
+      <p class="pick__text">${profile.events[key]}</p>
+    `;
+    host.appendChild(el);
+  });
+}
+
 function renderEvents(host, leadEl, profile) {
   leadEl.textContent = profile.events.lead;
   host.innerHTML = "";
@@ -964,6 +988,7 @@ function renderDashboard(attempt) {
   $("dash-portfolio-why").textContent = profile.portfolioWhy;
   renderBars($("dash-bars"), profile);
   renderPicks($("dash-picks"), profile);
+  appendEventPicks($("dash-picks"), profile);
   renderEvents($("dash-events"), $("dash-events-lead"), profile);
   const miniWrap = $("dash-donut-wrap");
   const fullWrap = $("carteira-donut-wrap");
