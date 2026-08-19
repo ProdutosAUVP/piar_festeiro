@@ -1185,7 +1185,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 /* ===== Ativos recomendados ===== */
 /* quatro ativos: 2x2 no desktop, empilhados no mobile */
 .grid--picks {
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
 }
 
 .pick {

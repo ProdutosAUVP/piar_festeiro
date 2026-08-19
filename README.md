@@ -84,6 +84,10 @@ mesma; o que muda por perfil é a leitura: o Ermitão é orientado a ir pelo
 conteúdo e pular a festa, a Assombração a aparecer e sair antes do bis, e o
 Inimigo do fim a ficar até o fim e perguntar onde é o after.
 
+No Giro da Bolsa Itinerante a ordem do evento é explícita em todos os textos:
+primeiro acontece a gravação do programa e só depois que ela é encerrada é que
+começa a parte de comer, beber e confraternizar.
+
 ## Design
 
 Segue o **design system da AUVP Capital**
