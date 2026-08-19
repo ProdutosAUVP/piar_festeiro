@@ -291,6 +291,33 @@ const Ambient = (() => {
 })();
 
 /* ==========================================================================
+   Métricas — Microsoft Clarity
+   O snippet do index cria window.clarity e enfileira as chamadas antes mesmo do
+   script remoto carregar, então dá para marcar de qualquer ponto da aplicação.
+   Só saem daqui rótulos do próprio teste: nenhuma resposta individual e nenhum
+   dado de quem respondeu. Se um bloqueador impedir o carregamento, tudo aqui
+   vira no-op e a tela segue funcionando.
+   ========================================================================== */
+const Track = (() => {
+  function send() {
+    try {
+      if (typeof window.clarity === "function") window.clarity.apply(null, arguments);
+    } catch (err) {
+      /* medição nunca pode derrubar a interface */
+    }
+  }
+
+  return {
+    /* rótulo de sessão: serve para filtrar e segmentar as gravações */
+    tag: (key, value) => send("set", key, String(value)),
+    /* ação pontual: aparece como evento no painel */
+    event: (name) => send("event", name),
+    /* prioriza a gravação desta sessão — quem terminou o teste é o que interessa */
+    upgrade: (reason) => send("upgrade", reason),
+  };
+})();
+
+/* ==========================================================================
    Persistência — localStorage, só no navegador de quem respondeu
    ========================================================================== */
 const Storage = (() => {
@@ -436,6 +463,12 @@ function renderDots() {
 
 function renderQuestion() {
   const q = QUESTIONS[state.current];
+  /* Marca até onde a pessoa chegou, para medir onde o questionário perde gente.
+     A pré-renderização do boot acontece com a landing na tela e não conta.
+     Zero à esquerda para a pergunta 10 não vir antes da 2 no filtro do Clarity. */
+  if (document.body.dataset.screen === "quiz") {
+    Track.tag("ultima_pergunta", String(state.current + 1).padStart(2, "0"));
+  }
   $("question-kicker").textContent = q.kicker;
   $("question-title").textContent = q.title;
   $("progress-current").textContent = state.current + 1;
@@ -521,6 +554,12 @@ document.addEventListener("keydown", (e) => {
 function finishQuiz() {
   const score = computeScore();
   Storage.save({ score, answers: state.answers.slice(), savedAt: new Date().toISOString() });
+
+  Track.tag("pontuacao", score);
+  Track.event("quiz_concluido");
+  /* sessão que chegou ao fim vale gravação garantida */
+  Track.upgrade("quiz_concluido");
+
   showScreen("loading");
 
   let step = 0;
@@ -855,6 +894,7 @@ function animateMetrics(root) {
    ========================================================================== */
 function renderResult(profile) {
   state.profile = profile;
+  Track.tag("perfil", profile.category);
 
   const art = ART[profile.id];
   $("result-watermark").src = art.src;
@@ -923,6 +963,9 @@ const VIEWS = ["visao-geral", "perfil", "carteira"];
 function renderDashboard(attempt) {
   const profile = getProfile(attempt.score);
   state.profile = profile;
+  /* quem volta direto no painel também entra segmentado pelo perfil */
+  Track.tag("perfil", profile.category);
+  Track.tag("pontuacao", attempt.score);
 
   $("dash-profile").textContent = profile.category;
   $("dash-subtitle").textContent = profile.name;
@@ -1008,6 +1051,9 @@ function setView(view) {
       : active === "perfil"
         ? "Análise de perfil"
         : "Seu perfil festivo";
+
+  /* as abas são hash, não páginas: sem isso o Clarity veria tudo como uma tela só */
+  Track.tag("aba_painel", active);
 }
 
 function openDashboard(view) {
@@ -1017,6 +1063,7 @@ function openDashboard(view) {
     return;
   }
   const target = view || currentRoute() || VIEWS[0];
+  Track.event("painel_aberto");
   renderDashboard(attempt);
   setView(target);
   history.replaceState(null, "", `#/${VIEWS.includes(target) ? target : VIEWS[0]}`);
@@ -1056,11 +1103,13 @@ window.addEventListener(
 /* ==========================================================================
    Navegação
    ========================================================================== */
-function startQuiz() {
+/* `redo` separa quem está começando de quem já tinha um resultado e refez. */
+function startQuiz(options) {
   state.current = 0;
   state.answers.fill(null);
-  renderQuestion();
   showScreen("quiz");
+  renderQuestion();
+  Track.event(options && options.redo ? "quiz_refeito" : "quiz_iniciado");
 }
 
 function goHome() {
@@ -1078,13 +1127,17 @@ document.querySelectorAll(".theme-toggle").forEach((btn) => {
   btn.addEventListener("click", () => Theme.toggle());
 });
 
-$("btn-start").addEventListener("click", startQuiz);
+$("btn-start").addEventListener("click", () => startQuiz());
 $("btn-dashboard").addEventListener("click", () => openDashboard(VIEWS[0]));
 $("btn-to-dashboard").addEventListener("click", () => openDashboard(VIEWS[0]));
 $("btn-to-dashboard-top").addEventListener("click", () => openDashboard(VIEWS[0]));
-$("btn-redo").addEventListener("click", startQuiz);
-$("btn-redo-2").addEventListener("click", startQuiz);
+$("btn-redo").addEventListener("click", () => startQuiz({ redo: true }));
+$("btn-redo-2").addEventListener("click", () => startQuiz({ redo: true }));
 $("brand-home").addEventListener("click", goHome);
+
+["btn-share", "btn-share-dash"].forEach((id) => {
+  $(id).addEventListener("click", () => Track.event("compartilhou"));
+});
 
 document.querySelectorAll(".nav__link, .card__link").forEach((link) => {
   link.addEventListener("click", (e) => {
@@ -1101,6 +1154,8 @@ document.querySelectorAll(".nav__link, .card__link").forEach((link) => {
    Início
    ========================================================================== */
 Theme.init();
+Theme.onChange((theme) => Track.tag("tema", theme));
+Track.tag("tema", Theme.resolved());
 Ambient.start();
 renderQuestion();
 refreshIntro();

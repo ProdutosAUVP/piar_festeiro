@@ -63,8 +63,29 @@ questionário é enviada para servidor algum. Limpar os dados do site apaga o
 registro.
 
 A página carrega o **Microsoft Clarity** (`y4xdvzodne`) para medir uso —
-navegação, cliques e mapas de calor. É a única coisa que sai do dispositivo, e
-ela não carrega o resultado do teste.
+navegação, cliques e mapas de calor. É a única coisa que sai do dispositivo.
+
+Além do padrão, a aplicação marca a sessão para dar contexto às gravações. Vão
+só rótulos do teste: nenhuma resposta individual e nada de quem respondeu.
+
+| Rótulo | Valor | Serve para |
+| --- | --- | --- |
+| `perfil` | Ermitão, Assombração ou Inimigo do fim | filtrar gravações por perfil |
+| `pontuacao` | 10 a 40 | cruzar comportamento com a faixa de pontos |
+| `ultima_pergunta` | `01` a `10` | ver em que pergunta o questionário perde gente |
+| `aba_painel` | visao-geral, perfil ou carteira | as abas são hash, não páginas |
+| `tema` | claro ou escuro | uso real de cada tema |
+
+| Evento | Quando |
+| --- | --- |
+| `quiz_iniciado` | clicou em começar |
+| `quiz_refeito` | já tinha resultado e refez |
+| `quiz_concluido` | respondeu as dez (também prioriza a gravação da sessão) |
+| `painel_aberto` | entrou no painel |
+| `compartilhou` | clicou em compartilhar no WhatsApp |
+
+Se um bloqueador impedir o carregamento do Clarity, tudo isso vira no-op e a
+aplicação segue funcionando igual.
 
 ## Interação
 
