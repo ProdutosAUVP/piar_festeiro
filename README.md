@@ -57,9 +57,13 @@ seção.
 ## Dados
 
 O resultado e a preferência de tema ficam em `localStorage`, ou seja, **apenas
-no navegador de quem respondeu**. Não existe backend, nenhuma informação sai do
-dispositivo e nada é enviado para servidor algum. Limpar os dados do site apaga
-o registro.
+no navegador de quem respondeu**. Não existe backend e nenhuma resposta do
+questionário é enviada para servidor algum. Limpar os dados do site apaga o
+registro.
+
+A página carrega o **Microsoft Clarity** (`y4xdvzodne`) para medir uso —
+navegação, cliques e mapas de calor. É a única coisa que sai do dispositivo, e
+ela não carrega o resultado do teste.
 
 ## Interação
 
