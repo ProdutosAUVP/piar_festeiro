@@ -32,7 +32,7 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
 | **Landing** | Rastro discreto de luz verde acompanhando o cursor. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
 | **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), estratégia ideal, recomendação do analista e os eventos da AUVP. |
+| **Resultado** | Retrato do perfil como marca d'água no hero, diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), eventos da AUVP, estratégia ideal e recomendação do analista. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
@@ -58,9 +58,13 @@ seção.
 ## Dados
 
 O resultado e a preferência de tema ficam em `localStorage`, ou seja, **apenas
-no navegador de quem respondeu**. Não existe backend, nenhuma informação sai do
-dispositivo e nada é enviado para servidor algum. Limpar os dados do site apaga
-o registro.
+no navegador de quem respondeu**. Não existe backend e nenhuma resposta do
+questionário é enviada para servidor algum. Limpar os dados do site apaga o
+registro.
+
+A página carrega o **Microsoft Clarity** (`y4xdvzodne`) para medir uso —
+navegação, cliques e mapas de calor. É a única coisa que sai do dispositivo, e
+ela não carrega o resultado do teste.
 
 ## Interação
 
@@ -86,6 +90,10 @@ mesma; o que muda por perfil é a leitura: o Ermitão é orientado a ir pelo
 conteúdo e pular a festa, a Assombração a aparecer e sair antes do bis, e o
 Inimigo do fim a ficar até o fim e perguntar onde é o after.
 
+No Giro da Bolsa Itinerante a ordem do evento é explícita em todos os textos:
+primeiro acontece a gravação do programa e só depois que ela é encerrada é que
+começa a parte de comer, beber e confraternizar.
+
 ## Design
 
 Segue o **design system da AUVP Capital**
@@ -108,7 +116,7 @@ Segue o **design system da AUVP Capital**
   repinta o gráfico sozinho. Cada fatia mantém seu slot de cor; a separação entre
   fatias é um vão de 2px na cor da superfície, nunca um contorno.
 - Cada perfil tem um retrato próprio (`perfil festeiro_*.png`), usado no card de
-  resumo e na análise de perfil.
+  resumo, na análise de perfil e como marca d'água discreta no hero do resultado.
 - `prefers-reduced-motion` congela o fundo e entrega todas as seções reveladas.
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
   espaço entre cards de uma mesma linha vem sempre do `gap` do grid.

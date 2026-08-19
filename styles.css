@@ -736,7 +736,32 @@ body[data-screen="dashboard"] .theme-toggle--float {
 }
 
 .lp-hero {
+  position: relative;
   padding: clamp(56px, 12vw, 88px) 0 clamp(28px, 7vw, 44px);
+}
+
+/* retrato do perfil como marca d'água, no vazio à direita do hero */
+.hero-watermark {
+  position: absolute;
+  top: 50%;
+  right: clamp(8px, 2.5vw, 120px);
+  width: clamp(300px, 32vw, 520px);
+  height: auto;
+  opacity: 0.07;
+  transform: translateY(-24%);
+  pointer-events: none;
+  user-select: none;
+  z-index: -1;
+}
+
+:root[data-theme="light"] .hero-watermark {
+  opacity: 0.06;
+}
+
+@media (max-width: 900px) {
+  .hero-watermark {
+    display: none;
+  }
 }
 
 .display--result {
@@ -1162,7 +1187,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 /* ===== Ativos recomendados ===== */
 /* quatro ativos: 2x2 no desktop, empilhados no mobile */
 .grid--picks {
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
 }
 
 .pick {
@@ -1366,9 +1391,8 @@ body[data-screen="dashboard"] .theme-toggle--float {
   margin-bottom: 12px;
 }
 
-/* Marcador branco: a trilha já é colorida, então a posição precisa de um ponto
-   neutro para não competir com o gradiente. No claro o branco desapareceria na
-   superfície, e o verde de acento assume. */
+/* Marcador sempre branco. No tema claro ganha um anel de acento, senão
+   sumiria contra o fundo branco. */
 .scale__marker {
   position: absolute;
   top: 50%;
@@ -1383,7 +1407,7 @@ body[data-screen="dashboard"] .theme-toggle--float {
 }
 
 :root[data-theme="light"] .scale__marker {
-  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .scale__labels {

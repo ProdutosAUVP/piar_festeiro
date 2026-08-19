@@ -783,17 +783,20 @@ const ART = {
   },
 };
 
+/* Os dois eventos da AUVP abrem a lista de ativos, com a mesma moldura dos
+   picks do perfil: a data entra abaixo do nome e o corpo é a leitura do perfil,
+   o mesmo conteúdo do card "Onde a AUVP te espera" em outro formato. */
 function renderPicks(host, profile) {
-  // os eventos da AUVP entram na carteira como ativos, no fim da lista
   const eventPicks = ["giro", "private"].map((key) => ({
     name: EVENTS[key].name,
     tag: "Evento AUVP",
+    when: EVENTS[key].when,
     text: profile.events[key],
     event: true,
   }));
 
   host.innerHTML = "";
-  [...profile.picks, ...eventPicks].forEach((pick) => {
+  [...eventPicks, ...profile.picks].forEach((pick) => {
     const el = document.createElement("article");
     el.className = `pick${pick.event ? " pick--event" : ""}`;
     el.innerHTML = `
@@ -801,27 +804,8 @@ function renderPicks(host, profile) {
         <h4 class="pick__name">${pick.name}</h4>
         <span class="pick__tag">${pick.tag}</span>
       </div>
+      ${pick.when ? `<span class="pick__when">${pick.when}</span>` : ""}
       <p class="pick__text">${pick.text}</p>
-    `;
-    host.appendChild(el);
-  });
-}
-
-/* Na carteira os dois eventos da AUVP entram como ativos: mesma moldura dos
-   picks, com a data no lugar da tag de classe e a leitura do perfil no corpo.
-   É o mesmo conteúdo do card "Onde a AUVP te espera", em outro formato. */
-function appendEventPicks(host, profile) {
-  ["giro", "private"].forEach((key) => {
-    const event = EVENTS[key];
-    const el = document.createElement("article");
-    el.className = "pick pick--event";
-    el.innerHTML = `
-      <div class="pick__head">
-        <h4 class="pick__name">${event.name}</h4>
-        <span class="pick__tag">Evento AUVP</span>
-      </div>
-      <span class="pick__when">${event.when}</span>
-      <p class="pick__text">${profile.events[key]}</p>
     `;
     host.appendChild(el);
   });
@@ -871,6 +855,9 @@ function animateMetrics(root) {
    ========================================================================== */
 function renderResult(profile) {
   state.profile = profile;
+
+  const art = ART[profile.id];
+  $("result-watermark").src = art.src;
 
   $("result-title").textContent = profile.category;
   $("result-subtitle").textContent = profile.name;
@@ -985,7 +972,6 @@ function renderDashboard(attempt) {
   $("dash-portfolio-why").textContent = profile.portfolioWhy;
   renderBars($("dash-bars"), profile);
   renderPicks($("dash-picks"), profile);
-  appendEventPicks($("dash-picks"), profile);
   renderEvents($("dash-events"), $("dash-events-lead"), profile);
   const miniWrap = $("dash-donut-wrap");
   const fullWrap = $("carteira-donut-wrap");

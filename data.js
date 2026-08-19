@@ -156,7 +156,7 @@ const PROFILES = [
     ],
     events: {
       lead: "Dois eventos por ano já dão conta da sua exposição a rolê. Comece pelo mais curto.",
-      giro: "Feito para você: sentado, com mesa, comida na frente e um programa que já conhece do canal. Assiste ao vivo, ri quando quiser, e às 22h a conta já está pedida.",
+      giro: "Feito para você: sentado, com mesa e um programa que já conhece do canal. Primeiro vem a gravação, e você só assiste ao vivo e ri quando quiser. Quando ela acaba é que abre a parte de comer, beber e conversar — e aí você já pode pedir a conta com a consciência tranquila.",
       private: "Dois dias é bastante para o seu horizonte, mas o conteúdo compensa. Vá pelas palestras, aproveite o intervalo para conversar com quem você só conhece da internet, e sinta-se livre para pular a festa do último dia.",
     },
     strategy: {
@@ -246,7 +246,7 @@ const PROFILES = [
     ],
     events: {
       lead: "Os dois cabem na sua agenda sem estourar o orçamento de sono. É exatamente o seu tipo de alocação.",
-      giro: "O rolê perfeito para o seu perfil: dura o suficiente, tem hora para acabar e você sai de lá com assunto para a semana inteira. Vá, fique até o fim da gravação e depois decida se estica.",
+      giro: "O rolê perfeito para o seu perfil: primeiro a gravação, com hora para começar e para acabar, e só depois que ela é encerrada é que rola a confraternização com comida e bebida. Fique até o fim do programa e decida ali se estica ou se vai embora com assunto para a semana inteira.",
       private: "Aqui você faz o que faz de melhor: aproveita os dois dias de conteúdo, aparece na festa do último dia, dança as boas e vai embora antes do bis. Ninguém nem percebe que você sumiu.",
     },
     strategy: {
@@ -336,7 +336,7 @@ const PROFILES = [
     ],
     events: {
       lead: "Dois eventos por ano é pouco para o seu ritmo, mas são os dois que você não pode perder.",
-      giro: "Você vai chegar cedo, sentar na primeira fila e virar parte da gravação. Quando o programa acabar, o bar continua aberto — e é aí que o seu evento começa de verdade.",
+      giro: "Você vai chegar cedo, sentar na primeira fila e virar parte da gravação. Encerrado o programa, começa a hora de comer, beber e confraternizar — e é aí que o seu evento começa de verdade.",
       private: "Este é o seu. Dois dias de conteúdo, uma cidade cheia de gente da comunidade e, no encerramento, a festa oficial com tema exclusivo. Você vai ficar até o fim e ainda vai perguntar onde é o after.",
     },
     strategy: {
@@ -399,7 +399,7 @@ const EVENTS = {
     name: "Giro da Bolsa Itinerante",
     when: "A cada trimestre, em uma cidade diferente",
     about:
-      "Edição presencial do quadro semanal do canal Investidor Sardinha, gravada em bares e restaurantes para uma plateia de cerca de 150 pessoas. A cidade é escolhida por votação da comunidade.",
+      "Edição presencial do quadro semanal do canal Investidor Sardinha, gravada em bares e restaurantes para uma plateia de cerca de 150 pessoas. Primeiro acontece a gravação, com todo mundo acompanhando o programa ao vivo; só depois que ela é encerrada é que começa a parte de comer, beber e confraternizar. A cidade é escolhida por votação da comunidade.",
   },
   private: {
     name: "Private Day",
