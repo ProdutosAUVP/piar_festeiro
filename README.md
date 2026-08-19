@@ -32,15 +32,15 @@ sempre juntos — na escala, no resultado, no painel e no compartilhamento.
 | **Landing** | Rastro discreto de luz verde acompanhando o cursor. Cards com os números da análise. |
 | **Questionário** | Uma pergunta por vez, trilha de progresso clicável, navegação por teclado. |
 | **Processamento** | Um brinde: taça com bolhas subindo enquanto o comitê de churrasco é consultado. |
-| **Resultado** | Diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), estratégia ideal, recomendação do analista e os eventos da AUVP. |
+| **Resultado** | Retrato do perfil como marca d'água no hero, diagnóstico, indicadores, sugestão de alocação (barras + gráfico de pizza), eventos da AUVP, estratégia ideal e recomendação do analista. |
 | **Painel** | Visão geral, Perfil e Carteira — roteados por hash (`#/visao-geral`, `#/perfil`, `#/carteira`). |
 
 ### O painel
 
 - **Visão geral** — resumo em dois cards no topo (texto à esquerda, retrato do
   perfil à direita), o par escala festiva + indicadores, os cards horizontais de
-  sugestão de alocação e estratégia ideal, o par destaque positivo + ponto de
-  atenção e o convite para os eventos da AUVP.
+  sugestão de alocação, o convite para os eventos da AUVP e a estratégia ideal, e
+  o par destaque positivo + ponto de atenção.
 - **Perfil** — diagnóstico ao lado do retrato do perfil, assinado no rodapé com
   a tagline, três **pontos fortes**, três **pontos de atenção** e a recomendação
   do analista.
@@ -106,7 +106,7 @@ Segue o **design system da AUVP Capital**
   repinta o gráfico sozinho. Cada fatia mantém seu slot de cor; a separação entre
   fatias é um vão de 2px na cor da superfície, nunca um contorno.
 - Cada perfil tem um retrato próprio (`perfil festeiro_*.png`), usado no card de
-  resumo e na análise de perfil.
+  resumo, na análise de perfil e como marca d'água discreta no hero do resultado.
 - `prefers-reduced-motion` congela o fundo e entrega todas as seções reveladas.
 - Ritmo vertical único no painel: um espaçamento entre blocos de topo, e o
   espaço entre cards de uma mesma linha vem sempre do `gap` do grid.

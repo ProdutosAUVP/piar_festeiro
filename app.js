@@ -780,7 +780,7 @@ const ART = {
 };
 
 function renderPicks(host, profile) {
-  // os eventos da AUVP entram na carteira como ativos, no fim da lista
+  // os eventos da AUVP abrem a lista de ativos da carteira
   const eventPicks = ["giro", "private"].map((key) => ({
     name: EVENTS[key].name,
     tag: "Evento AUVP",
@@ -789,7 +789,7 @@ function renderPicks(host, profile) {
   }));
 
   host.innerHTML = "";
-  [...profile.picks, ...eventPicks].forEach((pick) => {
+  [...eventPicks, ...profile.picks].forEach((pick) => {
     const el = document.createElement("article");
     el.className = `pick${pick.event ? " pick--event" : ""}`;
     el.innerHTML = `
@@ -847,6 +847,9 @@ function animateMetrics(root) {
    ========================================================================== */
 function renderResult(profile) {
   state.profile = profile;
+
+  const art = ART[profile.id];
+  $("result-watermark").src = art.src;
 
   $("result-title").textContent = profile.category;
   $("result-subtitle").textContent = profile.name;
